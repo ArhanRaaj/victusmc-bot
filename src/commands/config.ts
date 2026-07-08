@@ -1,0 +1,139 @@
+import { ChannelType, PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
+import type { Command } from '../types/index.js';
+import { supabase } from '../services/supabase.js';
+import { ComponentsV2 } from '../embeds/componentsV2.js';
+import { requireAdmin } from '../middleware/requireLinked.js';
+import { logger } from '../utils/logger.js';
+import { config } from '../config.js';
+
+export const configCommand: Command = {
+    data: new SlashCommandBuilder()
+        .setName('config')
+        .setDescription('Configure bot settings (Admin only)')
+        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
+        .setDMPermission(false)
+        .addSubcommand((sub) =>
+            sub
+                .setName('view')
+                .setDescription('View current bot configuration')
+        )
+        .addSubcommand((sub) =>
+            sub
+                .setName('logs')
+                .setDescription('Set the audit logs channel')
+                .addChannelOption((opt) =>
+                    opt
+                        .setName('channel')
+                        .setDescription('Channel for audit logs')
+                        .addChannelTypes(ChannelType.GuildText)
+                        .setRequired(true)
+                )
+        )
+        .addSubcommand((sub) =>
+            sub
+                .setName('transcript-channel')
+                .setDescription('Set the channel where ticket transcripts are posted on close')
+                .addChannelOption((opt) =>
+                    opt
+                        .setName('channel')
+                        .setDescription('Channel for ticket transcripts')
+                        .addChannelTypes(ChannelType.GuildText)
+                        .setRequired(true)
+                )
+        ),
+
+    async execute(interaction) {
+        if (!interaction.guildId) return;
+
+        const isAdmin = await requireAdmin(interaction);
+        if (!isAdmin) return;
+
+        await interaction.deferReply({ flags: ComponentsV2.IS_COMPONENTS_V2 });
+
+        const subcommand = interaction.options.getSubcommand();
+
+        try {
+            if (subcommand === 'view') {
+                const settings = await supabase.getBotSettings(interaction.guildId);
+                const logChannelId = settings?.log_channel_id || 'Not set';
+                const ticketPanelChannelId = settings?.ticket_panel_channel_id || 'Not set';
+                const ticketParentCategoryId = settings?.ticket_parent_category_id || 'Not set';
+                const archiveChannelId = settings?.ticket_archive_channel_id || 'Not set';
+                const staffRoleIds = [
+                    ...new Set([
+                        ...((settings?.ticket_staff_role_ids || []) as string[]),
+                        ...((settings?.ticket_admin_role_ids || []) as string[]),
+                    ]),
+                ];
+
+                const container = ComponentsV2.infoContainer(
+                    'Bot Configuration',
+                    `**Server:** ${interaction.guild?.name}\n\n` +
+                    `**Audit Logs:** ${logChannelId !== 'Not set' ? `<#${logChannelId}>` : '`Not set`'}\n` +
+                    `**Ticket Panel Channel:** ${ticketPanelChannelId !== 'Not set' ? `<#${ticketPanelChannelId}>` : '`Not set`'}\n` +
+                    `**Default Ticket Category:** ${ticketParentCategoryId !== 'Not set' ? `\`${ticketParentCategoryId}\`` : '`Not set`'}\n` +
+                    `**Ticket Transcripts:** ${archiveChannelId !== 'Not set' ? `<#${archiveChannelId}>` : '`Not set`'}\n` +
+                    `**Ticket Staff Roles:** ${staffRoleIds.length ? staffRoleIds.map((roleId) => `<@&${roleId}>`).join(', ') : '`Not set`'}\n\n` +
+                    `**Auto Register Commands:** ${config.bot.autoRegisterCommands ? '`Enabled`' : '`Disabled`'}`
+                );
+
+                await interaction.editReply({
+                    components: [container],
+                    flags: ComponentsV2.IS_COMPONENTS_V2,
+                });
+                return;
+            }
+
+            if (subcommand === 'logs') {
+                const channel = interaction.options.getChannel('channel', true);
+                const success = await supabase.updateBotSettings(interaction.guildId, {
+                    log_channel_id: channel.id,
+                });
+
+                if (!success) throw new Error('Database update failed');
+
+                await interaction.editReply({
+                    components: [
+                        ComponentsV2.successContainer(
+                            'Configuration Updated',
+                            `Audit logs will now be sent to <#${channel.id}>.`
+                        ),
+                    ],
+                    flags: ComponentsV2.IS_COMPONENTS_V2,
+                });
+                return;
+            }
+
+            if (subcommand === 'transcript-channel') {
+                const channel = interaction.options.getChannel('channel', true);
+                const success = await supabase.updateBotSettings(interaction.guildId, {
+                    ticket_archive_channel_id: channel.id,
+                });
+
+                if (!success) throw new Error('Database update failed');
+
+                await interaction.editReply({
+                    components: [
+                        ComponentsV2.successContainer(
+                            'Transcript Channel Set',
+                            `📄 Ticket transcripts will now be posted to <#${channel.id}> whenever a ticket is closed.`
+                        ),
+                    ],
+                    flags: ComponentsV2.IS_COMPONENTS_V2,
+                });
+                return;
+            }
+        } catch (error) {
+            logger.error('Config command error:', error);
+            await interaction.editReply({
+                components: [
+                    ComponentsV2.errorContainer(
+                        'Configuration Error',
+                        'Failed to update bot settings. Confirm the bot settings migration is applied and the service role key is valid.'
+                    ),
+                ],
+                flags: ComponentsV2.IS_COMPONENTS_V2,
+            });
+        }
+    },
+};
