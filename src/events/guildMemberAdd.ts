@@ -2,6 +2,7 @@ import { ChannelType, Events, AuditLogEvent } from 'discord.js';
 import type { GuildMember } from 'discord.js';
 import type { Event } from '../types/index.js';
 import { welcomeSettings } from '../services/welcomeSettings.js';
+import { greetSettings, formatGreetMsg } from '../services/greetSettings.js';
 import { buildWelcomePayload } from '../commands/welcome.js';
 import { auditLogSettings } from '../services/auditLogSettings.js';
 import { handleBotAdd } from './antiNukeHandler.js';
@@ -33,6 +34,22 @@ export const guildMemberAddEvent: Event = {
                         logger.error(`Failed to send welcome message for ${member.user.tag}:`, err);
                     });
                 }
+            }
+
+            // Greet system - welcome message
+            const greetCfg = await greetSettings.get(member.guild.id);
+            if (greetCfg.welcomeEnabled && greetCfg.welcomeChannelId) {
+                const greetChannel = member.guild.channels.cache.get(greetCfg.welcomeChannelId);
+                if (greetChannel && greetChannel.type === ChannelType.GuildText) {
+                    const msg = formatGreetMsg(greetCfg.welcomeMsg, member);
+                    await greetChannel.send({ content: msg }).catch(() => {});
+                }
+            }
+
+            // Greet system - DM message
+            if (greetCfg.dmEnabled) {
+                const msg = formatGreetMsg(greetCfg.dmMsg, member);
+                await member.send({ content: msg }).catch(() => {});
             }
 
             // Assign Auto-Roles

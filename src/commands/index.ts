@@ -41,7 +41,6 @@ import { shipCommand } from './ship.js';
 import { balCommand } from './bal.js';
 import { dailyCommand } from './daily.js';
 import { minesCommand } from './mines.js';
-import { avatarCommand } from './avatar.js';
 import { userinfoCommand } from './userinfo.js';
 import { serverinfoCommand } from './serverinfo.js';
 import { emojiCommand } from './emoji.js';
@@ -52,6 +51,11 @@ import { staffCommand } from './staff.js';
 import { attendanceCommand, attendanceLogCommand } from './attendance.js';
 import { modCommand } from './mod.js';
 import { countingCommand } from './counting.js';
+import { stickyCommand } from './sticky.js';
+import { greetCommand } from './greet.js';
+import { pingCommand, membercountCommand, botinfoCommand, servericonCommand, serverbannerCommand } from './utility.js';
+import { createFunCommand } from './funActions.js';
+import { avatarCommand } from './avatar.js';
 
 // Export command collection
 export const commands = new Collection<string, Command>();
@@ -97,6 +101,7 @@ const allCommands: Command[] = [
     diceCommand,
     rateCommand,
     shipCommand,
+    ...['hug', 'kiss', 'slap', 'pat', 'cuddle', 'poke', 'dance', 'blush', 'cry', 'kill', 'bite', 'smug', 'baka', 'happy', 'wave', 'wink', 'laugh', 'sleep', 'smile', 'highfive', 'lick', 'yeet', 'punch'].map(createFunCommand),
     balCommand,
     dailyCommand,
     minesCommand,
@@ -112,6 +117,13 @@ const allCommands: Command[] = [
     attendanceLogCommand,
     modCommand,
     countingCommand,
+    stickyCommand,
+    greetCommand,
+    pingCommand,
+    membercountCommand,
+    botinfoCommand,
+    servericonCommand,
+    serverbannerCommand,
     ...musicCommands,
 ];
 

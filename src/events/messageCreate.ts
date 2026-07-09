@@ -17,6 +17,7 @@ import { buildFinalEmbedPayload } from '../commands/embed.js';
 import { isNoprefixUser } from '../services/noprefixSettings.js';
 import { addChatXp, getConfig as getLevelingConfig } from '../services/levelingSettings.js';
 import { countingSettings } from '../services/countingSettings.js';
+import { stickySettings, StickyMessage } from '../services/stickySettings.js';
 
 const SETTINGS_TTL_MS = 20_000;
 const MAX_QUEUE_DEPTH = 3;
@@ -273,6 +274,25 @@ export const messageCreateEvent: Event = {
                 if (number % 100 === 0) await message.react('🎉').catch(() => {});
                 if (number === 69) await message.react('😏').catch(() => {});
                 await countingSettings.set(message.guildId!, { lastNumber: number, lastUserId: message.author.id, count: number });
+            }
+        }
+
+        // --- Sticky Messages ---
+        if (message.inGuild()) {
+            const guildId = message.guildId!;
+            const stickies = await stickySettings.getStickies(guildId);
+            const sticky = stickies.find((s: StickyMessage) => s.channel === message.channelId && s.enabled);
+            if (sticky) {
+                if (sticky.messageId) {
+                    try {
+                        const old = await message.channel.messages.fetch(sticky.messageId).catch(() => null);
+                        if (old) await old.delete().catch(() => {});
+                    } catch {}
+                }
+                const sent = await message.channel.send({ content: sticky.content }).catch(() => null);
+                if (sent) {
+                    await stickySettings.updateMessageId(guildId, message.channelId, sent.id);
+                }
             }
         }
 

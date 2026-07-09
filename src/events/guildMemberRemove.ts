@@ -2,6 +2,7 @@ import { Events, AuditLogEvent } from 'discord.js';
 import type { GuildMember } from 'discord.js';
 import type { Event } from '../types/index.js';
 import { auditLogSettings } from '../services/auditLogSettings.js';
+import { greetSettings, formatGreetMsg } from '../services/greetSettings.js';
 import { handleMassKick } from './antiNukeHandler.js';
 import { ComponentsV2 } from '../embeds/componentsV2.js';
 import { logger } from '../utils/logger.js';
@@ -22,6 +23,17 @@ export const guildMemberRemoveEvent: Event = {
             }
 
             const guildId = member.guild.id;
+
+            // Greet system - leave message
+            const greetCfg = await greetSettings.get(guildId);
+            if (greetCfg.leaveEnabled && greetCfg.leaveChannelId) {
+                const leaveChannel = member.guild.channels.cache.get(greetCfg.leaveChannelId);
+                if (leaveChannel && leaveChannel.type === 0) {
+                    const msg = formatGreetMsg(greetCfg.leaveMsg, member);
+                    await leaveChannel.send({ content: msg }).catch(() => {});
+                }
+            }
+
             const config = await auditLogSettings.get(guildId);
             const channelId = config.channels?.member_leave;
             if (!config.enabled || !channelId || !config.events.includes('member_leave')) return;
@@ -40,7 +52,7 @@ export const guildMemberRemoveEvent: Event = {
 
             const container = ComponentsV2.baseContainer(ComponentsV2.Accents.danger);
             container.addTextDisplayComponents(
-                ComponentsV2.text('## 📤 Member Left\n\u200b'),
+                ComponentsV2.text('## 📦 Member Left\n\u200b'),
                 ComponentsV2.text(`**User:** <@${member.user.id}> (${member.user.username})\n**ID:** \`${member.user.id}\``),
                 ComponentsV2.text(`**Joined:** ${joinedAt}\n**Roles:** ${rolesStr}`),
                 ComponentsV2.text(`-# <t:${Math.floor(Date.now() / 1000)}:R>`)
