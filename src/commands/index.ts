@@ -56,6 +56,12 @@ import { greetCommand } from './greet.js';
 import { pingCommand, membercountCommand, botinfoCommand, servericonCommand, serverbannerCommand } from './utility.js';
 import { createFunCommand } from './funActions.js';
 import { avatarCommand } from './avatar.js';
+import { autoresponderCommand } from './autoresponder.js';
+import { bumpalertCommand } from './bumpalert.js';
+import { autothreadCommand } from './autothread.js';
+import { modmailCommand, modmailCloseCommand } from './modmail.js';
+import { youtubeCommand } from './youtube.js';
+import { vouchCommand } from './vouch.js';
 
 // Export command collection
 export const commands = new Collection<string, Command>();
@@ -119,6 +125,13 @@ const allCommands: Command[] = [
     countingCommand,
     stickyCommand,
     greetCommand,
+    autoresponderCommand,
+    bumpalertCommand,
+    autothreadCommand,
+    modmailCommand,
+    modmailCloseCommand,
+    youtubeCommand,
+    vouchCommand,
     pingCommand,
     membercountCommand,
     botinfoCommand,

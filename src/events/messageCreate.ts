@@ -18,6 +18,10 @@ import { isNoprefixUser } from '../services/noprefixSettings.js';
 import { addChatXp, getConfig as getLevelingConfig } from '../services/levelingSettings.js';
 import { countingSettings } from '../services/countingSettings.js';
 import { stickySettings, StickyMessage } from '../services/stickySettings.js';
+import { autoResponder } from '../services/autoResponder.js';
+import { bumpAlertService } from '../services/bumpAlertSettings.js';
+import { autoThreadService } from '../services/autoThreadSettings.js';
+import { modMailService } from '../services/modMailSettings.js';
 
 const SETTINGS_TTL_MS = 20_000;
 const MAX_QUEUE_DEPTH = 3;
@@ -296,6 +300,46 @@ export const messageCreateEvent: Event = {
             }
         }
 
+        // --- Auto-responder ---
+        if (message.inGuild() && !message.author.bot) {
+            const responders = await autoResponder.get(message.guildId!);
+            for (const r of responders) {
+                if (r.enabled && autoResponder.match(message.content, r)) {
+                    await message.channel.send({ content: r.response }).catch(() => {});
+                    break;
+                }
+            }
+        }
+
+        // --- Bump Detection ---
+        if (message.inGuild() && !message.author.bot) {
+            const bumpConfig = await bumpAlertService.get(message.guildId!);
+            if (bumpConfig && message.channelId === bumpConfig.channelId) {
+                const isBump = message.author.id === '302050872383242240' && 
+                    message.content.includes('Bump done') || 
+                    message.content.includes('server is bumped');
+                if (isBump) {
+                    const roleMention = bumpConfig.pingRoleId ? `<@&${bumpConfig.pingRoleId}>` : '';
+                    setTimeout(async () => {
+                        const channel = message.guild?.channels.cache.get(bumpConfig!.channelId);
+                        if (!channel?.isTextBased()) return;
+                        await channel.send({ content: `${roleMention}\n${bumpConfig!.message}` }).catch(() => {});
+                    }, 7200000); // 2 hours
+                }
+            }
+        }
+
+        // --- Auto-Thread ---
+        if (message.inGuild() && !message.author.bot) {
+            const threadCfg = await autoThreadService.get(message.guildId!);
+            if (threadCfg && threadCfg.channelIds.includes(message.channelId)) {
+                const name = threadCfg.name.replace('{user}', message.author.username).slice(0, 100);
+                if (!message.thread) {
+                    await message.startThread({ name }).catch(() => {});
+                }
+            }
+        }
+
         // --- Chat XP Tracking ---
         if (message.inGuild()) {
             const levelingConfig = getLevelingConfig(message.guildId!);
@@ -568,6 +612,44 @@ export const messageCreateEvent: Event = {
                 'VictusMC AI could not answer your DM right now. Please try again in a moment or open a support ticket.'
             ));
             return;
+        }
+
+        // --- ModMail DM forwarding ---
+        if (!message.inGuild() && message.content && message.author.id !== message.client.user.id) {
+            // Find first mutual guild with modmail enabled and create/open a thread
+            const mutualGuilds = message.client.guilds.cache.filter(g => g.members.cache.has(message.author.id));
+            for (const guild of mutualGuilds.values()) {
+                const mailCfg = await modMailService.getConfig(guild.id);
+                if (mailCfg.enabled && mailCfg.categoryId) {
+                    let thread = await modMailService.getOpenThread(guild.id, message.author.id);
+                    let channelId = thread?.channelId;
+                    if (!channelId) {
+                        const member = await guild.members.fetch(message.author.id).catch(() => null);
+                        if (!member) continue;
+                        const ch = await guild.channels.create({
+                            name: `modmail-${message.author.username}`.slice(0, 32),
+                            type: ChannelType.GuildText,
+                            parent: mailCfg.categoryId,
+                            permissionOverwrites: [
+                                { id: guild.roles.everyone.id, deny: [PermissionFlagsBits.ViewChannel] },
+                                { id: message.client.user.id, allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages, PermissionFlagsBits.ReadMessageHistory] },
+                                ...(mailCfg.staffRoleId ? [{ id: mailCfg.staffRoleId, allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages, PermissionFlagsBits.ReadMessageHistory] }] : []),
+                            ],
+                        }).catch(() => null);
+                        if (!ch) continue;
+                        await modMailService.openThread(guild.id, message.author.id, ch.id);
+                        channelId = ch.id;
+                        await ch.send({ content: `ModMail thread opened for <@${message.author.id}>.` }).catch(() => {});
+                    }
+                    const ch = guild.channels.cache.get(channelId);
+                    if (ch?.isTextBased()) {
+                        const c = ComponentsV2.baseContainer(ComponentsV2.Accents.info);
+                        c.addTextDisplayComponents(ComponentsV2.text(`## <:Edit:1524363079675154433> ModMail from ${message.author.tag}\n\n${message.content}`));
+                        await ch.send({ components: [c], flags: ComponentsV2.IS_COMPONENTS_V2 }).catch(() => {});
+                    }
+                    break;
+                }
+            }
         }
 
         if (!message.inGuild()) return;
