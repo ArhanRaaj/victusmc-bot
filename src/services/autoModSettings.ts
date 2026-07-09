@@ -16,6 +16,9 @@ export interface AutoModConfig {
     enabled: boolean;
     logChannelId: string | null;
     rules: AutoModRule[];
+    whitelistRoleIds: string[];
+    whitelistChannelIds: string[];
+    blacklistWords: string[];
 }
 
 const DEFAULT_RULES: AutoModRule[] = [
@@ -35,6 +38,9 @@ const DEFAULT_CONFIG: AutoModConfig = {
     enabled: false,
     logChannelId: null,
     rules: DEFAULT_RULES,
+    whitelistRoleIds: [],
+    whitelistChannelIds: [],
+    blacklistWords: [],
 };
 
 export class AutoModSettingsService {
