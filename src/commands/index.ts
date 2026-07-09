@@ -45,7 +45,12 @@ import { avatarCommand } from './avatar.js';
 import { userinfoCommand } from './userinfo.js';
 import { serverinfoCommand } from './serverinfo.js';
 import { emojiCommand } from './emoji.js';
+import { noprefixCommand } from './noprefix.js';
 import { musicCommands } from './music/index.js';
+import { levelingCommand, levelCommand } from './leveling.js';
+import { staffCommand } from './staff.js';
+import { attendanceCommand, attendanceLogCommand } from './attendance.js';
+import { modCommand } from './mod.js';
 
 // Export command collection
 export const commands = new Collection<string, Command>();
@@ -98,6 +103,13 @@ const allCommands: Command[] = [
     userinfoCommand,
     serverinfoCommand,
     emojiCommand,
+    noprefixCommand,
+    levelingCommand,
+    levelCommand,
+    staffCommand,
+    attendanceCommand,
+    attendanceLogCommand,
+    modCommand,
     ...musicCommands,
 ];
 
