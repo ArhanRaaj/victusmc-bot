@@ -43,6 +43,7 @@ CREATE TABLE IF NOT EXISTS bot_settings (
     ticket_allow_user_reopen BOOLEAN DEFAULT true,
     prefix TEXT DEFAULT '!',
     suggestion_channel_id TEXT,
+    announcement_channels TEXT[] DEFAULT '{}',
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
@@ -155,11 +156,15 @@ CREATE TABLE IF NOT EXISTS discord_announcements (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     guild_id TEXT NOT NULL,
     title TEXT NOT NULL,
-    content TEXT NOT NULL,
+    description TEXT NOT NULL DEFAULT '',
     type TEXT DEFAULT 'info',
     target TEXT DEFAULT 'channel',
     dm_category TEXT,
     channel_id TEXT,
+    thumbnail_url TEXT,
+    image_url TEXT,
+    footer_text TEXT,
+    ping_everyone BOOLEAN DEFAULT false,
     status TEXT DEFAULT 'draft',
     scheduled_at TIMESTAMPTZ,
     sent_count INT DEFAULT 0,

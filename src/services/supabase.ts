@@ -66,7 +66,7 @@ class SupabaseService {
             } else if (status === 'TIMED_OUT') {
                 logger.warn('⚠️ Realtime: Connection timed out. Ensure "supabase_realtime" publication includes "discord_linked_accounts".');
             } else {
-                logger.debug(`📡 Realtime Status Update: ${status}`);
+                logger.debug(`📦 Realtime Status Update: ${status}`);
             }
         });
 
@@ -988,18 +988,22 @@ class SupabaseService {
     async createDiscordAnnouncement(announcement: {
         guild_id: string;
         title: string;
-        content: string;
+        description: string;
         type?: string;
         target?: string;
         dm_category?: string;
         channel_id?: string;
+        thumbnail_url?: string;
+        image_url?: string;
+        footer_text?: string;
+        ping_everyone?: boolean;
         scheduled_at?: string;
         created_by: string;
         created_by_name?: string;
     }): Promise<any | null> {
         const { data, error } = await this.client
             .from('discord_announcements')
-            .insert({ ...announcement, status: 'draft' })
+            .insert({ ...announcement, content: announcement.description, status: 'draft' })
             .select()
             .single();
 
@@ -1031,10 +1035,14 @@ class SupabaseService {
      */
     async updateDiscordAnnouncement(id: string, updates: Partial<{
         title: string;
-        content: string;
+        description: string;
         type: string;
         target: string;
         dm_category: string;
+        thumbnail_url: string;
+        image_url: string;
+        footer_text: string;
+        ping_everyone: boolean;
         status: string;
         sent_count: number;
         failed_count: number;

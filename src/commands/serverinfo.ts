@@ -44,22 +44,16 @@ export const serverinfoCommand: Command = {
         c.addSeparatorComponents(ComponentsV2.separator());
 
         c.addTextDisplayComponents(ComponentsV2.text(
-            `**Owner:** ${owner?.user?.tag || 'Unknown'} • **Created:** <t:${created}:R>\n` +
-            `**Members:** ${guild.memberCount} • **Channels:** ${textChannels} Text • ${voiceChannels} Voice • ${categories} Categories\n` +
-            `**Boosts:** ${boosts} (Level ${boostLevel}) • **Roles:** ${guild.roles.cache.size}`
+            `**Owner:** ${owner?.user?.tag || 'Unknown'} **Created:** <t:${created}:R>\n` +
+            `**Members:** ${guild.memberCount} **Channels:** ${textChannels} Text, ${voiceChannels} Voice, ${categories} Categories\n` +
+            `**Boosts:** ${boosts} (Level ${boostLevel}) **Roles:** ${guild.roles.cache.size}`
         ));
 
         c.addSeparatorComponents(ComponentsV2.separator());
 
         const gamesSection = new SectionBuilder()
-            .setButtonAccessory(
-                new ButtonBuilder()
-                    .setLabel('Store')
-                    .setStyle(ButtonStyle.Link)
-                    .setURL(`${config.branding.website}/store`)
-            )
             .addTextDisplayComponents(new TextDisplayBuilder().setContent(
-                `### 🎮 Gamemodes\n` +
+                `### Gamemodes\n` +
                 `> **Lifesteal** — Fight, steal hearts, survive!\n` +
                 `> **PvP** — Competitive player-versus-player arena\n\n` +
                 `**Server IP:** \`play.victusmc.net\``
@@ -68,13 +62,17 @@ export const serverinfoCommand: Command = {
 
         const buttons = new ActionRowBuilder<ButtonBuilder>().addComponents(
             new ButtonBuilder()
+                .setLabel('Store')
+                .setStyle(ButtonStyle.Link)
+                .setURL(`${config.branding.website}/store`),
+            new ButtonBuilder()
                 .setLabel('Discord')
                 .setStyle(ButtonStyle.Link)
                 .setURL(`${config.branding.website}/discord`),
             new ButtonBuilder()
                 .setLabel('Hosting')
                 .setStyle(ButtonStyle.Link)
-                .setURL(`${config.branding.website}/hosting`)
+                .setURL('https://www.victuscloud.com')
         );
         c.addActionRowComponents(buttons);
 

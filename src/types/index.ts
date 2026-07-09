@@ -107,6 +107,7 @@ export interface BotSettings {
     ticket_allow_user_reopen: boolean;
     prefix: string | null;
     suggestion_channel_id: string | null;
+    announcement_channels: string[];
     updated_at: string;
 }
 
@@ -295,11 +296,15 @@ export interface Announcement {
     id: string;
     guild_id: string;
     title: string;
-    content: string;
+    description: string;
     type: 'info' | 'warning' | 'success' | 'error';
     target: 'channel' | 'dm' | 'both';
     dm_category: 'maintenance' | 'billing' | 'security' | 'promotions' | null;
     channel_id: string | null;
+    thumbnail_url: string | null;
+    image_url: string | null;
+    footer_text: string | null;
+    ping_everyone: boolean;
     status: 'draft' | 'scheduled' | 'sending' | 'completed' | 'cancelled';
     scheduled_at: string | null;
     sent_count: number;
