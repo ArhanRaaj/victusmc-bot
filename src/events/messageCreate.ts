@@ -1,4 +1,4 @@
-import { ChannelType, AttachmentBuilder, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
+﻿import { ChannelType, AttachmentBuilder, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 import type { Message } from 'discord.js';
 import { config } from '../config.js';
 import { supabase } from '../services/supabase.js';
@@ -14,6 +14,9 @@ import { PrefixInteraction, translateV2Components } from '../utils/prefixInterac
 import { checkCooldown } from '../middleware/rateLimit.js';
 import { ComponentsV2 } from '../embeds/componentsV2.js';
 import { buildFinalEmbedPayload } from '../commands/embed.js';
+import { isNoprefixUser } from '../services/noprefixSettings.js';
+import { addChatXp, getConfig as getLevelingConfig } from '../services/levelingSettings.js';
+import { countingSettings } from '../services/countingSettings.js';
 
 const SETTINGS_TTL_MS = 20_000;
 const MAX_QUEUE_DEPTH = 3;
@@ -165,7 +168,7 @@ export const messageCreateEvent: Event = {
                     const durationMs = Date.now() - new Date(afkData.timestamp).getTime();
                     const durationStr = formatDurationMs(durationMs);
                     
-                    let body = `🔮 You are no longer AFK.\n\n` +
+                    let body = `<:Search:1524363077393317968> You are no longer AFK.\n\n` +
                         `› **You were AFK for:** ${durationStr}\n` +
                         `› **Reason:** ${afkData.reason || 'AFK'}\n\n`;
 
@@ -175,9 +178,9 @@ export const messageCreateEvent: Event = {
                             .map((m: any) => `› **${m.authorTag || m.username || m.tag || m.authorName || 'Unknown User'}** in <#${m.channelId}>: [Jump to Message](https://discord.com/channels/${guildId}/${m.channelId}/${m.messageId}) (<t:${Math.floor(new Date(m.timestamp).getTime() / 1000)}:R>)`)
                             .slice(0, 10)
                             .join('\n');
-                        body += `### 📝 Mentions while you were AFK\n${mentionList}`;
+                        body += `### <:Edit:1524363079675154433> Mentions while you were AFK\n${mentionList}`;
                     } else {
-                        body += `### 📝 Mentions while you were AFK\nNo one mentioned you while you were away.`;
+                        body += `### <:Edit:1524363079675154433> Mentions while you were AFK\nNo one mentioned you while you were away.`;
                     }
 
                     const welcomeContainer = ComponentsV2.successContainer(
@@ -207,7 +210,7 @@ export const messageCreateEvent: Event = {
                             // Send AFK notification in the channel
                             const afkContainer = ComponentsV2.infoContainer(
                                 'AFK User Mentioned',
-                                `🔍 **${mentionedUser.username}** is currently AFK: **${afkData.reason || 'AFK'}** (<t:${Math.floor(new Date(afkData.timestamp).getTime() / 1000)}:R>)`
+                                `<:Search:1524363077393317968> **${mentionedUser.username}** is currently AFK: **${afkData.reason || 'AFK'}** (<t:${Math.floor(new Date(afkData.timestamp).getTime() / 1000)}:R>)`
                             );
                             await message.reply({
                                 components: [afkContainer],
@@ -237,6 +240,62 @@ export const messageCreateEvent: Event = {
             }
         }
 
+        // --- Counting Game ---
+        if (message.inGuild()) {
+            const countingConfig = await countingSettings.get(message.guildId!);
+            if (countingConfig.enabled && countingConfig.channelId === message.channelId) {
+                const number = parseInt(message.content);
+                if (isNaN(number)) {
+                    await message.delete().catch(() => {});
+                    return;
+                }
+                if (number !== countingConfig.lastNumber + 1) {
+                    await message.delete().catch(() => {});
+                    const c = ComponentsV2.errorContainer(
+                        'Wrong Number!',
+                        `<@${message.author.id}> ruined the count! The next number should have been **${countingConfig.lastNumber + 1}**. Count reset to **0**.`
+                    );
+                    await message.channel.send({ components: [c], flags: ComponentsV2.IS_COMPONENTS_V2 }).catch(() => {});
+                    await countingSettings.set(message.guildId!, { lastNumber: 0, lastUserId: null, count: 0 });
+                    return;
+                }
+                if (message.author.id === countingConfig.lastUserId) {
+                    await message.delete().catch(() => {});
+                    const c = ComponentsV2.errorContainer(
+                        'Wait Your Turn!',
+                        `<@${message.author.id}> you can't count twice in a row! Count reset to **0**.`
+                    );
+                    await message.channel.send({ components: [c], flags: ComponentsV2.IS_COMPONENTS_V2 }).catch(() => {});
+                    await countingSettings.set(message.guildId!, { lastNumber: 0, lastUserId: null, count: 0 });
+                    return;
+                }
+                const reactions = ['🎉', '✅'];
+                if (number % 100 === 0) await message.react('🎉').catch(() => {});
+                if (number === 69) await message.react('😏').catch(() => {});
+                await countingSettings.set(message.guildId!, { lastNumber: number, lastUserId: message.author.id, count: number });
+            }
+        }
+
+        // --- Chat XP Tracking ---
+        if (message.inGuild()) {
+            const levelingConfig = getLevelingConfig(message.guildId!);
+            if (levelingConfig.enabled) {
+                if (levelingConfig.chatChannels.length === 0 || levelingConfig.chatChannels.includes(message.channelId)) {
+                    const result = addChatXp(message.guildId!, message.author.id);
+                    if (result.leveledUp && levelingConfig.announceChannel) {
+                        const channel = message.guild?.channels.cache.get(levelingConfig.announceChannel);
+                        if (channel?.isTextBased()) {
+                            const c = ComponentsV2.baseContainer(ComponentsV2.Accents.success);
+                            c.addTextDisplayComponents(ComponentsV2.text(
+                                `<:Stars:1524363036389937212> Congratulations <@${message.author.id}>! You reached **chat level ${result.newLevel}**!`
+                            ));
+                            await (channel as any).send({ components: [c], flags: ComponentsV2.IS_COMPONENTS_V2 }).catch(() => {});
+                        }
+                    }
+                }
+            }
+        }
+
         // Get guild specific prefix or default to '!'
         let prefix = '!';
         if (message.inGuild()) {
@@ -257,22 +316,22 @@ export const messageCreateEvent: Event = {
             const c = ComponentsV2.baseContainer(ComponentsV2.Accents.primary);
             c.addMediaGalleryComponents(ComponentsV2.mediaGallery('https://cdn.discordapp.com/attachments/1416827980004724766/1523993256961118299/wmremove-transformed.png'));
             c.addTextDisplayComponents(
-                ComponentsV2.text('## 👋 Hey there! I\'m VictusMC Bot\n\u200b'),
+                ComponentsV2.text('## <:Wave:1524363100734623836> Hey there! I\'m VictusMC Bot\n\u200b'),
                 ComponentsV2.text(
                     'Your all-in-one companion for the **VictusMC** Minecraft network.\n\n' +
-                    '### 🎮 What I Can Do\n' +
+                    '### <:Giveaway:1524363020250382437> What I Can Do\n' +
                     '› **Server Info** — Check status, player counts, and more\n' +
                     '› **Moderation** — Keep your server safe with auto-mod & anti-nuke\n' +
                     '› **Tickets** — Handle support requests seamlessly\n' +
                     '› **Music** — Play high-quality audio in voice channels\n' +
                     '› **Giveaways & Polls** — Engage your community\n' +
                     '› **Custom Layouts** — Design beautiful Components V2 panels\n\n' +
-                    '### 📜 Quick Links\n' +
+                    '### 📦 Quick Links\n' +
                     '› Use \`/help\` to explore all commands\n' +
                     '› Server IP: \`play.victusmc.net\`\n' +
                     '› We have **2 gamemodes**: **Lifesteal** & **PvP**\n\u200b'
                 ),
-                ComponentsV2.text('-# 💫 VictusMC • Premium Discord Bot')
+                ComponentsV2.text('-# <:Stars:1524363036389937212> VictusMC • Premium Discord Bot')
             );
             c.addActionRowComponents(
                 new ActionRowBuilder<ButtonBuilder>().addComponents(
@@ -298,14 +357,14 @@ export const messageCreateEvent: Event = {
                         const response = await fetch(imageUrl);
                         const buffer = Buffer.from(await response.arrayBuffer());
                         const emoji = await guild.emojis.create({ attachment: buffer, name: pending.name });
-                        const c = ComponentsV2.successContainer('✅ Emoji Added',
+                        const c = ComponentsV2.successContainer('<:Tick:1524363090626482326> Emoji Added',
                             `Successfully added **${emoji}** \`:${emoji.name}:\``);
                         await message.reply({ components: [c], flags: ComponentsV2.IS_COMPONENTS_V2 });
                     } catch (err: any) {
                         const reason = err.message?.includes('rate') ? 'Rate limited. Try again in a moment.'
                             : err.message?.includes('image') ? 'The image format is invalid or too large (max 256KB for static, 50KB for animated).'
                             : err.message || 'Unknown error.';
-                        const c = ComponentsV2.errorContainer('❌ Failed to Add Emoji', reason);
+                        const c = ComponentsV2.errorContainer('<:Cross:1524363088621469737> Failed to Add Emoji', reason);
                         await message.reply({ components: [c], flags: ComponentsV2.IS_COMPONENTS_V2 });
                     }
                     return;
@@ -315,6 +374,15 @@ export const messageCreateEvent: Event = {
 
         let isCommand = false;
         let commandPrefix = '';
+
+        // Noprefix: check if the user is allowed to run commands without a prefix
+        if (message.inGuild() && isNoprefixUser(message.guildId!, message.author.id) && !content.startsWith(prefix) && !content.startsWith(mentionPrefix || '') && !content.startsWith(mentionNickPrefix || '')) {
+            const cmdName = content.split(/\s+/)[0]?.toLowerCase();
+            if (cmdName && message.client.commands.has(cmdName)) {
+                isCommand = true;
+                commandPrefix = '';
+            }
+        }
 
         if (content.startsWith(prefix)) {
             isCommand = true;
@@ -372,7 +440,7 @@ export const messageCreateEvent: Event = {
                             await command.execute(prefixInteraction as any);
                         } catch (error) {
                             logger.error(`Error running prefix command ${commandName}:`, error);
-                            await message.reply('⚠️ An error occurred while executing this command.').catch(() => {});
+                            await message.reply('<:Exclamation:1524363098809569350> An error occurred while executing this command.').catch(() => {});
                         }
                         return;
                     }
@@ -441,11 +509,11 @@ export const messageCreateEvent: Event = {
                                         const payload = buildFinalEmbedPayload(embed);
                                         await message.reply({ components: [payload], flags: ComponentsV2.IS_COMPONENTS_V2 }).catch(() => {});
                                     } else {
-                                        await message.reply({ content: `❌ Linked custom embed template **\`${replyText}\`** not found.` }).catch(() => {});
+                                        await message.reply({ content: `<:Cross:1524363088621469737> Linked custom embed template **\`${replyText}\`** not found.` }).catch(() => {});
                                     }
                                 } catch (error) {
                                     logger.error('Failed to send custom command embed:', error);
-                                    await message.reply({ content: '⚠️ Failed to load the custom embed response.' }).catch(() => {});
+                                    await message.reply({ content: '<:Exclamation:1524363098809569350> Failed to load the custom embed response.' }).catch(() => {});
                                 }
                             } else if (customCmd.reply_type === 'image') {
                                 await message.reply({ files: [new AttachmentBuilder(replyText)] }).catch(() => {});

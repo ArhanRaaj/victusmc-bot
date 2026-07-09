@@ -51,6 +51,7 @@ import { levelingCommand, levelCommand } from './leveling.js';
 import { staffCommand } from './staff.js';
 import { attendanceCommand, attendanceLogCommand } from './attendance.js';
 import { modCommand } from './mod.js';
+import { countingCommand } from './counting.js';
 
 // Export command collection
 export const commands = new Collection<string, Command>();
@@ -110,6 +111,7 @@ const allCommands: Command[] = [
     attendanceCommand,
     attendanceLogCommand,
     modCommand,
+    countingCommand,
     ...musicCommands,
 ];
 
