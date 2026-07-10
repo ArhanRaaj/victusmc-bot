@@ -193,6 +193,21 @@ export function checkRoleRewards(guildId: string, userLevel: number): string[] {
         .map(r => r.roleId);
 }
 
+export function getLeaderboard(guildId: string, limit = 10): { userId: string; chatXp: number; voiceXp: number; totalXp: number; level: number }[] {
+    const guildLevels = levelsCache.get(guildId);
+    if (!guildLevels) return [];
+    return guildLevels
+        .map(u => ({
+            userId: u.userId,
+            chatXp: u.chatXp,
+            voiceXp: u.voiceXp,
+            totalXp: u.chatXp + u.voiceXp,
+            level: calculateLevel(u.chatXp + u.voiceXp),
+        }))
+        .sort((a, b) => b.totalXp - a.totalXp)
+        .slice(0, limit);
+}
+
 // Voice session tracking
 const voiceSessions = new Collection<string, number>();
 

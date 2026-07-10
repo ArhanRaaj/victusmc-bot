@@ -66,6 +66,10 @@ import { starboardCommand } from './starboard.js';
 import { timezoneCommand } from './timezone.js';
 import { autoroleCommand } from './autorole.js';
 import { remindCommand } from './remind.js';
+import { leaderboardCommand } from './leaderboard.js';
+import { roleinfoCommand } from './roleinfo.js';
+import { emojisCommand } from './emojis.js';
+import { inviteCommand } from './invite.js';
 
 // Export command collection
 export const commands = new Collection<string, Command>();
@@ -140,6 +144,10 @@ const allCommands: Command[] = [
     timezoneCommand,
     autoroleCommand,
     remindCommand,
+    leaderboardCommand,
+    roleinfoCommand,
+    emojisCommand,
+    inviteCommand,
     pingCommand,
     membercountCommand,
     botinfoCommand,
