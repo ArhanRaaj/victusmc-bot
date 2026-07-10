@@ -49,6 +49,15 @@ export const modCommand: Command = {
                 .addUserOption(opt => opt.setName('user').setDescription('The user').setRequired(true))
         )
         .addSubcommand(sub =>
+            sub.setName('move').setDescription('Move a member to another voice channel')
+                .addUserOption(opt => opt.setName('user').setDescription('The user').setRequired(true))
+                .addChannelOption(opt => opt.setName('channel').setDescription('Target voice channel').setRequired(true).addChannelTypes(ChannelType.GuildVoice))
+        )
+        .addSubcommand(sub =>
+            sub.setName('disconnect').setDescription('Disconnect a member from voice')
+                .addUserOption(opt => opt.setName('user').setDescription('The user').setRequired(true))
+        )
+        .addSubcommand(sub =>
             sub.setName('stealemoji').setDescription('Steal an emoji from a message or URL')
                 .addStringOption(opt => opt.setName('emoji').setDescription('The emoji (custom or URL)').setRequired(true))
                 .addStringOption(opt => opt.setName('name').setDescription('Name for the emoji'))
@@ -78,6 +87,8 @@ export const modCommand: Command = {
                 case 'setnick': return await handleSetNick(interaction);
                 case 'deafen': return await handleDeafen(interaction);
                 case 'undeafen': return await handleUndeafen(interaction);
+                case 'move': return await handleMove(interaction);
+                case 'disconnect': return await handleDisconnect(interaction);
                 case 'stealemoji': return await handleStealEmoji(interaction);
                 case 'stealsticker': return await handleStealSticker(interaction);
                 case 'clear': return await handleClear(interaction);
@@ -179,6 +190,41 @@ async function handleUndeafen(interaction: any) {
     }
     await member.voice.setDeaf(false);
     const c = ComponentsV2.successContainer('Member Undeafened', `${member.user.tag} has been undeafened.`);
+    await interaction.editReply({ components: [c], flags: V2 });
+}
+
+async function handleMove(interaction: any) {
+    const member = interaction.options.getMember('user');
+    const channel = interaction.options.getChannel('channel', true);
+    if (!member) {
+        const c = ComponentsV2.errorContainer('Error', 'User not found.');
+        await interaction.editReply({ components: [c], flags: V2 });
+        return;
+    }
+    if (!member.voice.channel) {
+        const c = ComponentsV2.warningContainer('Not in Voice', `${member.user.tag} is not in a voice channel.`);
+        await interaction.editReply({ components: [c], flags: V2 });
+        return;
+    }
+    await member.voice.setChannel(channel);
+    const c = ComponentsV2.successContainer('Member Moved', `${member.user.tag} moved to <#${channel.id}>.`);
+    await interaction.editReply({ components: [c], flags: V2 });
+}
+
+async function handleDisconnect(interaction: any) {
+    const member = interaction.options.getMember('user');
+    if (!member) {
+        const c = ComponentsV2.errorContainer('Error', 'User not found.');
+        await interaction.editReply({ components: [c], flags: V2 });
+        return;
+    }
+    if (!member.voice.channel) {
+        const c = ComponentsV2.warningContainer('Not in Voice', `${member.user.tag} is not in a voice channel.`);
+        await interaction.editReply({ components: [c], flags: V2 });
+        return;
+    }
+    await member.voice.disconnect();
+    const c = ComponentsV2.successContainer('Member Disconnected', `${member.user.tag} has been disconnected from voice.`);
     await interaction.editReply({ components: [c], flags: V2 });
 }
 

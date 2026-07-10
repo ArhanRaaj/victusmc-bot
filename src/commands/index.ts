@@ -62,6 +62,8 @@ import { autothreadCommand } from './autothread.js';
 import { modmailCommand, modmailCloseCommand } from './modmail.js';
 import { youtubeCommand } from './youtube.js';
 import { vouchCommand } from './vouch.js';
+import { starboardCommand } from './starboard.js';
+import { timezoneCommand } from './timezone.js';
 
 // Export command collection
 export const commands = new Collection<string, Command>();
@@ -132,6 +134,8 @@ const allCommands: Command[] = [
     modmailCloseCommand,
     youtubeCommand,
     vouchCommand,
+    starboardCommand,
+    timezoneCommand,
     pingCommand,
     membercountCommand,
     botinfoCommand,

@@ -15,7 +15,7 @@ import { checkCooldown } from '../middleware/rateLimit.js';
 import { ComponentsV2 } from '../embeds/componentsV2.js';
 import { buildFinalEmbedPayload } from '../commands/embed.js';
 import { isNoprefixUser } from '../services/noprefixSettings.js';
-import { addChatXp, getConfig as getLevelingConfig } from '../services/levelingSettings.js';
+import { addChatXp, getConfig as getLevelingConfig, checkRoleRewards } from '../services/levelingSettings.js';
 import { countingSettings } from '../services/countingSettings.js';
 import { stickySettings, StickyMessage } from '../services/stickySettings.js';
 import { autoResponder } from '../services/autoResponder.js';
@@ -346,14 +346,41 @@ export const messageCreateEvent: Event = {
             if (levelingConfig.enabled) {
                 if (levelingConfig.chatChannels.length === 0 || levelingConfig.chatChannels.includes(message.channelId)) {
                     const result = addChatXp(message.guildId!, message.author.id);
-                    if (result.leveledUp && levelingConfig.announceChannel) {
-                        const channel = message.guild?.channels.cache.get(levelingConfig.announceChannel);
-                        if (channel?.isTextBased()) {
-                            const c = ComponentsV2.baseContainer(ComponentsV2.Accents.success);
-                            c.addTextDisplayComponents(ComponentsV2.text(
-                                `<:Stars:1524363036389937212> Congratulations <@${message.author.id}>! You reached **chat level ${result.newLevel}**!`
-                            ));
-                            await (channel as any).send({ components: [c], flags: ComponentsV2.IS_COMPONENTS_V2 }).catch(() => {});
+                    if (result.leveledUp) {
+                        // Assign role rewards
+                        const rewardRoleIds = checkRoleRewards(message.guildId!, result.newLevel);
+                        const member = message.member;
+                        if (member) {
+                            for (const roleId of rewardRoleIds) {
+                                const role = message.guild?.roles.cache.get(roleId);
+                                if (role && !member.roles.cache.has(roleId)) {
+                                    await member.roles.add(role).catch(() => {});
+                                }
+                            }
+                        }
+
+                        // Level-up log channel
+                        if (levelingConfig.levelLogChannel) {
+                            const logChannel = message.guild?.channels.cache.get(levelingConfig.levelLogChannel);
+                            if (logChannel?.isTextBased()) {
+                                const c = ComponentsV2.baseContainer(ComponentsV2.Accents.success);
+                                c.addTextDisplayComponents(ComponentsV2.text(
+                                    `<:Stars:1524363036389937212> <@${message.author.id}> reached **level ${result.newLevel}** in chat!`
+                                ));
+                                await (logChannel as any).send({ components: [c], flags: ComponentsV2.IS_COMPONENTS_V2 }).catch(() => {});
+                            }
+                        }
+
+                        // Public announce channel
+                        if (levelingConfig.announceChannel) {
+                            const channel = message.guild?.channels.cache.get(levelingConfig.announceChannel);
+                            if (channel?.isTextBased()) {
+                                const c = ComponentsV2.baseContainer(ComponentsV2.Accents.success);
+                                c.addTextDisplayComponents(ComponentsV2.text(
+                                    `<:Stars:1524363036389937212> Congratulations <@${message.author.id}>! You reached **chat level ${result.newLevel}**!`
+                                ));
+                                await (channel as any).send({ components: [c], flags: ComponentsV2.IS_COMPONENTS_V2 }).catch(() => {});
+                            }
                         }
                     }
                 }

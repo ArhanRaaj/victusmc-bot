@@ -18,6 +18,7 @@ import { roleDeleteEvent } from './roleDelete.js';
 import { roleCreateEvent } from './roleCreate.js';
 import { channelCreateEvent } from './channelCreate.js';
 import { webhookUpdateEvent } from './webhookUpdate.js';
+import { messageReactionAddEvent } from './messageReactionAdd.js';
 
 const events: Event[] = [
     readyEvent,
@@ -35,6 +36,7 @@ const events: Event[] = [
     roleCreateEvent,
     channelCreateEvent,
     webhookUpdateEvent,
+    messageReactionAddEvent,
 ];
 
 /**
