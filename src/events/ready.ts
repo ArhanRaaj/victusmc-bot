@@ -13,6 +13,7 @@ import { initializeFonts } from 'musicard';
 import { startGiveawayScheduler } from '../commands/giveaway.js';
 import { startVoiceXpInterval } from './voiceStateUpdate.js';
 import { reminderService } from '../services/reminderSettings.js';
+import { birthdayService } from '../services/birthdaySettings.js';
 
 let dmQueueProcessing = false;
 
@@ -143,6 +144,33 @@ export const readyEvent: Event = {
                 }
             }
         }, 15000);
+
+        // Birthday checker
+        let lastBirthdayDate = '';
+        setInterval(async () => {
+            const today = new Date();
+            const dateStr = `${today.getMonth() + 1}-${today.getDate()}`;
+            if (dateStr === lastBirthdayDate) return;
+            lastBirthdayDate = dateStr;
+
+            for (const guild of client.guilds.cache.values()) {
+                const cfg = await birthdayService.getConfig(guild.id);
+                if (!cfg.enabled || !cfg.channelId) continue;
+                const birthdays = await birthdayService.getTodaysBirthdays(guild.id);
+                if (birthdays.length === 0) continue;
+                const channel = guild.channels.cache.get(cfg.channelId);
+                if (!channel?.isTextBased()) continue;
+                const mentions = birthdays.map(b => `<@${b.userId}>`).join(', ');
+                const roleMention = cfg.roleId ? `<@&${cfg.roleId}>` : '';
+
+                const { ComponentsV2 } = await import('../embeds/componentsV2.js');
+                const c = ComponentsV2.baseContainer(ComponentsV2.Accents.success);
+                c.addTextDisplayComponents(ComponentsV2.text(
+                    `## 🎂 Birthday${birthdays.length > 1 ? 's' : ''} Today!\n\n${mentions}\n\nHappy birthday! 🎉🎉\n\n${roleMention}`
+                ));
+                await channel.send({ components: [c], flags: ComponentsV2.IS_COMPONENTS_V2 }).catch(() => {});
+            }
+        }, 3600000); // every hour
 
         client.user.setPresence({
             status: 'online',
