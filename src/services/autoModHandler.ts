@@ -49,7 +49,7 @@ async function applyPunishment(message: Message, rule: AutoModRule, reason: stri
         const logChannel = message.guild.channels.cache.get(config.logChannelId) as TextChannel | undefined;
         if (logChannel) {
             const container = ComponentsV2.warningContainer(
-                '🛡️ Auto-Mod Action',
+                '<:Shield:1524362964772196422> Auto-Mod Action',
                 `**Rule:** ${rule.type}\n**User:** ${message.author.tag} (<@${message.author.id}>)\n**Action:** ${rule.punishment}\n**Reason:** ${reason}\n**Channel:** <#${message.channelId}>`
             );
             logChannel.send({ components: [container], flags: V2 }).catch(() => {});

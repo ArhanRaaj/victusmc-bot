@@ -26,16 +26,16 @@ const SOURCE_ICON: Record<string, string> = {
     youtube: '<:Play:1524363092706721892>',
     soundcloud: '⚙️',
     bandcamp: '🔵',
-    twitch: '🎵',
+    twitch: '<:Music:1524363029838561400>',
     vimeo: '🎬',
     spotify: '<:Tick:1524363090626482326>',
-    deezer: '🎵',
+    deezer: '<:Music:1524363029838561400>',
     applemusic: '🍎',
     http: '<:Link:1524363114903113799>',
 };
 
 export function sourceIcon(source?: string): string {
-    return SOURCE_ICON[(source || '').toLowerCase()] || '🎵';
+    return SOURCE_ICON[(source || '').toLowerCase()] || '<:Music:1524363029838561400>';
 }
 
 /** Escape Discord markdown so track titles can't break the layout. */

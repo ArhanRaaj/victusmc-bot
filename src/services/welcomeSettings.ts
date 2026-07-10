@@ -19,7 +19,7 @@ const DEFAULT_CONFIG: WelcomeConfig = {
     channelId: null,
     template: 'Welcome {user} to {guild}! You are member #{member_count}!',
     embedEnabled: true,
-    embedTitle: 'Welcome to the Server! 🎉',
+    embedTitle: 'Welcome to the Server! <:Stars:1524363036389937212>',
     embedColor: '#8b5cf6',
     embedImage: null,
     customEmbedName: null,

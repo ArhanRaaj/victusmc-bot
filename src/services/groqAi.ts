@@ -31,7 +31,7 @@ export const groqAi = {
         }
     ): Promise<string> {
         if (!this.isEnabled()) {
-            return "⚠️ Victus AI is not currently configured or enabled. Please contact staff for assistance.";
+            return "<:Exclamation:1524363098809569350> Victus AI is not currently configured or enabled. Please contact staff for assistance.";
         }
 
         const systemMessage = `You are the official AI Assistant for VictusMc (a premier Minecraft network).
@@ -41,7 +41,7 @@ User context:
 - Discord User: ${context.discordTag} (${context.discordId})
 - Linked VictusMC Account: ${context.linked ? 'Yes' : 'No'}
 
-Key facts about VictusMC (⚠️ CRITICAL — do NOT make up gamemodes):
+Key facts about VictusMC (<:Exclamation:1524363098809569350> CRITICAL — do NOT make up gamemodes):
 - We currently have EXACTLY 2 gamemodes: Lifesteal and PvP. There is NO Survival, Skyblock, Prison, KitPvP, Creative, or any other mode.
 - Server IP: play.victusmc.net (Java, latest version).
 - Launched on 10th July 2026.
@@ -76,20 +76,20 @@ Guidelines:
             if (!response.ok) {
                 const errText = await response.text();
                 logger.error(`Groq API returned error status ${response.status}: ${errText}`);
-                return "⚠️ Sorry, I encountered an issue reaching my AI backend. Please try again in a moment.";
+                return "<:Exclamation:1524363098809569350> Sorry, I encountered an issue reaching my AI backend. Please try again in a moment.";
             }
 
             const data = (await response.json()) as any;
             const content = data?.choices?.[0]?.message?.content;
             if (!content) {
                 logger.warn('Groq API returned empty chat completion response');
-                return "⚠️ I couldn't formulate a response right now. Please try again.";
+                return "<:Exclamation:1524363098809569350> I couldn't formulate a response right now. Please try again.";
             }
 
             return content.trim();
         } catch (error) {
             logger.error('Error invoking Groq AI askVictus:', error);
-            return "⚠️ A network error occurred while communicating with my AI brain. Please try again later.";
+            return "<:Exclamation:1524363098809569350> A network error occurred while communicating with my AI brain. Please try again later.";
         }
     },
 
@@ -98,7 +98,7 @@ Guidelines:
      */
     async suggestForTicket(input: TicketSuggestInput): Promise<string> {
         if (!this.isEnabled()) {
-            return "⚠️ Groq AI assistant is not enabled. Cannot generate ticket suggestions.";
+            return "<:Exclamation:1524363098809569350> Groq AI assistant is not enabled. Cannot generate ticket suggestions.";
         }
 
         const formattedMessages = input.messages
@@ -142,19 +142,19 @@ Generate a professional response outline or recommended reply:`;
             if (!response.ok) {
                 const errText = await response.text();
                 logger.error(`Groq API returned error status ${response.status} for ticket suggest: ${errText}`);
-                return "⚠️ Failed to communicate with Groq AI for ticket suggestion.";
+                return "<:Exclamation:1524363098809569350> Failed to communicate with Groq AI for ticket suggestion.";
             }
 
             const data = (await response.json()) as any;
             const content = data?.choices?.[0]?.message?.content;
             if (!content) {
-                return "⚠️ Empty suggestion returned from the AI assistant.";
+                return "<:Exclamation:1524363098809569350> Empty suggestion returned from the AI assistant.";
             }
 
             return content.trim();
         } catch (error) {
             logger.error('Error invoking Groq AI suggestForTicket:', error);
-            return "⚠️ A network error occurred while generating a ticket suggestion.";
+            return "<:Exclamation:1524363098809569350> A network error occurred while generating a ticket suggestion.";
         }
     }
 };

@@ -41,7 +41,7 @@ export function initTicketBridge(client: Client<true>): void {
                 logger.error('ticketBridge: relayWebMessageToDiscord failed:', e));
         },
     );
-    logger.info('🎫 Ticket bridge initialized.');
+    logger.info('<:Ticket:1524363100734623836> Ticket bridge initialized.');
 }
 
 /** A fresh website ticket: spin up a Discord channel and ping staff. */
@@ -112,7 +112,7 @@ async function handleNewWebTicket(client: Client<true>, ticket: any): Promise<vo
         // Components V2 messages can't carry a `content` field — ping separately.
         const webPing = `${staffPing} ${ownerPing}`.trim();
         await channel.send({
-            content: webPing || `🎫 New website ticket #${ticket.ticket_number ?? ''}`,
+            content: webPing || `<:Ticket:1524363100734623836> New website ticket #${ticket.ticket_number ?? ''}`,
             allowedMentions: { parse: ['roles', 'users'] },
         }).catch(() => undefined);
     } catch (e) {
@@ -121,7 +121,7 @@ async function handleNewWebTicket(client: Client<true>, ticket: any): Promise<vo
         await channel.send({
             content:
                 `${staffPing}\n` +
-                `🎫 **Website ticket #${ticket.ticket_number ?? ''}** from ${opener}\n` +
+                `<:Ticket:1524363100734623836> **Website ticket #${ticket.ticket_number ?? ''}** from ${opener}\n` +
                 `**Subject:** ${truncate(ticket.subject, 200)}\n\n` +
                 `_Reply in this channel to answer — messages sync to the website ticket._`,
             allowedMentions: { parse: ['roles', 'users'] },
@@ -180,7 +180,7 @@ export async function mirrorAiReplyToTicket(channelId: string, botId: string, co
 }
 
 async function postWebMessage(channel: any, msg: any): Promise<void> {
-    const tag = msg.author_is_staff ? '🛡️ ' : '';
+    const tag = msg.author_is_staff ? '<:Shield:1524362964772196422> ' : '';
     const who = msg.author_username || (msg.author_is_staff ? 'Staff' : 'User');
     const lines = [`**${tag}${who}** (website):`, truncate(msg.content || '', 1800)];
     if (Array.isArray(msg.attachments) && msg.attachments.length) {

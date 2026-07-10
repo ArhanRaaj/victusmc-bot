@@ -50,11 +50,11 @@ export const interactionCreateEvent: Event = {
                             flags: ComponentsV2.IS_COMPONENTS_V2 | MessageFlags.Ephemeral,
                         });
                     } catch (error: any) {
-                        logger.error('❌ Failed to send V2 auto-link response:', error);
+                        logger.error('<:Cross:1524363088621469737> Failed to send V2 auto-link response:', error);
                         if (error.errors) logger.error('Validation details:', JSON.stringify(error.errors, null, 2));
 
                     await interaction.reply({
-                        content: '⚠️ **System Error:** Failed to render linking interface. Please contact support.',
+                        content: '<:Exclamation:1524363098809569350> **System Error:** Failed to render linking interface. Please contact support.',
                         flags: MessageFlags.Ephemeral,
                     }).catch(() => { });
                     }
@@ -66,7 +66,7 @@ export const interactionCreateEvent: Event = {
                 logger.info(`Command: /${interaction.commandName} by ${interaction.user.tag} (${interaction.user.id})`);
                 await command.execute(interaction);
             } catch (error: any) {
-                logger.error(`❌ Error executing command ${interaction.commandName}:`, error);
+                logger.error(`<:Cross:1524363088621469737> Error executing command ${interaction.commandName}:`, error);
                 if (error.errors) logger.error('Validation details:', JSON.stringify(error.errors, null, 2));
 
                 const container = ComponentsV2.errorContainer(
@@ -86,8 +86,8 @@ export const interactionCreateEvent: Event = {
                         await interaction.reply(replyOptions);
                     }
                 } catch (fallbackError: any) {
-                    logger.error('❌ Fallback V2 response failed:', fallbackError);
-                    const finalFallback = { content: '⚠️ **Critical Error:** High-end UI failed. Check bot console.', flags: MessageFlags.Ephemeral as number };
+                    logger.error('<:Cross:1524363088621469737> Fallback V2 response failed:', fallbackError);
+                    const finalFallback = { content: '<:Exclamation:1524363098809569350> **Critical Error:** High-end UI failed. Check bot console.', flags: MessageFlags.Ephemeral as number };
                     if (interaction.replied || interaction.deferred) {
                         await interaction.editReply(finalFallback).catch(() => { });
                     } else {

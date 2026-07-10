@@ -274,8 +274,8 @@ export const messageCreateEvent: Event = {
                     await countingSettings.set(message.guildId!, { lastNumber: 0, lastUserId: null, count: 0 });
                     return;
                 }
-                const reactions = ['🎉', '✅'];
-                if (number % 100 === 0) await message.react('🎉').catch(() => {});
+                const reactions = ['<:Stars:1524363036389937212>', '<:Tick:1524363090626482326>'];
+                if (number % 100 === 0) await message.react('<:Stars:1524363036389937212>').catch(() => {});
                 if (number === 69) await message.react('😏').catch(() => {});
                 await countingSettings.set(message.guildId!, { lastNumber: number, lastUserId: message.author.id, count: number });
             }

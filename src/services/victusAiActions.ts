@@ -59,7 +59,7 @@ export const victusAiActions = {
         if (/\b(launch|launched|when.*(open|start|release|created)|server.*(age|old|created)|release date|when was)\b/i.test(cleanedPrompt)) {
             return {
                 handled: true,
-                content: `🎉 **VictusMC** officially launched on **10th July 2026**! We're excited to have you here.`,
+                content: `<:Stars:1524363036389937212> **VictusMC** officially launched on **10th July 2026**! We're excited to have you here.`,
             };
         }
 

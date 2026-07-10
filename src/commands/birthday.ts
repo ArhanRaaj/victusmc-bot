@@ -55,7 +55,7 @@ export const birthdayCommand: Command = {
             }
             const list = birthdays.map(b => `<@${b.userId}>`).join(', ');
             const c = ComponentsV2.baseContainer(ComponentsV2.Accents.success);
-            c.addTextDisplayComponents(ComponentsV2.text(`## 🎂 Birthdays Today\n\n${list}\n\nHappy birthday! 🎉`));
+            c.addTextDisplayComponents(ComponentsV2.text(`## 🎂 Birthdays Today\n\n${list}\n\nHappy birthday! <:Stars:1524363036389937212>`));
             await interaction.editReply({ components: [c], flags: V2 });
             return;
         }
