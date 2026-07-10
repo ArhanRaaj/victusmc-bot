@@ -2,7 +2,8 @@ import { SlashCommandBuilder, version as djsVersion } from 'discord.js';
 import type { Command } from '../types/index.js';
 import { ComponentsV2 } from '../embeds/componentsV2.js';
 import { config } from '../config.js';
-import { version } from '../../package.json' with { type: 'json' };
+import { createRequire } from 'node:module';
+const { version } = createRequire(import.meta.url)('../../package.json');
 
 const V2 = ComponentsV2.IS_COMPONENTS_V2;
 const startTime = Date.now();
