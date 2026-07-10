@@ -54,7 +54,7 @@ import { countingCommand } from './counting.js';
 import { stickyCommand } from './sticky.js';
 import { greetCommand } from './greet.js';
 import { pingCommand, membercountCommand, botinfoCommand, servericonCommand, serverbannerCommand } from './utility.js';
-import { createFunCommand } from './funActions.js';
+import { actionCommand } from './funActions.js';
 import { avatarCommand } from './avatar.js';
 import { autoresponderCommand } from './autoresponder.js';
 import { bumpalertCommand } from './bumpalert.js';
@@ -124,7 +124,7 @@ const allCommands: Command[] = [
     diceCommand,
     rateCommand,
     shipCommand,
-    ...['hug', 'kiss', 'slap', 'pat', 'cuddle', 'poke', 'dance', 'blush', 'cry', 'kill', 'bite', 'smug', 'baka', 'happy', 'wave', 'wink', 'laugh', 'sleep', 'smile', 'highfive', 'lick', 'yeet', 'punch'].map(createFunCommand),
+    actionCommand,
     balCommand,
     dailyCommand,
     minesCommand,

@@ -1,6 +1,8 @@
 import { SlashCommandBuilder } from 'discord.js';
 import type { Command } from '../types/index.js';
 
+const ACTION_NAMES = ['hug', 'kiss', 'slap', 'pat', 'cuddle', 'poke', 'dance', 'blush', 'cry', 'kill', 'bite', 'smug', 'baka', 'happy', 'wave', 'wink', 'laugh', 'sleep', 'smile', 'highfive', 'lick', 'yeet', 'punch'] as const;
+
 const GIFS: Record<string, string[]> = {
     hug: ['https://media.tenor.com/4WgsRYI7JL4AAAAd/anime-hug.gif', 'https://media.tenor.com/6w9Ew2ANn4QAAAAd/anime-hug.gif', 'https://media.tenor.com/2OLFjHXs4scAAAAd/hug-anime.gif'],
     kiss: ['https://media.tenor.com/CwA4Uo5k-9IAAAAd/kiss-anime.gif', 'https://media.tenor.com/gU2J6M5b3RkAAAAd/anime-kiss.gif', 'https://media.tenor.com/0YqiBFHFOYAAAAAd/anime-kiss.gif'],
@@ -47,19 +49,22 @@ function buildActionDesc(action: string, user: string, target?: string): string 
     return `**${user}** ${verb}`;
 }
 
-export function createFunCommand(action: string): Command {
-    return {
-        data: new SlashCommandBuilder()
-            .setName(action)
-            .setDescription(action.charAt(0).toUpperCase() + action.slice(1))
-            .addUserOption(opt => opt.setName('user').setDescription('Target user').setRequired(false)),
-        async execute(interaction) {
-            const target = interaction.options.getUser('user');
-            const desc = buildActionDesc(action, interaction.user.username, target?.username);
-            const gif = getGif(action);
-            await interaction.reply({
-                content: `${desc}\n${gif}`,
-            });
-        },
-    };
-}
+export const actionCommand: Command = {
+    data: new SlashCommandBuilder()
+        .setName('action')
+        .setDescription('Perform an action with a GIF')
+        .addStringOption(opt =>
+            opt.setName('type')
+                .setDescription('The action to perform')
+                .setRequired(true)
+                .addChoices(...ACTION_NAMES.map(name => ({ name, value: name })))
+        )
+        .addUserOption(opt => opt.setName('user').setDescription('Target user').setRequired(false)),
+    async execute(interaction) {
+        const action = interaction.options.getString('type', true);
+        const target = interaction.options.getUser('user');
+        const desc = buildActionDesc(action, interaction.user.username, target?.username);
+        const gif = getGif(action);
+        await interaction.reply({ content: `${desc}\n${gif}` });
+    },
+};

@@ -13,22 +13,22 @@ export const ecoCommand: Command = {
         .setDMPermission(false)
         .addSubcommand(sub =>
             sub.setName('give').setDescription('Give coins to a user')
-                .addUserOption(opt => opt.setName('user').setRequired(true))
-                .addIntegerOption(opt => opt.setName('amount').setRequired(true).setMinValue(1))
+                .addUserOption(opt => opt.setName('user').setDescription('Target user').setRequired(true))
+                .addIntegerOption(opt => opt.setName('amount').setDescription('Amount of coins').setRequired(true).setMinValue(1))
         )
         .addSubcommand(sub =>
             sub.setName('remove').setDescription('Remove coins from a user')
-                .addUserOption(opt => opt.setName('user').setRequired(true))
-                .addIntegerOption(opt => opt.setName('amount').setRequired(true).setMinValue(1))
+                .addUserOption(opt => opt.setName('user').setDescription('Target user').setRequired(true))
+                .addIntegerOption(opt => opt.setName('amount').setDescription('Amount of coins').setRequired(true).setMinValue(1))
         )
         .addSubcommand(sub =>
             sub.setName('set').setDescription('Set a user\'s balance')
-                .addUserOption(opt => opt.setName('user').setRequired(true))
-                .addIntegerOption(opt => opt.setName('amount').setRequired(true).setMinValue(0))
+                .addUserOption(opt => opt.setName('user').setDescription('Target user').setRequired(true))
+                .addIntegerOption(opt => opt.setName('amount').setDescription('New balance').setRequired(true).setMinValue(0))
         )
         .addSubcommand(sub =>
             sub.setName('balance').setDescription('View any user\'s balance')
-                .addUserOption(opt => opt.setName('user').setRequired(true))
+                .addUserOption(opt => opt.setName('user').setDescription('Target user').setRequired(true))
         ),
 
     async execute(interaction) {
