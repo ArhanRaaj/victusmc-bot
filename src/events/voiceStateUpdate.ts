@@ -5,7 +5,7 @@ import { logger } from '../utils/logger.js';
 import { j2cSettings } from '../services/j2cSettings.js';
 import { auditLogSettings } from '../services/auditLogSettings.js';
 import { ComponentsV2 } from '../embeds/componentsV2.js';
-import { getConfig as getLevelingConfig, addVoiceXp, startVoiceSession, endVoiceSession } from '../services/levelingSettings.js';
+import { getConfig as getLevelingConfig, addVoiceXp, startVoiceSession, endVoiceSession, getVoiceSessionStart } from '../services/levelingSettings.js';
 
 export const voiceStateUpdateEvent: Event = {
     name: 'voiceStateUpdate',
@@ -32,7 +32,16 @@ export const voiceStateUpdateEvent: Event = {
                     if (ch && config.events.includes('voice_leave')) {
                         const logChannel = guild.channels.cache.get(ch);
                         if (logChannel?.isTextBased()) {
-                            const c = ComponentsV2.warningContainer('<:Dissable:1524363096855023626> Voice Leave', `**${member.user.tag}** left <#${oldState.channelId}>`);
+                            const startTime = getVoiceSessionStart(guild.id, member.id);
+                            let duration = '';
+                            if (startTime) {
+                                const elapsed = Date.now() - startTime;
+                                const hrs = Math.floor(elapsed / 3600000);
+                                const mins = Math.floor((elapsed % 3600000) / 60000);
+                                const secs = Math.floor((elapsed % 60000) / 1000);
+                                duration = `\n<:Timer:1524363047534329916> Duration: ${hrs > 0 ? `${hrs}h ` : ''}${mins > 0 ? `${mins}m ` : ''}${secs}s`;
+                            }
+                            const c = ComponentsV2.warningContainer('<:Dissable:1524363096855023626> Voice Leave', `**${member.user.tag}** left <#${oldState.channelId}>${duration}`);
                             await (logChannel as any).send({ components: [c], flags: ComponentsV2.IS_COMPONENTS_V2 }).catch(() => {});
                         }
                     }

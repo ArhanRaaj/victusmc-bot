@@ -78,6 +78,7 @@ import { birthdayCommand } from './birthday.js';
 import { slotsCommand } from './slots.js';
 import { reportCommand } from './report.js';
 import { uptimeCommand } from './uptime.js';
+import { voicetimeCommand } from './voicetime.js';
 
 // Export command collection
 export const commands = new Collection<string, Command>();
@@ -164,6 +165,7 @@ const allCommands: Command[] = [
     slotsCommand,
     reportCommand,
     uptimeCommand,
+    voicetimeCommand,
     pingCommand,
     membercountCommand,
     botinfoCommand,
