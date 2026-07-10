@@ -128,7 +128,7 @@ export const helpCommand: Command = {
 
             case 'administration':
                 title = 'Setup & Administration';
-                desc = `Commands to configure welcome parameters, logs, prefixes, and voice channels.\n\n` +
+                desc = `Commands to configure welcome, logs, prefixes, voice channels, and server features.\n\n` +
                     `### Command Catalog\n` +
                     `› \`/config view\` • Inspect current bot configuration.\n` +
                     `› \`/config logs <channel>\` • Set the target channel for audit logs.\n` +
@@ -136,8 +136,18 @@ export const helpCommand: Command = {
                     `› \`/setprefix <prefix>\` • Changes the server-specific prefix.\n` +
                     `› \`/prefix\` • Inspect current server prefix.\n` +
                     `› \`/welcome setup\` • Configure welcome channel, auto-role, and nicknames.\n` +
+                    `› \`/greet\` • Configure welcome/leave/DM greeting messages.\n` +
+                    `› \`/autorole\` • Auto-assign roles to new members.\n` +
                     `› \`/j2c\` • Set up Join-To-Create temporary voice channels.\n` +
-                    `› \`/reactroles\` • Create dropdown, button, or unique reaction role panels.`;
+                    `› \`/reactroles\` • Create dropdown, button, or unique reaction role panels.\n` +
+                    `› \`/counting enable\` • Enable the counting game channel.\n` +
+                    `› \`/sticky\` • Set up sticky messages in channels.\n` +
+                    `› \`/autoresponder\` • Auto-reply to keywords/messages.\n` +
+                    `› \`/bumpalert\` • Get notified when DISBOARD bump is ready.\n` +
+                    `› \`/autothread\` • Auto-create threads in channels.\n` +
+                    `› \`/starboard\` • Pin popular messages via star reactions.\n` +
+                    `› \`/birthday setup\` • Set up automatic birthday announcements.\n` +
+                    `› \`/report setup\` • Configure the user report system.`;
                 break;
 
             case 'moderation':
@@ -149,8 +159,15 @@ export const helpCommand: Command = {
                     `› \`/unban <user_id> [reason]\` • Lift a server ban.\n` +
                     `› \`/timeout <user> <duration> [reason]\` • Place a user in timeout.\n` +
                     `› \`/untimeout <user> [reason]\` • Remove a user's timeout.\n` +
+                    `› \`/mod mute/unmute/deafen/undeafen\` • Voice moderation commands.\n` +
+                    `› \`/mod lock/unlock/slowmode\` • Channel moderation commands.\n` +
+                    `› \`/mod setnick/clear\` • Utility moderation commands.\n` +
+                    `› \`/mod move/disconnect\` • Move or disconnect members from voice.\n` +
+                    `› \`/mod stealemoji/stealsticker\` • Copy emojis/stickers to the server.\n` +
                     `› \`/purge <count> [user]\` • Bulk-delete channel messages.\n` +
                     `› \`/warn <user> <reason>\` • Issue a warn to a member.\n` +
+                    `› \`/dm <user> <message>\` • Direct message a member.\n` +
+                    `› \`/staff\` • Manage server staff roles.\n` +
                     `› \`/whitelist <add/remove/list/edit>\` • Manage user immunities for moderation.\n` +
                     `› \`/antinuke\` • Configure anti-nuke protection (mass ban/kick/channel delete).\n` +
                     `› \`/automod\` • Configure auto-moderation rules (spam, invites, bad words, etc.).\n` +
@@ -187,37 +204,71 @@ export const helpCommand: Command = {
 
             case 'features':
                 title = 'Features & Customization';
-                desc = `Create custom commands, layouts, giveaways, suggestions, and polls.\n\n` +
+                desc = `Create custom commands, layouts, giveaways, suggestions, polls, and utility tools.\n\n` +
                     `### Command Catalog\n` +
                     `› \`/create-command\` • Create a custom prefix/slash command.\n` +
                     `› \`/giveaway create\` • Open giveaway builder.\n` +
                     `› \`/giveaway end/pause/resume/reroll\` • Manage giveaways.\n` +
                     `› \`/suggest <title> <content>\` • Submit a user suggestion.\n` +
                     `› \`/suggestion modapprove/moddeny\` • Moderate suggestions.\n` +
-                    `› \`/poll create\` • Launch a server-wide poll.`;
+                    `› \`/poll create\` • Launch a server-wide poll.\n` +
+                    `› \`/embed\` • Create custom embeds.\n` +
+                    `› \`/announce\` • Send an announcement to a channel.\n` +
+                    `› \`/remind me/here\` • Set reminders (DM or channel).\n` +
+                    `› \`/timezone\` • Set and convert timezones.\n` +
+                    `› \`/birthday set/remove/check\` • Manage your birthday.\n` +
+                    `› \`/leveling\` • Configure XP leveling system and rewards.\n` +
+                    `› \`/leaderboard\` • View XP leaderboard rankings.\n` +
+                    `› \`/level\` • Check a user's level and XP.\n` +
+                    `› \`/roleinfo\` • View role details (permissions, color, members).\n` +
+                    `› \`/emojis\` • List all server emojis.\n` +
+                    `› \`/serverinfo\` • View detailed server information.\n` +
+                    `› \`/userinfo [user]\` • View user information.\n` +
+                    `› \`/avatar [user]\` • View a user's avatar.\n` +
+                    `› \`/servericon\` • View the server icon.\n` +
+                    `› \`/serverbanner\` • View the server banner.\n` +
+                    `› \`/membercount\` • View server member count.\n` +
+                    `› \`/botinfo\` • View bot information.\n` +
+                    `› \`/uptime\` • Show bot statistics and uptime.\n` +
+                    `› \`/ping\` • Check bot latency.\n` +
+                    `› \`/invite\` • Get bot invite links.\n` +
+                    `› \`/voicetime\` • Check your current VC session time.\n` +
+                    `› \`/youtube setup\` • Configure YouTube video notifications.\n` +
+                    `› \`/vouch\` • Rate and review trusted members.\n` +
+                    `› \`/modmail setup\` • Configure the ModMail system.\n` +
+                    `› \`/report user\` • Report a user to staff.\n` +
+                    `› \`/noprefix\` • Manage no-prefix users.\n` +
+                    `› \`/afk [reason]\` • Set your status to AFK.`;
                 break;
 
             case 'minecraft':
-                title = 'Minecraft & Fun Utilities';
-                desc = `Minecraft utilities, economy, and fun commands.\n\n` +
-                    `### Command Catalog\n` +
-                    `› \`/afk [reason]\` • Set your status to AFK.\n` +
-                    `› \`/bal [user]\` • Check cash balance.\n` +
-                    `› \`/daily\` • Claim $500 daily cash reward.\n` +
-                    `› \`/avatar [user]\` • View a user's avatar.\n` +
-                    `› \`/userinfo [user]\` • View user information.\n` +
-                    `› \`/serverinfo\` • View server information.\n` +
+                title = 'Minecraft, Economy & Fun';
+                desc = `Minecraft utilities, economy system, and fun commands.\n\n` +
+                    `### Minecraft\n` +
                     `› \`/minecraft status\` • Get VictusMc online status, ping, and player count.\n` +
                     `› \`/minecraft player\` • Look up a Java player's profile.\n` +
                     `› \`/minecraft uuid\` • Resolve a username to UUID.\n` +
                     `› \`/minecraft skin\` • Get a player's skin download.\n` +
-                    `› \`/minecraft history\` • View a player's name history.\n` +
-                    `› \`/8ball\` • Ask the magic 8-ball (bet optional).\n` +
-                    `› \`/coinflip\` • Flip a coin (bet optional).\n` +
-                    `› \`/dice\` • Roll a die (bet optional).\n` +
+                    `› \`/minecraft history\` • View a player's name history.\n\n` +
+                    `### Economy\n` +
+                    `› \`/bal [user]\` • Check cash balance.\n` +
+                    `› \`/daily\` • Claim $500 daily cash reward.\n` +
+                    `› \`/pay <user> <amount>\` • Transfer coins to another user.\n` +
+                    `› \`/eco give/remove/set\` • Admin economy management.\n` +
+                    `› \`/rich\` • View the economy leaderboard.\n` +
+                    `› \`/shop\` • Browse and buy items from the server shop.\n` +
+                    `› \`/slots <bet>\` • Play the slot machine.\n` +
+                    `› \`/mines <bet>\` • Play Mines (9×9, 3 mines).\n\n` +
+                    `### Fun\n` +
+                    `› \`/8ball [bet]\` • Ask the magic 8-ball.\n` +
+                    `› \`/coinflip [bet]\` • Flip a coin.\n` +
+                    `› \`/dice [bet]\` • Roll a die.\n` +
                     `› \`/rate\` • Rate something.\n` +
                     `› \`/ship\` • Ship two users.\n` +
-                    `› \`/mines <bet>\` • Play Mines (9×9, 3 mines).`;
+                    `› \`/hug /kiss /slap /pat /cuddle /poke\` • Action commands.\n` +
+                    `› \`/dance /blush /cry /kill /bite /smug\` • Action commands.\n` +
+                    `› \`/baka /happy /wave /wink /laugh /sleep\` • Action commands.\n` +
+                    `› \`/smile /highfive /lick /yeet /punch\` • Action commands.`;
                 break;
         }
 
