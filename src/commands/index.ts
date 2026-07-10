@@ -76,6 +76,8 @@ import { ecoCommand } from './eco.js';
 import { shopCommand } from './shop.js';
 import { birthdayCommand } from './birthday.js';
 import { slotsCommand } from './slots.js';
+import { reportCommand } from './report.js';
+import { uptimeCommand } from './uptime.js';
 
 // Export command collection
 export const commands = new Collection<string, Command>();
@@ -160,6 +162,8 @@ const allCommands: Command[] = [
     shopCommand,
     birthdayCommand,
     slotsCommand,
+    reportCommand,
+    uptimeCommand,
     pingCommand,
     membercountCommand,
     botinfoCommand,
