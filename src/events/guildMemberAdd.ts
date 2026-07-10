@@ -5,6 +5,7 @@ import { welcomeSettings } from '../services/welcomeSettings.js';
 import { greetSettings, formatGreetMsg } from '../services/greetSettings.js';
 import { buildWelcomePayload } from '../commands/welcome.js';
 import { auditLogSettings } from '../services/auditLogSettings.js';
+import { autoRoleService } from '../services/autoRoleSettings.js';
 import { handleBotAdd } from './antiNukeHandler.js';
 import { ComponentsV2 } from '../embeds/componentsV2.js';
 import { logger } from '../utils/logger.js';
@@ -52,13 +53,26 @@ export const guildMemberAddEvent: Event = {
                 await member.send({ content: msg }).catch(() => {});
             }
 
-            // Assign Auto-Roles
+            // Assign Auto-Roles (welcome system)
             if (config.autoRoleIds && config.autoRoleIds.length > 0) {
                 const rolesToAssign = config.autoRoleIds.filter((id: string) => member.guild.roles.cache.has(id));
                 if (rolesToAssign.length > 0) {
                     await member.roles.add(rolesToAssign).catch((err) => {
                         logger.error(`Failed to assign auto-roles to ${member.user.tag}:`, err);
                     });
+                }
+            }
+
+            // Auto-Role system
+            const autoRoleCfg = await autoRoleService.get(member.guild.id);
+            if (autoRoleCfg.enabled) {
+                const isBot = member.user.bot;
+                const roleIds = isBot ? autoRoleCfg.botRoleIds : autoRoleCfg.roleIds;
+                if (roleIds.length > 0) {
+                    const validRoles = roleIds.filter((id: string) => member.guild.roles.cache.has(id));
+                    if (validRoles.length > 0) {
+                        await member.roles.add(validRoles).catch(() => {});
+                    }
                 }
             }
 

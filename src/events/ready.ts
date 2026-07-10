@@ -11,6 +11,8 @@ import { initTicketBridge } from '../services/ticketBridge.js';
 import { startUptimeHeartbeat } from '../services/uptimeHeartbeat.js';
 import { initializeFonts } from 'musicard';
 import { startGiveawayScheduler } from '../commands/giveaway.js';
+import { startVoiceXpInterval } from './voiceStateUpdate.js';
+import { reminderService } from '../services/reminderSettings.js';
 
 let dmQueueProcessing = false;
 
@@ -114,9 +116,32 @@ export const readyEvent: Event = {
         // Start background giveaway ends_at checks scheduler
         startGiveawayScheduler(client);
 
+        // Start voice XP interval (every 60 seconds)
+        startVoiceXpInterval(client);
+
         await processAdminDmQueue(client);
         setInterval(() => {
             processAdminDmQueue(client).catch((error) => logger.error('DM queue interval failed:', error));
+        }, 15000);
+
+        // Reminder checker
+        setInterval(async () => {
+            for (const guild of client.guilds.cache.values()) {
+                const due = await reminderService.getDue(guild.id);
+                for (const { index, reminder } of due) {
+                    const user = await client.users.fetch(reminder.userId).catch(() => null);
+                    if (!user) continue;
+                    if (reminder.channelId) {
+                        const channel = guild.channels.cache.get(reminder.channelId);
+                        if (channel?.isTextBased()) {
+                            await channel.send({ content: `<@${reminder.userId}> ⏰ Reminder: ${reminder.message}` }).catch(() => {});
+                        }
+                    } else {
+                        await user.send({ content: `⏰ Reminder: ${reminder.message}` }).catch(() => {});
+                    }
+                    await reminderService.markReminded(guild.id, index);
+                }
+            }
         }, 15000);
 
         client.user.setPresence({

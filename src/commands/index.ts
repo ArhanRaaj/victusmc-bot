@@ -64,6 +64,8 @@ import { youtubeCommand } from './youtube.js';
 import { vouchCommand } from './vouch.js';
 import { starboardCommand } from './starboard.js';
 import { timezoneCommand } from './timezone.js';
+import { autoroleCommand } from './autorole.js';
+import { remindCommand } from './remind.js';
 
 // Export command collection
 export const commands = new Collection<string, Command>();
@@ -136,6 +138,8 @@ const allCommands: Command[] = [
     vouchCommand,
     starboardCommand,
     timezoneCommand,
+    autoroleCommand,
+    remindCommand,
     pingCommand,
     membercountCommand,
     botinfoCommand,
