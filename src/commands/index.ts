@@ -75,6 +75,7 @@ import { richCommand } from './rich.js';
 import { ecoCommand } from './eco.js';
 import { shopCommand } from './shop.js';
 import { birthdayCommand } from './birthday.js';
+import { slotsCommand } from './slots.js';
 
 // Export command collection
 export const commands = new Collection<string, Command>();
@@ -158,6 +159,7 @@ const allCommands: Command[] = [
     ecoCommand,
     shopCommand,
     birthdayCommand,
+    slotsCommand,
     pingCommand,
     membercountCommand,
     botinfoCommand,

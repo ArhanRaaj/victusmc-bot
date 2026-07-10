@@ -681,6 +681,21 @@ export const messageCreateEvent: Event = {
 
         if (!message.inGuild()) return;
 
+        // --- ModMail staff reply forwarding ---
+        if (message.inGuild() && !message.author.bot && message.content) {
+            const thread = await modMailService.getThreadByChannel(message.guildId!, message.channelId);
+            if (thread) {
+                const user = await message.client.users.fetch(thread.userId).catch(() => null);
+                if (user) {
+                    const c = ComponentsV2.baseContainer(ComponentsV2.Accents.info);
+                    c.addTextDisplayComponents(ComponentsV2.text(
+                        `## <:Edit:1524363079675154433> Staff Reply\nFrom: ${message.author.tag}\n\n${message.content}`
+                    ));
+                    await user.send({ components: [c], flags: ComponentsV2.IS_COMPONENTS_V2 }).catch(() => {});
+                }
+            }
+        }
+
         // The AI answers in a guild channel when ANY of these is true:
         //  - the bot is directly @mentioned (works in any channel, configured or not)
         //  - the channel has been /summon-ed by staff
