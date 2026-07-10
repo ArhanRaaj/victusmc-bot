@@ -70,6 +70,10 @@ import { leaderboardCommand } from './leaderboard.js';
 import { roleinfoCommand } from './roleinfo.js';
 import { emojisCommand } from './emojis.js';
 import { inviteCommand } from './invite.js';
+import { payCommand } from './pay.js';
+import { richCommand } from './rich.js';
+import { ecoCommand } from './eco.js';
+import { shopCommand } from './shop.js';
 
 // Export command collection
 export const commands = new Collection<string, Command>();
@@ -148,6 +152,10 @@ const allCommands: Command[] = [
     roleinfoCommand,
     emojisCommand,
     inviteCommand,
+    payCommand,
+    richCommand,
+    ecoCommand,
+    shopCommand,
     pingCommand,
     membercountCommand,
     botinfoCommand,
