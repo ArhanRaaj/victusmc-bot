@@ -47,7 +47,7 @@ function renderPanelManager(config: ReactRolesConfig): any {
     const btnRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
         new ButtonBuilder()
             .setCustomId('rr_wiz:create')
-            .setLabel('Create New Panel ➕')
+            .setLabel('Create New Panel <:Add:1524363108766974247>')
             .setStyle(ButtonStyle.Success)
     );
 
@@ -76,7 +76,7 @@ function renderPanelEditor(panel: ReactRolePanel): any {
         ? panel.mappings.map((m, idx) => `\`${idx + 1}.\` ${m.emoji} **${m.label}** → <@&${m.roleId}>`).join('\n')
         : '_No roles mapped yet_';
 
-    const text = `# ⚙️ Panel Editor: ${panel.title}\n` +
+    const text = `# <:Setting:1524363057990598687> Panel Editor: ${panel.title}\n` +
         `› **Description:** *${panel.description}*\n` +
         `› **Style:** \`${panel.style.toUpperCase()}\`\n\n` +
         `### Configured Roles:\n${mappingsList}`;
@@ -92,11 +92,11 @@ function renderPanelEditor(panel: ReactRolePanel): any {
             .setStyle(ButtonStyle.Success),
         new ButtonBuilder()
             .setCustomId(`rr_wiz:edit_details:${panel.id}`)
-            .setLabel('Edit Info 📝')
+            .setLabel('Edit Info <:Edit:1524363079675154433>')
             .setStyle(ButtonStyle.Secondary),
         new ButtonBuilder()
             .setCustomId(`rr_wiz:toggle_style:${panel.id}`)
-            .setLabel(`Change Style: ${panel.style === 'buttons' ? 'Select Menu ⬇️' : 'Buttons ⏹️'}`)
+            .setLabel(`Change Style: ${panel.style === 'buttons' ? 'Select Menu ⬇️' : 'Buttons <:Dissable:1524363096855023626>'}`)
             .setStyle(ButtonStyle.Secondary)
     );
 
@@ -108,12 +108,12 @@ function renderPanelEditor(panel: ReactRolePanel): any {
             .setStyle(ButtonStyle.Secondary),
         new ButtonBuilder()
             .setCustomId(`rr_wiz:publish:${panel.id}`)
-            .setLabel('Publish Panel 📣')
+            .setLabel('Publish Panel <:Annc:1524363017813360710>')
             .setStyle(ButtonStyle.Primary)
             .setDisabled(panel.mappings.length === 0),
         new ButtonBuilder()
             .setCustomId(`rr_wiz:delete:${panel.id}`)
-            .setLabel('Delete Panel 🗑️')
+            .setLabel('Delete Panel <:Delete:1524363081642147931>')
             .setStyle(ButtonStyle.Danger)
     );
 
@@ -143,7 +143,7 @@ function renderMappingDetail(panel: ReactRolePanel, idx: number): any {
 
     const c = ComponentsV2.baseContainer(ComponentsV2.Accents.info);
     const text =
-        `# ⚙️ Edit Role Mapping\n\n` +
+        `# <:Setting:1524363057990598687> Edit Role Mapping\n\n` +
         `**Mapping #${idx + 1}**\n` +
         `› **Label:** ${m.label}\n` +
         `› **Emoji:** ${m.emoji}\n` +
@@ -160,11 +160,11 @@ function renderMappingDetail(panel: ReactRolePanel, idx: number): any {
             .setStyle(ButtonStyle.Secondary),
         new ButtonBuilder()
             .setCustomId(`rr_wiz:edit_mapping:${panel.id}:${idx}`)
-            .setLabel('✏️ Edit Mapping')
+            .setLabel('<:Edit:1524363079675154433> Edit Mapping')
             .setStyle(ButtonStyle.Primary),
         new ButtonBuilder()
             .setCustomId(`rr_wiz:remove_mapping:${panel.id}:${idx}`)
-            .setLabel('🗑️ Remove')
+            .setLabel('<:Delete:1524363081642147931> Remove')
             .setStyle(ButtonStyle.Danger)
     );
 
@@ -406,7 +406,7 @@ export const reactRolesCommand: Command = {
                             embeds: []
                         });
                     } else {
-                        await interaction.reply({ content: '❌ Failed to send panel. Make sure I have permission to send messages here.' });
+                        await interaction.reply({ content: '<:Cross:1524363088621469737> Failed to send panel. Make sure I have permission to send messages here.' });
                     }
                 }
             }
@@ -419,7 +419,7 @@ export const reactRolesCommand: Command = {
             const panel = config.panels.find(p => p.id === panelId);
 
             if (!panel) {
-                await interaction.reply({ content: '❌ Role panel not found.' });
+                await interaction.reply({ content: '<:Cross:1524363088621469737> Role panel not found.' });
                 return;
             }
 
@@ -447,7 +447,7 @@ export const reactRolesCommand: Command = {
                 }
             } catch (err: any) {
                 logger.error('Failed to toggle role:', err);
-                await interaction.reply({ content: '❌ Failed to toggle role. Ensure the bot has a higher role position than the role being assigned.' });
+                await interaction.reply({ content: '<:Cross:1524363088621469737> Failed to toggle role. Ensure the bot has a higher role position than the role being assigned.' });
             }
         }
     },
@@ -475,7 +475,7 @@ export const reactRolesCommand: Command = {
                     new TextInputBuilder()
                         .setCustomId('emoji')
                         .setLabel('Emoji')
-                        .setPlaceholder('📢')
+                        .setPlaceholder('<:Annc:1524363017813360710>')
                         .setStyle(TextInputStyle.Short)
                         .setRequired(true)
                 )
@@ -514,7 +514,7 @@ export const reactRolesCommand: Command = {
             const panel = config.panels.find(p => p.id === panelId);
 
             if (!panel) {
-                await interaction.reply({ content: '❌ Role panel not found.' });
+                await interaction.reply({ content: '<:Cross:1524363088621469737> Role panel not found.' });
                 return;
             }
 
@@ -543,7 +543,7 @@ export const reactRolesCommand: Command = {
                 }
             } catch (err) {
                 logger.error('Failed to toggle role via select:', err);
-                await interaction.reply({ content: '❌ Failed to toggle role. Ensure the bot has a higher role position than the role being assigned.' });
+                await interaction.reply({ content: '<:Cross:1524363088621469737> Failed to toggle role. Ensure the bot has a higher role position than the role being assigned.' });
             }
         }
     },

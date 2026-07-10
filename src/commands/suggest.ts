@@ -26,20 +26,20 @@ function buildSuggestionCard(suggestion: Suggestion, up: number, down: number): 
 
     const c = ComponentsV2.baseContainer(accent);
 
-    const statusLabel = suggestion.status === 'approved' ? '🟢 APPROVED'
-        : suggestion.status === 'denied' ? '🔴 DENIED'
-        : suggestion.status === 'implemented' ? '🟣 IMPLEMENTED'
-        : '🟡 PENDING';
+    const statusLabel = suggestion.status === 'approved' ? '<:Tick:1524363090626482326> APPROVED'
+        : suggestion.status === 'denied' ? '<:Cross:1524363088621469737> DENIED'
+        : suggestion.status === 'implemented' ? '<:Music:1524363029838561400> IMPLEMENTED'
+        : '<:Pause:1524363094933897226> PENDING';
 
-    let body = `-# 💡 SUGGESTION • #${suggestion.id} • ${statusLabel}\n` +
+    let body = `-# <:Idea:1524363069004845126> SUGGESTION • #${suggestion.id} • ${statusLabel}\n` +
         `# ${suggestion.title}\n\n` +
         `**Submitter:** <@${suggestion.user_id}> (${suggestion.author_tag})\n\n` +
         `**Content:**\n${suggestion.content}\n\n` +
         `**Community Feedback:**\n` +
-        `\`${bar}\`  \`${percentage}%\`  (👍 ${up} · 👎 ${down})`;
+        `\`${bar}\`  \`${percentage}%\`  (<:Like:1524362991825453166> ${up} · <:Dislike:1524362987694067866> ${down})`;
 
     if (suggestion.locked) {
-        body += `\n\n🔒 **Voting has been locked for this suggestion.**`;
+        body += `\n\n<:Lock:1524363064001040385> **Voting has been locked for this suggestion.**`;
     }
 
     c.addTextDisplayComponents(ComponentsV2.text(body))
@@ -118,7 +118,7 @@ export const suggestCommand: Command = {
             );
 
             if (!tempSuggestion) {
-                await interaction.editReply({ content: '❌ System error saving suggestion to database.' });
+                await interaction.editReply({ content: '<:Cross:1524363088621469737> System error saving suggestion to database.' });
                 return;
             }
 
@@ -144,7 +144,7 @@ export const suggestCommand: Command = {
             });
         } catch (error) {
             logger.error('Failed to create suggestion:', error);
-            await interaction.editReply({ content: '❌ Failed to process suggestion submission.' });
+            await interaction.editReply({ content: '<:Cross:1524363088621469737> Failed to process suggestion submission.' });
         }
     }
 };
@@ -198,14 +198,14 @@ export const suggestionCommand: Command = {
 
         const suggestion = await supabase.getSuggestion(suggestionId);
         if (!suggestion) {
-            await interaction.reply({ content: '❌ Suggestion not found in database.' });
+            await interaction.reply({ content: '<:Cross:1524363088621469737> Suggestion not found in database.' });
             return;
         }
 
         if (system === 'suggest') {
             if (action === 'upvote' || action === 'downvote') {
                 if (suggestion.locked) {
-                    await interaction.reply({ content: '🔒 Voting is locked on this suggestion.' });
+                    await interaction.reply({ content: '<:Lock:1524363064001040385> Voting is locked on this suggestion.' });
                     return;
                 }
 
@@ -216,11 +216,11 @@ export const suggestionCommand: Command = {
                 if (userVote && userVote.vote_type === (action === 'upvote' ? 'up' : 'down')) {
                     // Remove vote if clicked same one again (toggle behavior)
                     await supabase.removeSuggestionVote(suggestionId, interaction.user.id);
-                    await interaction.reply({ content: '👍 Vote removed.' });
+                    await interaction.reply({ content: '<:Like:1524362991825453166> Vote removed.' });
                 } else {
                     // Save vote
                     await supabase.addSuggestionVote(suggestionId, interaction.user.id, interaction.user.username, action === 'upvote' ? 'up' : 'down');
-                    await interaction.reply({ content: `✅ Recorded ${action === 'upvote' ? 'Upvote' : 'Downvote'}.` });
+                    await interaction.reply({ content: `<:Tick:1524363090626482326> Recorded ${action === 'upvote' ? 'Upvote' : 'Downvote'}.` });
                 }
 
                 // Refresh card message
@@ -250,7 +250,7 @@ export const suggestionCommand: Command = {
 
                 let voteText = `# 🧾 Voters Log: Suggestion #${suggestionId}\n\n`;
                 votes.forEach((v, i) => {
-                    voteText += `\`#${i+1}\` <@${v.user_id}> (${v.username}) voted **${v.vote_type === 'up' ? '👍 Up' : '👎 Down'}** • <t:${Math.floor(new Date(v.created_at).getTime() / 1000)}:R>\n`;
+                    voteText += `\`#${i+1}\` <@${v.user_id}> (${v.username}) voted **${v.vote_type === 'up' ? '<:Like:1524362991825453166> Up' : '<:Dislike:1524362987694067866> Down'}** • <t:${Math.floor(new Date(v.created_at).getTime() / 1000)}:R>\n`;
                 });
 
                 await interaction.editReply({
@@ -271,24 +271,24 @@ export const suggestionCommand: Command = {
 
             if (action === 'approve') {
                 await supabase.updateSuggestionStatus(suggestionId, 'approved');
-                await interaction.reply({ content: '🟢 Suggestion approved.' });
+                await interaction.reply({ content: '<:Tick:1524363090626482326> Suggestion approved.' });
             } 
             else if (action === 'deny') {
                 await supabase.updateSuggestionStatus(suggestionId, 'denied');
-                await interaction.reply({ content: '🔴 Suggestion denied.' });
+                await interaction.reply({ content: '<:Cross:1524363088621469737> Suggestion denied.' });
             } 
             else if (action === 'implement') {
                 await supabase.updateSuggestionStatus(suggestionId, 'implemented');
-                await interaction.reply({ content: '🟣 Suggestion marked as implemented.' });
+                await interaction.reply({ content: '<:Music:1524363029838561400> Suggestion marked as implemented.' });
             }
             else if (action === 'lock') {
                 await supabase.toggleSuggestionLock(suggestionId);
                 const updated = await supabase.getSuggestion(suggestionId);
-                await interaction.reply({ content: updated?.locked ? '🔒 Suggestion locked.' : '🔓 Suggestion unlocked.' });
+                await interaction.reply({ content: updated?.locked ? '<:Lock:1524363064001040385> Suggestion locked.' : '<:UnLock:1524363066404503614> Suggestion unlocked.' });
             }
             else if (action === 'delete') {
                 await supabase.deleteSuggestion(suggestionId);
-                await interaction.reply({ content: '🗑️ Suggestion deleted.' });
+                await interaction.reply({ content: '<:Delete:1524363081642147931> Suggestion deleted.' });
 
                 // Delete discord card message
                 const channel = interaction.guild?.channels.cache.get(suggestion.channel_id);

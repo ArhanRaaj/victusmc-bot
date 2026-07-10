@@ -39,7 +39,7 @@ export const unbanCommand: Command = {
             const banInfo = await guild.bans.fetch(userId).catch(() => null);
 
             if (!banInfo) {
-                const err = '❌ This user is not currently banned from this server.';
+                const err = '<:Cross:1524363088621469737> This user is not currently banned from this server.';
                 if (isPrefix) {
                     await interaction.reply({ content: err });
                 } else {
@@ -58,7 +58,7 @@ export const unbanCommand: Command = {
             if (isPrefix) {
                 const embed = new EmbedBuilder()
                     .setColor(0x2b2d31)
-                    .setTitle('✅ User Unbanned')
+                    .setTitle('<:Tick:1524363090626482326> User Unbanned')
                     .setDescription(successMsg);
                 await interaction.reply({ embeds: [embed] });
             } else {
@@ -69,7 +69,7 @@ export const unbanCommand: Command = {
             }
         } catch (err: any) {
             logger.error('Failed to unban user:', err);
-            const errMsg = '❌ Failed to unban user. Make sure you entered a valid Discord ID and that I have ban permissions.';
+            const errMsg = '<:Cross:1524363088621469737> Failed to unban user. Make sure you entered a valid Discord ID and that I have ban permissions.';
             if (isPrefix) {
                 await interaction.reply({ content: errMsg });
             } else {

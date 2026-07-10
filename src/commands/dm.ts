@@ -30,7 +30,7 @@ export const dmCommand: Command = {
         const messageText = interaction.options.getString('message', true);
 
         if (targetUser.bot) {
-            await interaction.reply({ content: '❌ You cannot send DMs to other bots.' });
+            await interaction.reply({ content: '<:Cross:1524363088621469737> You cannot send DMs to other bots.' });
             return;
         }
 
@@ -40,7 +40,7 @@ export const dmCommand: Command = {
         try {
             const dmEmbed = new EmbedBuilder()
                 .setColor(0x2b2d31)
-                .setTitle('📬 Official Server Message')
+                .setTitle('<:Message:1524363100734623836> Official Server Message')
                 .setDescription(`You have received an official message from the administration of **${interaction.guild?.name}**:\n\n>>> ${messageText}`)
                 .setFooter({ text: 'VictusMC • Official administration broadcast' })
                 .setTimestamp();
@@ -50,7 +50,7 @@ export const dmCommand: Command = {
             if (isPrefix) {
                 const successEmbed = new EmbedBuilder()
                     .setColor(0x2b2d31)
-                    .setTitle('✅ Message Delivered')
+                    .setTitle('<:Tick:1524363090626482326> Message Delivered')
                     .setDescription(`Your official DM was successfully sent to <@${targetUser.id}>.`);
                 await interaction.editReply({ embeds: [successEmbed] });
             } else {

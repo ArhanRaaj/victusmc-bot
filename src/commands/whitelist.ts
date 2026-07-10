@@ -30,7 +30,7 @@ function renderWhitelistEditor(record: WhitelistRecord): any {
         }).join('\n')
         : '_No immunities selected (Currently has no protections)_';
 
-    const text = `# 🛡️ Whitelist Editor: ${record.userName}\n` +
+    const text = `# <:Shield:1524362964772196422> Whitelist Editor: ${record.userName}\n` +
         `Configure immunity status and action bypasses for this member.\n\n` +
         `› **User:** <@${record.userId}> (\`${record.userId}\`)\n` +
         `› **Added By:** <@${record.addedBy}>\n\n` +
@@ -56,11 +56,11 @@ function renderWhitelistEditor(record: WhitelistRecord): any {
     const btnRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
         new ButtonBuilder()
             .setCustomId(`whitelist:save:${record.userId}`)
-            .setLabel('Save Settings ✅')
+            .setLabel('Save Settings <:Tick:1524363090626482326>')
             .setStyle(ButtonStyle.Success),
         new ButtonBuilder()
             .setCustomId(`whitelist:remove_btn:${record.userId}`)
-            .setLabel('Remove Whitelist 🗑️')
+            .setLabel('Remove Whitelist <:Delete:1524363081642147931>')
             .setStyle(ButtonStyle.Danger)
     );
 
@@ -132,7 +132,7 @@ export const whitelistCommand: Command = {
             if (isPrefix) {
                 const embed = new EmbedBuilder()
                     .setColor(0x2b2d31)
-                    .setTitle('✅ Whitelist Added')
+                    .setTitle('<:Tick:1524363090626482326> Whitelist Added')
                     .setDescription(`Added **${user.username}** to the whitelist with all bypasses.`);
                 await interaction.reply({ embeds: [embed] });
             } else {
@@ -147,7 +147,7 @@ export const whitelistCommand: Command = {
             const record = config.users.find(u => u.userId === user.id);
 
             if (!record) {
-                const err = '❌ This user is not currently whitelisted.';
+                const err = '<:Cross:1524363088621469737> This user is not currently whitelisted.';
                 if (isPrefix) {
                     await interaction.reply({ content: err });
                 } else {
@@ -160,7 +160,7 @@ export const whitelistCommand: Command = {
             }
 
             if (isPrefix) {
-                await interaction.reply({ content: '❌ Whitelist editor dashboard is only supported via slash commands.' });
+                await interaction.reply({ content: '<:Cross:1524363088621469737> Whitelist editor dashboard is only supported via slash commands.' });
             } else {
                 await interaction.reply({
                     components: [renderWhitelistEditor(record)],
@@ -173,7 +173,7 @@ export const whitelistCommand: Command = {
             const exists = config.users.some(u => u.userId === user.id);
 
             if (!exists) {
-                const err = '❌ This user is not currently whitelisted.';
+                const err = '<:Cross:1524363088621469737> This user is not currently whitelisted.';
                 if (isPrefix) {
                     await interaction.reply({ content: err });
                 } else {
@@ -193,7 +193,7 @@ export const whitelistCommand: Command = {
             if (isPrefix) {
                 const embed = new EmbedBuilder()
                     .setColor(0x2b2d31)
-                    .setTitle('✅ Whitelist Removed')
+                    .setTitle('<:Tick:1524363090626482326> Whitelist Removed')
                     .setDescription(successMsg);
                 await interaction.reply({ embeds: [embed] });
             } else {
@@ -205,7 +205,7 @@ export const whitelistCommand: Command = {
         }
         else if (sub === 'list') {
             if (config.users.length === 0) {
-                const err = '❌ No users are currently whitelisted on this server.';
+                const err = '<:Cross:1524363088621469737> No users are currently whitelisted on this server.';
                 if (isPrefix) {
                     await interaction.reply({ content: err });
                 } else {
@@ -228,13 +228,13 @@ export const whitelistCommand: Command = {
             if (isPrefix) {
                 const embed = new EmbedBuilder()
                     .setColor(0x2b2d31)
-                    .setTitle('🛡️ Server Whitelists')
+                    .setTitle('<:Shield:1524362964772196422> Server Whitelists')
                     .setDescription(desc)
                     .setTimestamp();
                 await interaction.reply({ embeds: [embed] });
             } else {
                 const listCard = ComponentsV2.baseContainer(ComponentsV2.Accents.primary);
-                listCard.addTextDisplayComponents(ComponentsV2.text(`# 🛡️ Server Whitelists\n\n${desc}`));
+                listCard.addTextDisplayComponents(ComponentsV2.text(`# <:Shield:1524362964772196422> Server Whitelists\n\n${desc}`));
                 await interaction.reply({
                     components: [listCard],
                     flags: V2
@@ -254,7 +254,7 @@ export const whitelistCommand: Command = {
         const record = config.users.find(u => u.userId === targetId);
 
         if (!record) {
-            await interaction.reply({ content: '❌ Whitelist record not found.' });
+            await interaction.reply({ content: '<:Cross:1524363088621469737> Whitelist record not found.' });
             return;
         }
 

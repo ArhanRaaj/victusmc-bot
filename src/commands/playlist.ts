@@ -87,13 +87,13 @@ export const playlistCommand: Command = {
                 const deleted = await playlistService.delete(guildId, userId, name);
                 
                 if (!deleted) {
-                    await interaction.reply({ content: `❌ Playlist **${escapeMd(name)}** not found.` });
+                    await interaction.reply({ content: `<:Cross:1524363088621469737> Playlist **${escapeMd(name)}** not found.` });
                     return;
                 }
 
                 const embed = new EmbedBuilder()
                     .setColor(0x2b2d31)
-                    .setTitle('🗑️ Playlist Deleted')
+                    .setTitle('<:Delete:1524363081642147931> Playlist Deleted')
                     .setDescription(`Deleted playlist **${escapeMd(name)}** successfully.`);
                 await interaction.reply({ embeds: [embed] });
             }
@@ -104,7 +104,7 @@ export const playlistCommand: Command = {
 
                 const embed = new EmbedBuilder()
                     .setColor(0x2b2d31)
-                    .setTitle('✏️ Playlist Renamed')
+                    .setTitle('<:Edit:1524363079675154433> Playlist Renamed')
                     .setDescription(`Renamed playlist **${escapeMd(name)}** to **${escapeMd(newName)}** successfully.`);
                 await interaction.reply({ embeds: [embed] });
             }
@@ -117,14 +117,14 @@ export const playlistCommand: Command = {
 
                 const playlist = await playlistService.get(guildId, userId, name);
                 if (!playlist) {
-                    await interaction.editReply({ content: `❌ Playlist **${escapeMd(name)}** not found.` });
+                    await interaction.editReply({ content: `<:Cross:1524363088621469737> Playlist **${escapeMd(name)}** not found.` });
                     return;
                 }
 
                 const lavalink = interaction.client.lavalink;
                 const node = lavalink.nodeManager.leastUsedNodes()[0];
                 if (!node) {
-                    await interaction.editReply({ content: '❌ No active music servers available to search.' });
+                    await interaction.editReply({ content: '<:Cross:1524363088621469737> No active music servers available to search.' });
                     return;
                 }
 
@@ -141,12 +141,12 @@ export const playlistCommand: Command = {
                     }
                 } catch (err) {
                     logger.error('Playlist search failed:', err);
-                    await interaction.editReply({ content: '❌ Search failed. Could not reach the music server.' });
+                    await interaction.editReply({ content: '<:Cross:1524363088621469737> Search failed. Could not reach the music server.' });
                     return;
                 }
 
                 if (!res || !res.tracks?.length || res.loadType === 'empty' || res.loadType === 'error') {
-                    await interaction.editReply({ content: `❌ No results found for **${query.slice(0, 100)}**.` });
+                    await interaction.editReply({ content: `<:Cross:1524363088621469737> No results found for **${query.slice(0, 100)}**.` });
                     return;
                 }
 
@@ -166,7 +166,7 @@ export const playlistCommand: Command = {
 
                 const successEmbed = new EmbedBuilder()
                     .setColor(0x2b2d31)
-                    .setTitle('✅ Added to Playlist')
+                    .setTitle('<:Tick:1524363090626482326> Added to Playlist')
                     .setDescription(
                         isPlaylist 
                             ? `Added **${tracksToAdd.length}** tracks from playlist **${escapeMd(res.playlist?.name || 'Playlist')}** to **${escapeMd(playlist.name)}**.`
@@ -181,13 +181,13 @@ export const playlistCommand: Command = {
 
                 const playlist = await playlistService.get(guildId, userId, name);
                 if (!playlist) {
-                    await interaction.reply({ content: `❌ Playlist **${escapeMd(name)}** not found.` });
+                    await interaction.reply({ content: `<:Cross:1524363088621469737> Playlist **${escapeMd(name)}** not found.` });
                     return;
                 }
 
                 const index = pos - 1;
                 if (index < 0 || index >= playlist.tracks.length) {
-                    await interaction.reply({ content: `❌ Invalid track position. Choose a number between 1 and ${playlist.tracks.length}.` });
+                    await interaction.reply({ content: `<:Cross:1524363088621469737> Invalid track position. Choose a number between 1 and ${playlist.tracks.length}.` });
                     return;
                 }
 
@@ -205,7 +205,7 @@ export const playlistCommand: Command = {
                 if (playlists.length === 0) {
                     const embed = new EmbedBuilder()
                         .setColor(0x2b2d31)
-                        .setTitle('ℹ️ No Playlists')
+                        .setTitle('<:Info:1524363004823470120> No Playlists')
                         .setDescription('You have not created any custom playlists yet. Use \`/playlist create <name>\` to start.');
                     await interaction.reply({ embeds: [embed] });
                     return;
@@ -213,13 +213,13 @@ export const playlistCommand: Command = {
 
                 const listEmbed = new EmbedBuilder()
                     .setColor(0x2b2d31)
-                    .setTitle('🎶 Your Music Playlists')
+                    .setTitle('<:Music:1524363029838561400> Your Music Playlists')
                     .setDescription('────────────────────────');
 
                 playlists.forEach((p) => {
                     const totalDuration = p.tracks.reduce((sum, t) => sum + t.duration, 0);
                     listEmbed.addFields({
-                        name: `📂 ${p.name}`,
+                        name: `<:Message:1524363100734623836> ${p.name}`,
                         value: `› Tracks: \`${p.tracks.length}\` | Duration: \`${formatDuration(totalDuration)}\`\n› Updated: <t:${Math.floor(new Date(p.updatedAt).getTime() / 1000)}:R>`
                     });
                 });
@@ -233,19 +233,19 @@ export const playlistCommand: Command = {
                 const name = interaction.options.getString('name', true).trim();
                 const playlist = await playlistService.get(guildId, userId, name);
                 if (!playlist) {
-                    await interaction.editReply({ content: `❌ Playlist **${escapeMd(name)}** not found.` });
+                    await interaction.editReply({ content: `<:Cross:1524363088621469737> Playlist **${escapeMd(name)}** not found.` });
                     return;
                 }
 
                 if (playlist.tracks.length === 0) {
-                    await interaction.editReply({ content: `❌ Playlist **${escapeMd(playlist.name)}** is empty. Add songs first using \`/playlist add\`.` });
+                    await interaction.editReply({ content: `<:Cross:1524363088621469737> Playlist **${escapeMd(playlist.name)}** is empty. Add songs first using \`/playlist add\`.` });
                     return;
                 }
 
                 const member = interaction.member as GuildMember;
                 const voice = member.voice.channel;
                 if (!voice) {
-                    await interaction.editReply({ content: '❌ You must join a voice channel first to play music.' });
+                    await interaction.editReply({ content: '<:Cross:1524363088621469737> You must join a voice channel first to play music.' });
                     return;
                 }
 
@@ -253,7 +253,7 @@ export const playlistCommand: Command = {
                 let player = lavalink.getPlayer(guildId);
                 
                 if (player && player.voiceChannelId && player.voiceChannelId !== voice.id) {
-                    await interaction.editReply({ content: '❌ I am already playing in another voice channel.' });
+                    await interaction.editReply({ content: '<:Cross:1524363088621469737> I am already playing in another voice channel.' });
                     return;
                 }
 
@@ -296,7 +296,7 @@ export const playlistCommand: Command = {
                 }
 
                 if (addedCount === 0) {
-                    await interaction.editReply({ content: '❌ Failed to load any tracks from the playlist.' });
+                    await interaction.editReply({ content: '<:Cross:1524363088621469737> Failed to load any tracks from the playlist.' });
                     return;
                 }
 
@@ -304,14 +304,14 @@ export const playlistCommand: Command = {
 
                 const successEmbed = new EmbedBuilder()
                     .setColor(0x2b2d31)
-                    .setTitle('🎶 Playlist Queued')
+                    .setTitle('<:Music:1524363029838561400> Playlist Queued')
                     .setDescription(`Successfully queued and loaded **${addedCount}** tracks from playlist **${escapeMd(playlist.name)}**.`);
                 await interaction.editReply({ embeds: [successEmbed] });
             }
             else if (sub === 'edit') {
                 const playlists = await playlistService.getAll(guildId, userId);
                 if (playlists.length === 0) {
-                    await interaction.reply({ content: '❌ You have no playlists to edit. Create one using `/playlist create`.' });
+                    await interaction.reply({ content: '<:Cross:1524363088621469737> You have no playlists to edit. Create one using `/playlist create`.' });
                     return;
                 }
 
@@ -326,15 +326,15 @@ export const playlistCommand: Command = {
                         })))
                 );
 
-                await interaction.reply({ content: '🛠️ **Playlist Editor**\nChoose a playlist from the dropdown menu below to edit its name, delete it, or remove tracks.', components: [selectMenu] });
+                await interaction.reply({ content: '<:Mod:1524363060033355776> **Playlist Editor**\nChoose a playlist from the dropdown menu below to edit its name, delete it, or remove tracks.', components: [selectMenu] });
             }
         } catch (error: any) {
             logger.error('Playlist subcommand execution failed:', error);
             const msg = error?.message || 'An unexpected error occurred.';
             if (interaction.replied || interaction.deferred) {
-                await interaction.editReply({ content: `❌ Error: ${msg}` }).catch(() => {});
+                await interaction.editReply({ content: `<:Cross:1524363088621469737> Error: ${msg}` }).catch(() => {});
             } else {
-                await interaction.reply({ content: `❌ Error: ${msg}` }).catch(() => {});
+                await interaction.reply({ content: `<:Cross:1524363088621469737> Error: ${msg}` }).catch(() => {});
             }
         }
     },
@@ -348,7 +348,7 @@ export const playlistCommand: Command = {
             const playlist = await playlistService.get(guildId, userId, playlistName);
             
             if (!playlist) {
-                await interaction.update({ content: '❌ Playlist not found.', components: [] });
+                await interaction.update({ content: '<:Cross:1524363088621469737> Playlist not found.', components: [] });
                 return;
             }
 
@@ -357,14 +357,14 @@ export const playlistCommand: Command = {
                     .setCustomId(`playlist_edit:actions:${playlist.name}`)
                     .setPlaceholder('Select editing action...')
                     .addOptions([
-                        { label: '✏️ Rename Playlist', value: 'rename', description: 'Change the playlist name' },
-                        { label: '🗑️ Delete Playlist', value: 'delete', description: 'Permanently remove the playlist' },
-                        { label: '❌ Remove Track', value: 'remove_track', description: 'Remove a specific track from the playlist' }
+                        { label: '<:Edit:1524363079675154433> Rename Playlist', value: 'rename', description: 'Change the playlist name' },
+                        { label: '<:Delete:1524363081642147931> Delete Playlist', value: 'delete', description: 'Permanently remove the playlist' },
+                        { label: '<:Cross:1524363088621469737> Remove Track', value: 'remove_track', description: 'Remove a specific track from the playlist' }
                     ])
             );
 
             await interaction.update({
-                content: `📂 **Editing Playlist: ${escapeMd(playlist.name)}**\nTracks: \`${playlist.tracks.length}\`\nChoose an action below:`,
+                content: `<:Message:1524363100734623836> **Editing Playlist: ${escapeMd(playlist.name)}**\nTracks: \`${playlist.tracks.length}\`\nChoose an action below:`,
                 components: [actionMenu]
             });
         }
@@ -374,14 +374,14 @@ export const playlistCommand: Command = {
             const playlist = await playlistService.get(guildId, userId, playlistName);
             
             if (!playlist) {
-                await interaction.update({ content: '❌ Playlist not found.', components: [] });
+                await interaction.update({ content: '<:Cross:1524363088621469737> Playlist not found.', components: [] });
                 return;
             }
 
             if (action === 'delete') {
                 await playlistService.delete(guildId, userId, playlist.name);
                 await interaction.update({
-                    content: `🗑️ **Playlist "${escapeMd(playlist.name)}" has been deleted.**`,
+                    content: `<:Delete:1524363081642147931> **Playlist "${escapeMd(playlist.name)}" has been deleted.**`,
                     components: []
                 });
             }
@@ -407,7 +407,7 @@ export const playlistCommand: Command = {
             else if (action === 'remove_track') {
                 if (playlist.tracks.length === 0) {
                     await interaction.update({
-                        content: `❌ Playlist **${escapeMd(playlist.name)}** has no tracks to remove.`,
+                        content: `<:Cross:1524363088621469737> Playlist **${escapeMd(playlist.name)}** has no tracks to remove.`,
                         components: []
                     });
                     return;
@@ -427,7 +427,7 @@ export const playlistCommand: Command = {
                 );
 
                 await interaction.update({
-                    content: `❌ **Select a track to remove from "${escapeMd(playlist.name)}"**:`,
+                    content: `<:Cross:1524363088621469737> **Select a track to remove from "${escapeMd(playlist.name)}"**:`,
                     components: [trackSelectMenu]
                 });
             }
@@ -438,7 +438,7 @@ export const playlistCommand: Command = {
             
             const playlist = await playlistService.get(guildId, userId, playlistName);
             if (!playlist) {
-                await interaction.update({ content: '❌ Playlist not found.', components: [] });
+                await interaction.update({ content: '<:Cross:1524363088621469737> Playlist not found.', components: [] });
                 return;
             }
 
@@ -446,7 +446,7 @@ export const playlistCommand: Command = {
             await playlistService.removeTrack(guildId, userId, playlistName, trackIdx);
 
             await interaction.update({
-                content: `✅ Removed **${escapeMd(removedTrack.title)}** from playlist **${escapeMd(playlist.name)}** successfully.`,
+                content: `<:Tick:1524363090626482326> Removed **${escapeMd(removedTrack.title)}** from playlist **${escapeMd(playlist.name)}** successfully.`,
                 components: []
             });
         }
@@ -463,12 +463,12 @@ export const playlistCommand: Command = {
             try {
                 await playlistService.rename(guildId, userId, oldName, newName);
                 await (interaction as any).update({
-                    content: `✏️ Playlist **${escapeMd(oldName)}** has been renamed to **${escapeMd(newName)}** successfully.`,
+                    content: `<:Edit:1524363079675154433> Playlist **${escapeMd(oldName)}** has been renamed to **${escapeMd(newName)}** successfully.`,
                     components: []
                 });
             } catch (err: any) {
                 await (interaction as any).update({
-                    content: `❌ Error: ${err.message || 'Failed to rename playlist.'}`,
+                    content: `<:Cross:1524363088621469737> Error: ${err.message || 'Failed to rename playlist.'}`,
                     components: []
                 });
             }

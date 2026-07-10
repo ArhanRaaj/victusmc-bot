@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from 'discord.js';
+﻿import { SlashCommandBuilder } from 'discord.js';
 import type { Command } from '../types/index.js';
 import { supabase } from '../services/supabase.js';
 import { logger } from '../utils/logger.js';
@@ -32,14 +32,14 @@ export const afkCommand: Command = {
                 description: JSON.stringify(afkData)
             });
 
-            const container = ComponentsV2.infoContainer(
-                'AFK Status Set',
-                `${interaction.user.username} is now AFK.\n\n` +
+            const container = ComponentsV2.baseContainer(ComponentsV2.Accents.info);
+            container.addTextDisplayComponents(ComponentsV2.text(
+                `<:Afk:1524363042731724923> **${interaction.user.username}** is now AFK.\n\n` +
                 `› **Reason:** ${reason}\n` +
                 `› **Since:** <t:${Math.floor(Date.now() / 1000)}:R>\n` +
                 `› **Scope:** Server Only\n\n` +
                 `-# You will be notified if someone mentions you.`
-            );
+            ));
 
             await interaction.reply({
                 components: [container],
@@ -47,7 +47,7 @@ export const afkCommand: Command = {
             });
         } catch (error) {
             logger.error('Failed to set AFK status:', error);
-            await interaction.reply({ content: '❌ Failed to set your AFK status. Please try again.' });
+            await interaction.reply({ content: '<:Cross:1524363088621469737> Failed to set your AFK status. Please try again.' });
         }
     }
 };

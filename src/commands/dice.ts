@@ -29,21 +29,21 @@ export const diceCommand: Command = {
 
         if (bet) {
             if (!chosenNumber || chosenNumber > sides) {
-                const c = ComponentsV2.errorContainer('❌ Missing Number',
+                const c = ComponentsV2.errorContainer('<:Cross:1524363088621469737> Missing Number',
                     `You must pick a number (1-${sides}) to bet on!`);
                 await interaction.reply({ components: [c], flags: V2 });
                 return;
             }
             const balance = await economy.getBalance(guildId, userId);
             if (balance < bet) {
-                const c = ComponentsV2.errorContainer('❌ Insufficient Cash',
+                const c = ComponentsV2.errorContainer('<:Cross:1524363088621469737> Insufficient Cash',
                     `You need **$${bet.toLocaleString()}** but only have **$${balance.toLocaleString()}**.`);
                 await interaction.reply({ components: [c], flags: V2 });
                 return;
             }
             const deductResult = await economy.removeCash(guildId, userId, bet);
             if (!deductResult.success) {
-                const c = ComponentsV2.errorContainer('❌ Bet Failed', 'Could not place your bet.');
+                const c = ComponentsV2.errorContainer('<:Cross:1524363088621469737> Bet Failed', 'Could not place your bet.');
                 await interaction.reply({ components: [c], flags: V2 });
                 return;
             }
@@ -53,16 +53,16 @@ export const diceCommand: Command = {
                 const multiplier = sides - 1;
                 const winnings = Math.floor(bet * multiplier);
                 const newBalance = await economy.addCash(guildId, userId, winnings);
-                const c = ComponentsV2.successContainer('🎲 Dice Roll (Bet)',
-                    `Rolled a **d${sides}**: **\`${result}\`**\n\n**You won!** 🎉\n**Payout:** $${winnings.toLocaleString()} (×${multiplier})\n**New Balance:** $${newBalance.toLocaleString()}`);
+                const c = ComponentsV2.successContainer('<:Giveaway:1524363020250382437> Dice Roll (Bet)',
+                    `Rolled a **d${sides}**: **\`${result}\`**\n\n**You won!** <:Stars:1524363036389937212>\n**Payout:** $${winnings.toLocaleString()} (×${multiplier})\n**New Balance:** $${newBalance.toLocaleString()}`);
                 await interaction.reply({ components: [c], flags: V2 });
             } else {
-                const c = ComponentsV2.errorContainer('🎲 Dice Roll (Bet)',
+                const c = ComponentsV2.errorContainer('<:Giveaway:1524363020250382437> Dice Roll (Bet)',
                     `Rolled a **d${sides}**: **\`${result}\`**\n\n**You lost!** 💸\n**Lost:** $${bet.toLocaleString()}\n**Balance:** $${deductResult.balance.toLocaleString()}`);
                 await interaction.reply({ components: [c], flags: V2 });
             }
         } else {
-            const c = ComponentsV2.infoContainer('🎲 Dice Roll',
+            const c = ComponentsV2.infoContainer('<:Giveaway:1524363020250382437> Dice Roll',
                 `Rolled a **d${sides}**\n\n**Result: \`${result}\`**`);
             await interaction.reply({ components: [c], flags: V2 });
         }

@@ -37,7 +37,7 @@ export const kickCommand: Command = {
         const isPrefix = interaction.constructor.name === 'PrefixInteraction';
 
         if (user.id === interaction.user.id) {
-            const err = '❌ You cannot kick yourself.';
+            const err = '<:Cross:1524363088621469737> You cannot kick yourself.';
             if (isPrefix) {
                 await interaction.reply({ content: err });
             } else {
@@ -51,7 +51,7 @@ export const kickCommand: Command = {
 
         const isWhitelisted = await whitelistSettings.isImmune(guild.id, user.id, 'kick');
         if (isWhitelisted) {
-            const err = '❌ This user is whitelisted and immune to kicks.';
+            const err = '<:Cross:1524363088621469737> This user is whitelisted and immune to kicks.';
             if (isPrefix) {
                 await interaction.reply({ content: err });
             } else {
@@ -66,7 +66,7 @@ export const kickCommand: Command = {
         const targetMember = await guild.members.fetch(user.id).catch(() => null);
 
         if (!targetMember) {
-            const err = '❌ User is not a member of this server.';
+            const err = '<:Cross:1524363088621469737> User is not a member of this server.';
             if (isPrefix) {
                 await interaction.reply({ content: err });
             } else {
@@ -81,7 +81,7 @@ export const kickCommand: Command = {
         // Hierarchy check
         const selfMember = guild.members.me;
         if (selfMember && targetMember.roles.highest.position >= selfMember.roles.highest.position) {
-            const err = '❌ I cannot kick this user because their highest role is equal to or higher than mine.';
+            const err = '<:Cross:1524363088621469737> I cannot kick this user because their highest role is equal to or higher than mine.';
             if (isPrefix) {
                 await interaction.reply({ content: err });
             } else {
@@ -94,7 +94,7 @@ export const kickCommand: Command = {
         }
 
         if (targetMember.id === guild.ownerId) {
-            const err = '❌ You cannot kick the server owner.';
+            const err = '<:Cross:1524363088621469737> You cannot kick the server owner.';
             if (isPrefix) {
                 await interaction.reply({ content: err });
             } else {
@@ -125,7 +125,7 @@ export const kickCommand: Command = {
             if (isPrefix) {
                 const embed = new EmbedBuilder()
                     .setColor(0x2b2d31)
-                    .setTitle('✅ User Kicked')
+                    .setTitle('<:Tick:1524363090626482326> User Kicked')
                     .setDescription(successMsg);
                 await interaction.reply({ embeds: [embed] });
             } else {
@@ -136,7 +136,7 @@ export const kickCommand: Command = {
             }
         } catch (err: any) {
             logger.error('Failed to kick member:', err);
-            const errMsg = '❌ Failed to kick user. Make sure I have appropriate administrative/kick permissions.';
+            const errMsg = '<:Cross:1524363088621469737> Failed to kick user. Make sure I have appropriate administrative/kick permissions.';
             if (isPrefix) {
                 await interaction.reply({ content: errMsg });
             } else {

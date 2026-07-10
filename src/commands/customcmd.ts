@@ -30,8 +30,8 @@ function renderWizPage(session: any): any {
 
     const navRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
         new ButtonBuilder().setCustomId(`customcmd_wiz:prev:${page}`).setLabel('⬅️ Back').setStyle(ButtonStyle.Secondary).setDisabled(page === 1),
-        new ButtonBuilder().setCustomId(`customcmd_wiz:next:${page}`).setLabel('Next ➡️').setStyle(ButtonStyle.Primary).setDisabled(page === 3),
-        new ButtonBuilder().setCustomId(`customcmd_wiz:cancel`).setLabel('Cancel ❌').setStyle(ButtonStyle.Danger)
+        new ButtonBuilder().setCustomId(`customcmd_wiz:next:${page}`).setLabel('Next <:Rightarrow:1524363086188773436>').setStyle(ButtonStyle.Primary).setDisabled(page === 3),
+        new ButtonBuilder().setCustomId(`customcmd_wiz:cancel`).setLabel('Cancel <:Cross:1524363088621469737>').setStyle(ButtonStyle.Danger)
     );
 
     const actionRows: any[] = [];
@@ -82,7 +82,7 @@ function renderWizPage(session: any): any {
             actionRows.push(typeSelect);
             actionRows.push(new ActionRowBuilder<ButtonBuilder>().addComponents(
                 new ButtonBuilder().setCustomId('customcmd_wiz:modal:response').setLabel('Edit Response Content').setStyle(ButtonStyle.Secondary),
-                new ButtonBuilder().setCustomId('customcmd_wiz:save').setLabel('Save Command ✅').setStyle(ButtonStyle.Success).setDisabled(!session.name || !session.replyContent)
+                new ButtonBuilder().setCustomId('customcmd_wiz:save').setLabel('Save Command <:Tick:1524363090626482326>').setStyle(ButtonStyle.Success).setDisabled(!session.name || !session.replyContent)
             ));
             break;
     }
@@ -147,7 +147,7 @@ export const customcmdCommand: Command = {
                 return;
             }
 
-            let text = `# 🛠️ Custom Commands List\n\n`;
+            let text = `# <:Mod:1524363060033355776> Custom Commands List\n\n`;
             list.forEach((c, i) => {
                 text += `### \`#${i+1}\` Command: **\`${c.name}\`**\n` +
                     `› **Type:** \`${c.reply_type.toUpperCase()}\` | **Cooldown:** \`${c.cooldown}s\`\n` +
@@ -188,7 +188,7 @@ export const customcmdCommand: Command = {
         const session = wizardSessions.get(key);
 
         if (!session) {
-            await interaction.reply({ content: '❌ Session expired.' });
+            await interaction.reply({ content: '<:Cross:1524363088621469737> Session expired.' });
             return;
         }
 
@@ -269,7 +269,7 @@ export const customcmdCommand: Command = {
                 });
             } catch (error) {
                 logger.error('Failed to save custom command:', error);
-                await interaction.reply({ content: '❌ System error writing custom command to database.' });
+                await interaction.reply({ content: '<:Cross:1524363088621469737> System error writing custom command to database.' });
             }
         }
     },
@@ -293,7 +293,7 @@ export const customcmdCommand: Command = {
         const session = wizardSessions.get(key);
 
         if (!session) {
-            await interaction.reply({ content: '❌ Session expired.' });
+            await interaction.reply({ content: '<:Cross:1524363088621469737> Session expired.' });
             return;
         }
 

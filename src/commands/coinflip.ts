@@ -27,20 +27,20 @@ export const coinflipCommand: Command = {
 
         if (bet) {
             if (!choice) {
-                const c = ComponentsV2.errorContainer('❌ Missing Choice', 'You must pick Heads or Tails when betting!');
+                const c = ComponentsV2.errorContainer('<:Cross:1524363088621469737> Missing Choice', 'You must pick Heads or Tails when betting!');
                 await interaction.reply({ components: [c], flags: V2 });
                 return;
             }
             const balance = await economy.getBalance(guildId, userId);
             if (balance < bet) {
-                const c = ComponentsV2.errorContainer('❌ Insufficient Cash',
+                const c = ComponentsV2.errorContainer('<:Cross:1524363088621469737> Insufficient Cash',
                     `You need **$${bet.toLocaleString()}** but only have **$${balance.toLocaleString()}**.`);
                 await interaction.reply({ components: [c], flags: V2 });
                 return;
             }
             const deductResult = await economy.removeCash(guildId, userId, bet);
             if (!deductResult.success) {
-                const c = ComponentsV2.errorContainer('❌ Bet Failed', 'Could not place your bet.');
+                const c = ComponentsV2.errorContainer('<:Cross:1524363088621469737> Bet Failed', 'Could not place your bet.');
                 await interaction.reply({ components: [c], flags: V2 });
                 return;
             }
@@ -49,16 +49,16 @@ export const coinflipCommand: Command = {
             if (won) {
                 const winnings = Math.floor(bet * 2);
                 const newBalance = await economy.addCash(guildId, userId, winnings);
-                const c = ComponentsV2.successContainer('🪙 Coin Flip (Bet)',
-                    `The coin landed on **${display}**!\n\n**You won!** 🎉\n**Payout:** $${winnings.toLocaleString()}\n**New Balance:** $${newBalance.toLocaleString()}`);
+                const c = ComponentsV2.successContainer('<:Gem:1524362979926081546> Coin Flip (Bet)',
+                    `The coin landed on **${display}**!\n\n**You won!** <:Stars:1524363036389937212>\n**Payout:** $${winnings.toLocaleString()}\n**New Balance:** $${newBalance.toLocaleString()}`);
                 await interaction.reply({ components: [c], flags: V2 });
             } else {
-                const c = ComponentsV2.errorContainer('🪙 Coin Flip (Bet)',
+                const c = ComponentsV2.errorContainer('<:Gem:1524362979926081546> Coin Flip (Bet)',
                     `The coin landed on **${display}**!\n\n**You lost!** 💸\n**Lost:** $${bet.toLocaleString()}\n**Balance:** $${deductResult.balance.toLocaleString()}`);
                 await interaction.reply({ components: [c], flags: V2 });
             }
         } else {
-            const c = ComponentsV2.infoContainer('🪙 Coin Flip',
+            const c = ComponentsV2.infoContainer('<:Gem:1524362979926081546> Coin Flip',
                 `The coin landed on **${display}**!`);
             await interaction.reply({ components: [c], flags: V2 });
         }

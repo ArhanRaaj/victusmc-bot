@@ -69,9 +69,9 @@ function renderGiveawayWizard(session: any): any {
     let desc = '';
 
     const navRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
-        new ButtonBuilder().setCustomId(`giveaway_wiz:prev:${page}`).setLabel('⬅️ Back').setStyle(ButtonStyle.Secondary).setDisabled(page === 1),
-        new ButtonBuilder().setCustomId(`giveaway_wiz:next:${page}`).setLabel('Next ➡️').setStyle(ButtonStyle.Primary).setDisabled(page === 3),
-        new ButtonBuilder().setCustomId(`giveaway_wiz:cancel`).setLabel('Cancel ❌').setStyle(ButtonStyle.Danger)
+        new ButtonBuilder().setCustomId(`giveaway_wiz:prev:${page}`).setLabel('Back').setEmoji('<:Right_arrow2:1524362968916164678>').setStyle(ButtonStyle.Secondary).setDisabled(page === 1),
+        new ButtonBuilder().setCustomId(`giveaway_wiz:next:${page}`).setLabel('Next').setEmoji('<:Rightarrow:1524363086188773436>').setStyle(ButtonStyle.Primary).setDisabled(page === 3),
+        new ButtonBuilder().setCustomId(`giveaway_wiz:cancel`).setLabel('Cancel').setEmoji('<:Cross:1524363088621469737>').setStyle(ButtonStyle.Danger)
     );
 
     const actionRows: any[] = [];
@@ -109,11 +109,11 @@ function renderGiveawayWizard(session: any): any {
                 `Review and launch the giveaway to a target text channel.\n\n` +
                 `› **Prize Item:** **"${session.prize || 'Missing prize!'}"**\n` +
                 `› **Winners Allocation:** \`${session.winnersCount}\` winner(s)\n` +
-                `› **Requirements Status:** ${session.reqRoleId || session.reqLevel > 0 || session.reqInvites > 0 || session.reqBooster ? '🟢 Active filters' : '⚪ Free entry'}\n\n` +
+                `› **Requirements Status:** ${session.reqRoleId || session.reqLevel > 0 || session.reqInvites > 0 || session.reqBooster ? '<:Tick:1524363090626482326> Active filters' : '<:Cross:1524363088621469737> Free entry'}\n\n` +
                 `Select a target channel below to publish and run the giveaway.`;
 
             const channelSelect = new ActionRowBuilder<ButtonBuilder>().addComponents(
-                new ButtonBuilder().setCustomId('giveaway_wiz:launch').setLabel('Launch Giveaway 🎉').setStyle(ButtonStyle.Success).setDisabled(!session.prize || !session.durationMs)
+                new ButtonBuilder().setCustomId('giveaway_wiz:launch').setLabel('Launch Giveaway').setEmoji('<:Stars:1524363036389937212>').setStyle(ButtonStyle.Success).setDisabled(!session.prize || !session.durationMs)
             );
             actionRows.push(channelSelect);
             break;
@@ -138,18 +138,18 @@ function buildGiveawayCard(giveaway: Giveaway, participantCount: number): any {
 
     const c = ComponentsV2.baseContainer(accent);
 
-    const statusBadge = isEnded ? '🔴 ENDED' : isPaused ? '⏸️ PAUSED' : '🎉 ACTIVE';
+    const statusBadge = isEnded ? '<:Cross:1524363088621469737> ENDED' : isPaused ? '<:Pause:1524363094933897226> PAUSED' : '<:Stars:1524363036389937212> ACTIVE';
     
-    let body = `-# 🎁 GIVEAWAY • #${giveaway.id.slice(0, 8)} • ${statusBadge}\n` +
+    let body = `-# <:Giveaway:1524363020250382437> GIVEAWAY • #${giveaway.id.slice(0, 8)} • ${statusBadge}\n` +
         `# ${giveaway.prize}\n\n` +
         `› **Winners:** \`${giveaway.winners_count}\` target slot(s)\n` +
         `› **Participants count:** \`${participantCount}\` entered\n`;
 
     if (isEnded) {
         if (giveaway.winners && giveaway.winners.length > 0) {
-            body += `\n🏆 **Winners:** ${giveaway.winners.map(w => `<@${w}>`).join(', ')}`;
+            body += `\n<:Trophy:1524363073098350622> **Winners:** ${giveaway.winners.map(w => `<@${w}>`).join(', ')}`;
         } else {
-            body += `\n🏆 **Winners:** _No participants entered._`;
+            body += `\n<:Trophy:1524363073098350622> **Winners:** _No participants entered._`;
         }
         body += `\n\nEnded: <t:${Math.floor(new Date(giveaway.ends_at).getTime() / 1000)}:R>`;
     } else {
@@ -167,12 +167,12 @@ function buildGiveawayCard(giveaway: Giveaway, participantCount: number): any {
         if (bst) reqs.push(`· Must be a Server Booster`);
 
         if (reqs.length > 0) {
-            body += `⚠️ **Entry Requirements:**\n${reqs.join('\n')}\n\n`;
+            body += `<:Exclamation:1524363098809569350> **Entry Requirements:**\n${reqs.join('\n')}\n\n`;
         } else {
-            body += `✨ **Entry Requirements:** None! Open to everyone.\n\n`;
+            body += `<:Stars:1524363036389937212> **Entry Requirements:** None! Open to everyone.\n\n`;
         }
 
-        body += `Click the **Participate 🎉** button below to register!`;
+        body += `Click the **Participate <:Stars:1524363036389937212>** button below to register!`;
     }
 
     c.addTextDisplayComponents(ComponentsV2.text(body))
@@ -180,7 +180,7 @@ function buildGiveawayCard(giveaway: Giveaway, participantCount: number): any {
 
     if (!isEnded) {
         c.addActionRowComponents(new ActionRowBuilder<ButtonBuilder>().addComponents(
-            new ButtonBuilder().setCustomId(`giveaway:enter:${giveaway.id}`).setLabel('Participate 🎉').setStyle(ButtonStyle.Success).setDisabled(isPaused)
+            new ButtonBuilder().setCustomId(`giveaway:enter:${giveaway.id}`).setLabel('Participate').setEmoji('<:Stars:1524363036389937212>').setStyle(ButtonStyle.Success).setDisabled(isPaused)
         ));
     }
 
@@ -256,7 +256,7 @@ export const giveawayCommand: Command = {
                 return;
             }
 
-            let body = `# 🎁 Active Giveaways Fleet\n`;
+            let body = `# <:Giveaway:1524363020250382437> Active Giveaways Fleet\n`;
             active.forEach(g => {
                 body += `### Giveaway ID: **\`${g.id}\`**\n` +
                     `› **Prize:** **"${g.prize}"**\n` +
@@ -323,8 +323,8 @@ export const giveawayCommand: Command = {
             if (channel && channel.type === ChannelType.GuildText) {
                 const rerollContainer = ComponentsV2.baseContainer(ComponentsV2.Accents.purple)
                     .addTextDisplayComponents(ComponentsV2.text(
-                        `-# 🎁 GIVEAWAY REROLL • #${id.slice(0, 8)}\n` +
-                        `# Reroll Complete! 🏆\n\n` +
+                        `-# <:Giveaway:1524363020250382437> GIVEAWAY REROLL • #${id.slice(0, 8)}\n` +
+                        `# Reroll Complete! <:Trophy:1524363073098350622>\n\n` +
                         `A new set of winners has been rolled for **"${giveaway.prize}"**!\n\n` +
                         `› **New Winners:** ${picked.map(w => `<@${w}>`).join(', ')}\n` +
                         `› **Hosted by:** <@${giveaway.host_id}>\n\n` +
@@ -333,7 +333,7 @@ export const giveawayCommand: Command = {
                     .addSeparatorComponents(ComponentsV2.separator());
 
                 await (channel as any).send({
-                    content: `🏆 **Reroll Winners:** ${picked.map(w => `<@${w}>`).join(', ')}!`,
+                    content: `<:Trophy:1524363073098350622> **Reroll Winners:** ${picked.map(w => `<@${w}>`).join(', ')}!`,
                     components: [rerollContainer],
                     flags: V2
                 });
@@ -425,7 +425,7 @@ export const giveawayCommand: Command = {
 
         if (interaction.customId.startsWith('giveaway_wiz:')) {
             if (!session) {
-                await interaction.reply({ content: '❌ Wizard session expired.' });
+                await interaction.reply({ content: '<:Cross:1524363088621469737> Wizard session expired.' });
                 return;
             }
 
@@ -481,11 +481,11 @@ export const giveawayCommand: Command = {
             const giveawayId = interaction.customId.split(':')[2];
             const giveaway = await supabase.getGiveaway(giveawayId);
             if (!giveaway || giveaway.status === 'ended') {
-                await interaction.reply({ content: '❌ This giveaway has ended.' });
+                await interaction.reply({ content: '<:Cross:1524363088621469737> This giveaway has ended.' });
                 return;
             }
             if (giveaway.status === 'paused') {
-                await interaction.reply({ content: '⏸️ This giveaway is currently paused.' });
+                await interaction.reply({ content: '<:Pause:1524363094933897226> This giveaway is currently paused.' });
                 return;
             }
 
@@ -497,19 +497,6 @@ export const giveawayCommand: Command = {
 
             const member = interaction.member as GuildMember | null;
             if (!member) return;
-
-            // 0. Account Linking Check (Mandatory for all entrants)
-            const linked = await supabase.getLinkedAccount(interaction.user.id).catch(() => null);
-            if (!linked) {
-                await interaction.reply({
-                    components: [ComponentsV2.errorContainer(
-                        'Account Not Linked', 
-                        'You must link your Discord account to VictusMC to participate in giveaways. Use the panel or `/account` to link your profile.'
-                    )],
-                    flags: V2
-                });
-                return;
-            }
 
             // 1. Role requirements
             const rId = giveaway.requirements?.roles?.[0];
@@ -528,7 +515,7 @@ export const giveawayCommand: Command = {
             const lvl = giveaway.requirements?.level ?? 0;
             if (lvl > 0) {
                 let level = 0;
-                const profile = await supabase.getUserProfile(linked.user_id).catch(() => null);
+                const profile = await supabase.getUserProfile(interaction.user.id).catch(() => null);
                 if (profile) {
                     level = calculateLevel(Number(profile.total_xp ?? 0));
                 }
@@ -583,7 +570,7 @@ export const giveawayCommand: Command = {
                 if (message) await message.edit({ components: [card], flags: V2 }).catch(() => {});
             }
 
-            await interaction.reply({ content: '🎉 You have successfully entered the giveaway! Good luck!' });
+            await interaction.reply({ content: '<:Stars:1524363036389937212> You have successfully entered the giveaway! Good luck!' });
         }
     },
 
@@ -594,7 +581,7 @@ export const giveawayCommand: Command = {
         const session = wizardSessions.get(key);
 
         if (!session) {
-            await interaction.reply({ content: '❌ Session expired.' });
+            await interaction.reply({ content: '<:Cross:1524363088621469737> Session expired.' });
             return;
         }
 
@@ -630,7 +617,7 @@ export const giveawayCommand: Command = {
                 interaction.guild?.channels.cache.find(c => c.name.toLowerCase() === input.toLowerCase() && c.type === ChannelType.GuildText);
 
             if (!channel || channel.type !== ChannelType.GuildText) {
-                await interaction.reply({ content: `❌ Target text channel "${input}" not found.` });
+                await interaction.reply({ content: `<:Cross:1524363088621469737> Target text channel "${input}" not found.` });
                 return;
             }
 
@@ -685,7 +672,7 @@ export const giveawayCommand: Command = {
                 );
 
                 if (!dbGiveaway) {
-                    await interaction.reply({ content: '❌ System error writing giveaway to database.' });
+                    await interaction.reply({ content: '<:Cross:1524363088621469737> System error writing giveaway to database.' });
                     return;
                 }
 
@@ -703,7 +690,7 @@ export const giveawayCommand: Command = {
                 });
             } catch (err) {
                 logger.error('Failed to launch giveaway:', err);
-                await interaction.reply({ content: '❌ Failed to launch giveaway. Check logs.' });
+                await interaction.reply({ content: '<:Cross:1524363088621469737> Failed to launch giveaway. Check logs.' });
             }
         }
     }
@@ -739,8 +726,8 @@ async function endGiveaway(client: Client, giveaway: Giveaway): Promise<void> {
     if (picked.length > 0) {
         const winContainer = ComponentsV2.baseContainer(ComponentsV2.Accents.purple)
             .addTextDisplayComponents(ComponentsV2.text(
-                `-# 🎁 GIVEAWAY CONCLUDED • #${giveaway.id.slice(0, 8)}\n` +
-                `# Congratulations! 🏆\n\n` +
+                `-# <:Giveaway:1524363020250382437> GIVEAWAY CONCLUDED • #${giveaway.id.slice(0, 8)}\n` +
+                `# Congratulations! <:Trophy:1524363073098350622>\n\n` +
                 `The lottery for **"${giveaway.prize}"** has officially finished!\n\n` +
                 `› **Winners:** ${picked.map(w => `<@${w}>`).join(', ')}\n` +
                 `› **Hosted by:** <@${giveaway.host_id}>\n` +
@@ -750,15 +737,15 @@ async function endGiveaway(client: Client, giveaway: Giveaway): Promise<void> {
             .addSeparatorComponents(ComponentsV2.separator());
 
         await (channel as any).send({
-            content: `🏆 **Giveaway Winners:** ${picked.map(w => `<@${w}>`).join(', ')}!`,
+            content: `<:Trophy:1524363073098350622> **Giveaway Winners:** ${picked.map(w => `<@${w}>`).join(', ')}!`,
             components: [winContainer],
             flags: V2
         });
     } else {
         const noWinContainer = ComponentsV2.baseContainer(ComponentsV2.Accents.danger)
             .addTextDisplayComponents(ComponentsV2.text(
-                `-# 🎁 GIVEAWAY CONCLUDED • #${giveaway.id.slice(0, 8)}\n` +
-                `# No Winners 🎟️\n\n` +
+                `-# <:Giveaway:1524363020250382437> GIVEAWAY CONCLUDED • #${giveaway.id.slice(0, 8)}\n` +
+                `# No Winners <:Ticket:1524363100734623836>\n\n` +
                 `The lottery for **"${giveaway.prize}"** has finished, but there were no participants.\n\n` +
                 `› **Hosted by:** <@${giveaway.host_id}>`
             ))

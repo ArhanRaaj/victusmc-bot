@@ -1,4 +1,4 @@
-import { Events } from 'discord.js';
+﻿import { Events } from 'discord.js';
 import type { Message } from 'discord.js';
 import type { Event } from '../types/index.js';
 import { auditLogSettings } from '../services/auditLogSettings.js';
@@ -27,7 +27,7 @@ export const messageUpdateEvent: Event = {
 
             const container = ComponentsV2.baseContainer(ComponentsV2.Accents.warning);
             container.addTextDisplayComponents(
-                ComponentsV2.text('## 📝 Message Edited\n\u200b'),
+                ComponentsV2.text('## <:Edit:1524363079675154433> Message Edited\n\u200b'),
                 ComponentsV2.text(`**User:** <@${newMessage.author?.id}> (${newMessage.author?.tag || 'Unknown'})\n**Channel:** <#${newMessage.channelId}>`),
                 ComponentsV2.text(`**Before:** ${oldContent.slice(0, 500)}\n**After:** ${newContent.slice(0, 500)}`),
                 ComponentsV2.text(`-# <t:${Math.floor(Date.now() / 1000)}:R>`)

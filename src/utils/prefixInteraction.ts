@@ -142,8 +142,8 @@ export class PrefixInteraction {
     async deferReply(options?: { flags?: number }) {
         if (this.deferred || this.replied) return;
         this.deferred = true;
-        this.replyMessage = await this.message.reply({ content: '⏳ Processing...' }).catch(async () => {
-            return (this.message.channel as any).send({ content: '⏳ Processing...' });
+        this.replyMessage = await this.message.reply({ content: '<:Processing:1524363038713708544> Processing...' }).catch(async () => {
+            return (this.message.channel as any).send({ content: '<:Processing:1524363038713708544> Processing...' });
         });
     }
 

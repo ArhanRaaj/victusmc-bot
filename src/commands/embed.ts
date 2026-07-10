@@ -40,7 +40,7 @@ function renderEditorDashboard(session: any): any {
     const accent = session.color ? (PRESET_COLORS[session.color.toLowerCase()] || parseInt(session.color.replace('#', ''), 16) || ComponentsV2.Accents.primary) : ComponentsV2.Accents.primary;
     const container = ComponentsV2.baseContainer(accent);
     
-    const body = `# 📝 Embed Editor: **\`${session.originalName}\`**\n` +
+    const body = `# <:Edit:1524363079675154433> Embed Editor: **\`${session.originalName}\`**\n` +
         `Modify the configuration fields below. Once finished, click **Save & Publish** to save the changes.\n\n` +
         `› **Title:** ${session.title ? `"${session.title}"` : '_Not set_'}\n` +
         `› **Description:** ${session.description ? `_Provided (${session.description.length} chars)_` : '_Not set_'}\n` +
@@ -58,18 +58,18 @@ function renderEditorDashboard(session: any): any {
         .setCustomId('embed_edit:select_field')
         .setPlaceholder('Choose a section to modify...')
         .addOptions([
-            { label: '📝 Edit Title & Description', value: 'field:basic', description: 'Modify the embed header text and description body' },
-            { label: '👤 Edit Author Information', value: 'field:author', description: 'Modify the author name, icon URL, and hyperlink' },
-            { label: '🖼️ Edit Thumbnail & Image Banner', value: 'field:media', description: 'Modify thumbnail and main image URLs' },
-            { label: '🔤 Edit Footer Info', value: 'field:footer', description: 'Modify footer text and footer icon URL' },
-            { label: '🎨 Edit Theme Color', value: 'field:color', description: 'Select a preset color or set a custom HEX value' },
+            { label: '<:Edit:1524363079675154433> Edit Title & Description', value: 'field:basic', description: 'Modify the embed header text and description body' },
+            { label: '<:User:1524363104903893052> Edit Author Information', value: 'field:author', description: 'Modify the author name, icon URL, and hyperlink' },
+            { label: '<:Image:1524363100734623836> Edit Thumbnail & Image Banner', value: 'field:media', description: 'Modify thumbnail and main image URLs' },
+            { label: '<:Edit:1524363079675154433> Edit Footer Info', value: 'field:footer', description: 'Modify footer text and footer icon URL' },
+            { label: '<:Pallete:1524362993666756628> Edit Theme Color', value: 'field:color', description: 'Select a preset color or set a custom HEX value' },
             { label: '🖱️ Edit Custom Buttons', value: 'field:buttons', description: 'Add, clear, or link action buttons below the embed' },
-            { label: '📊 Edit Dropdown Select Menu', value: 'field:select_menu', description: 'Add, clear, or configure dropdown menu options' }
+            { label: '<:Vote:1524363112709488641> Edit Dropdown Select Menu', value: 'field:select_menu', description: 'Add, clear, or configure dropdown menu options' }
         ]);
         
     const buttonsRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
-        new ButtonBuilder().setCustomId('embed_edit:save').setLabel('Save & Publish').setStyle(ButtonStyle.Success).setEmoji('💾'),
-        new ButtonBuilder().setCustomId('embed_edit:cancel').setLabel('Cancel').setStyle(ButtonStyle.Danger).setEmoji('❌')
+        new ButtonBuilder().setCustomId('embed_edit:save').setLabel('Save & Publish').setStyle(ButtonStyle.Success).setEmoji('<:Save:1524363083546624111>'),
+        new ButtonBuilder().setCustomId('embed_edit:cancel').setLabel('Cancel').setStyle(ButtonStyle.Danger).setEmoji('<:Cross:1524363088621469737>')
     );
     
     container.addActionRowComponents(new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(selectMenu));
@@ -116,7 +116,7 @@ function renderEditorSelectPage(session: any): any {
     const accent = session.color ? (PRESET_COLORS[session.color.toLowerCase()] || parseInt(session.color.replace('#', ''), 16) || ComponentsV2.Accents.primary) : ComponentsV2.Accents.primary;
     const container = ComponentsV2.baseContainer(accent);
     
-    const body = `# 📊 Edit Dropdown Select Menu: **\`${session.originalName}\`**\n` +
+    const body = `# <:Vote:1524363112709488641> Edit Dropdown Select Menu: **\`${session.originalName}\`**\n` +
         `Configure a dropdown select menu below your embed.\n\n` +
         `› **Dropdown Menu:** ${session.selectMenu ? `**${session.selectMenu.options.length} options**` : '_None_'}\n` +
         (session.selectMenu ? `  Placeholder: "${session.selectMenu.placeholder}"\n` + session.selectMenu.options.map((o: any, i: number) => `  \`${i+1}.\` **${o.label}** (${o.value})`).join('\n') : '') +
@@ -137,7 +137,7 @@ function renderEditorSelectPage(session: any): any {
 function renderEditorColorPage(session: any): any {
     const container = ComponentsV2.baseContainer(ComponentsV2.Accents.primary);
     
-    const body = `# 🎨 Select Theme Color\n` +
+    const body = `# <:Pallete:1524362993666756628> Select Theme Color\n` +
         `Choose a preset color below or enter a custom HEX value.\n\n` +
         `› **Current Color:** \`${session.color}\``;
         
@@ -177,8 +177,8 @@ function renderWizardPage(session: any): any {
 
     const navRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
         new ButtonBuilder().setCustomId(`embed_wiz:prev:${page}`).setLabel('⬅️ Back').setStyle(ButtonStyle.Secondary).setDisabled(page === 1),
-        new ButtonBuilder().setCustomId(`embed_wiz:next:${page}`).setLabel('Next ➡️').setStyle(ButtonStyle.Primary).setDisabled(page === 7),
-        new ButtonBuilder().setCustomId(`embed_wiz:cancel`).setLabel('Cancel ❌').setStyle(ButtonStyle.Danger)
+        new ButtonBuilder().setCustomId(`embed_wiz:next:${page}`).setLabel('Next <:Rightarrow:1524363086188773436>').setStyle(ButtonStyle.Primary).setDisabled(page === 7),
+        new ButtonBuilder().setCustomId(`embed_wiz:cancel`).setLabel('Cancel <:Cross:1524363088621469737>').setStyle(ButtonStyle.Danger)
     );
 
     const actionRows: any[] = [];
@@ -295,8 +295,8 @@ function renderWizardPage(session: any): any {
                 `Press **Save Draft** to record in database. You can publish from there.`;
 
             actionRows.push(new ActionRowBuilder<ButtonBuilder>().addComponents(
-                new ButtonBuilder().setCustomId('embed_wiz:save').setLabel('Save Draft ✅').setStyle(ButtonStyle.Success).setDisabled(!session.name),
-                new ButtonBuilder().setCustomId('embed_wiz:test_preview').setLabel('Test Preview 👁️').setStyle(ButtonStyle.Secondary)
+                new ButtonBuilder().setCustomId('embed_wiz:save').setLabel('Save Draft <:Tick:1524363090626482326>').setStyle(ButtonStyle.Success).setDisabled(!session.name),
+                new ButtonBuilder().setCustomId('embed_wiz:test_preview').setLabel('Test Preview <:User:1524363104903893052>').setStyle(ButtonStyle.Secondary)
             ));
             break;
     }
@@ -331,7 +331,7 @@ export function buildFinalEmbedPayload(session: any): any {
     const selectMenu = session.selectMenu || session.select_menu;
 
     if (authorName) {
-        textBody += `-# ${authorIconUrl ? '💠 ' : ''}${authorName}${authorUrl ? ` • [Link](${authorUrl})` : ''}\n`;
+        textBody += `-# ${authorIconUrl ? '<:Gem:1524362979926081546> ' : ''}${authorName}${authorUrl ? ` • [Link](${authorUrl})` : ''}\n`;
     }
     if (title) {
         textBody += `# ${title}\n\n`;
@@ -478,7 +478,7 @@ export const embedCommand: Command = {
             );
             
             const container = ComponentsV2.baseContainer(ComponentsV2.Accents.primary)
-                .addTextDisplayComponents(ComponentsV2.text('# 📝 Edit Custom Embed\nSelect the custom embed you would like to edit from the dropdown below.'))
+                .addTextDisplayComponents(ComponentsV2.text('# <:Edit:1524363079675154433> Edit Custom Embed\nSelect the custom embed you would like to edit from the dropdown below.'))
                 .addActionRowComponents(selectMenu);
                 
             await interaction.editReply({
@@ -553,7 +553,7 @@ export const embedCommand: Command = {
             }
 
             const confirmContainer = ComponentsV2.baseContainer(ComponentsV2.Accents.danger)
-                .addTextDisplayComponents(ComponentsV2.text(`# ⚠️ Confirm Delete\nAre you sure you want to permanently delete custom embed **\`${name}\`**?`))
+                .addTextDisplayComponents(ComponentsV2.text(`# <:Exclamation:1524363098809569350> Confirm Delete\nAre you sure you want to permanently delete custom embed **\`${name}\`**?`))
                 .addActionRowComponents(new ActionRowBuilder<ButtonBuilder>().addComponents(
                     new ButtonBuilder().setCustomId(`embed_act_del:confirm:${name}`).setLabel('Confirm Delete').setStyle(ButtonStyle.Danger),
                     new ButtonBuilder().setCustomId(`embed_act_del:cancel`).setLabel('Cancel').setStyle(ButtonStyle.Secondary)
@@ -655,7 +655,7 @@ export const embedCommand: Command = {
 
             const container = ComponentsV2.baseContainer(ComponentsV2.Accents.primary)
                 .addTextDisplayComponents(ComponentsV2.text(
-                    `# ⚙️ Embed Settings\nConfigure default values applied to new embeds.\n\n` +
+                    `# <:Setting:1524363057990598687> Embed Settings\nConfigure default values applied to new embeds.\n\n` +
                     `› **Default Accent Color:** \`${settings.default_color || 'purple'}\`\n` +
                     `› **Default Footer:** "${settings.default_footer || 'None'}"\n` +
                     `› **Default Author:** "${settings.default_author || 'None'}"\n` +
@@ -689,7 +689,7 @@ export const embedCommand: Command = {
             }
             
             if (!session) {
-                await interaction.reply({ content: '❌ Session expired.' });
+                await interaction.reply({ content: '<:Cross:1524363088621469737> Session expired.' });
                 return;
             }
             
@@ -755,7 +755,7 @@ export const embedCommand: Command = {
                     await interaction.update({ components: [successContainer], embeds: [], files: [] });
                 } catch (err) {
                     logger.error('Failed to update custom embed:', err);
-                    await interaction.reply({ content: '❌ Failed to save embed changes to database.' });
+                    await interaction.reply({ content: '<:Cross:1524363088621469737> Failed to save embed changes to database.' });
                 }
             }
             return;
@@ -765,7 +765,7 @@ export const embedCommand: Command = {
 
         if (interaction.customId.startsWith('embed_wiz:')) {
             if (!session) {
-                await interaction.reply({ content: '❌ Wizard session expired. Use `/embed create` to open a new session.' });
+                await interaction.reply({ content: '<:Cross:1524363088621469737> Wizard session expired. Use `/embed create` to open a new session.' });
                 return;
             }
 
@@ -850,7 +850,7 @@ export const embedCommand: Command = {
             else if (action === 'test_preview') {
                 const previewPayload = buildFinalEmbedPayload(session);
                 await interaction.reply({
-                    content: '👁️ **Live Template Preview:**',
+                    content: '<:User:1524363104903893052> **Live Template Preview:**',
                     components: [previewPayload],
                     flags: V2
                 });
@@ -881,7 +881,7 @@ export const embedCommand: Command = {
                     });
                 } catch (error) {
                     logger.error('Failed to save custom embed draft:', error);
-                    await interaction.reply({ content: '❌ System error saving embed draft.' });
+                    await interaction.reply({ content: '<:Cross:1524363088621469737> System error saving embed draft.' });
                 }
             }
         }
@@ -924,7 +924,7 @@ export const embedCommand: Command = {
                 const embedName = interaction.values[0];
                 const embed = await supabase.getCustomEmbed(interaction.guildId!, embedName);
                 if (!embed) {
-                    await interaction.reply({ content: '❌ Custom embed not found.' });
+                    await interaction.reply({ content: '<:Cross:1524363088621469737> Custom embed not found.' });
                     return;
                 }
                 
@@ -957,7 +957,7 @@ export const embedCommand: Command = {
                 const modal = new ModalBuilder().setCustomId(`embed_edit_modal:add_button:${Date.now()}`).setTitle('Configure Button Parameters');
                 modal.addComponents(
                     new ActionRowBuilder<TextInputBuilder>().addComponents(new TextInputBuilder().setCustomId('label').setLabel('Button Label').setPlaceholder('Click Here').setStyle(TextInputStyle.Short).setRequired(true)),
-                    new ActionRowBuilder<TextInputBuilder>().addComponents(new TextInputBuilder().setCustomId('emoji').setLabel('Emoji Name/Icon (Optional)').setPlaceholder('🔥').setStyle(TextInputStyle.Short).setRequired(false)),
+                    new ActionRowBuilder<TextInputBuilder>().addComponents(new TextInputBuilder().setCustomId('emoji').setLabel('Emoji Name/Icon (Optional)').setPlaceholder('<:Thunder:1524362985647247420>').setStyle(TextInputStyle.Short).setRequired(false)),
                     new ActionRowBuilder<TextInputBuilder>().addComponents(new TextInputBuilder().setCustomId('url').setLabel(style === 5 ? 'URL Link (Link style requires URL)' : 'Linked Child Embed Name / CustomId').setPlaceholder(style === 5 ? 'https://example.com' : 'support').setStyle(TextInputStyle.Short).setRequired(style === 5)),
                     new ActionRowBuilder<TextInputBuilder>().addComponents(new TextInputBuilder().setCustomId('ephemeral').setLabel('Load Embed Ephemerally? (yes/no)').setPlaceholder('no').setStyle(TextInputStyle.Short).setRequired(false))
                 );
@@ -967,7 +967,7 @@ export const embedCommand: Command = {
             
             const session = editors.get(key);
             if (!session) {
-                await interaction.reply({ content: '❌ Session expired.' });
+                await interaction.reply({ content: '<:Cross:1524363088621469737> Session expired.' });
                 return;
             }
             
@@ -1059,7 +1059,7 @@ export const embedCommand: Command = {
             const modal = new ModalBuilder().setCustomId(`embed_wiz_modal:add_button:${Date.now()}`).setTitle('Configure Button Parameters');
             modal.addComponents(
                 new ActionRowBuilder<TextInputBuilder>().addComponents(new TextInputBuilder().setCustomId('label').setLabel('Button Label').setPlaceholder('Click Here').setStyle(TextInputStyle.Short).setRequired(true)),
-                new ActionRowBuilder<TextInputBuilder>().addComponents(new TextInputBuilder().setCustomId('emoji').setLabel('Emoji Name/Icon (Optional)').setPlaceholder('🔥').setStyle(TextInputStyle.Short).setRequired(false)),
+                new ActionRowBuilder<TextInputBuilder>().addComponents(new TextInputBuilder().setCustomId('emoji').setLabel('Emoji Name/Icon (Optional)').setPlaceholder('<:Thunder:1524362985647247420>').setStyle(TextInputStyle.Short).setRequired(false)),
                 new ActionRowBuilder<TextInputBuilder>().addComponents(new TextInputBuilder().setCustomId('url').setLabel(style === 5 ? 'URL Link (Link style requires URL)' : 'Linked Child Embed Name / CustomId').setPlaceholder(style === 5 ? 'https://example.com' : 'support').setStyle(TextInputStyle.Short).setRequired(style === 5)),
                 new ActionRowBuilder<TextInputBuilder>().addComponents(new TextInputBuilder().setCustomId('ephemeral').setLabel('Load Embed Ephemerally? (yes/no)').setPlaceholder('no').setStyle(TextInputStyle.Short).setRequired(false))
             );
@@ -1072,7 +1072,7 @@ export const embedCommand: Command = {
             if (!embed) return;
 
             const actionContainer = ComponentsV2.baseContainer(ComponentsV2.Accents.primary)
-                .addTextDisplayComponents(ComponentsV2.text(`# 🛠️ Embed Dashboard: \`${name}\`\nSelect an action to perform on this template.`))
+                .addTextDisplayComponents(ComponentsV2.text(`# <:Mod:1524363060033355776> Embed Dashboard: \`${name}\`\nSelect an action to perform on this template.`))
                 .addActionRowComponents(new ActionRowBuilder<ButtonBuilder>().addComponents(
                     new ButtonBuilder().setCustomId(`embed_wiz_list_act:publish:${name}`).setLabel('Publish to Channel').setStyle(ButtonStyle.Primary),
                     new ButtonBuilder().setCustomId(`embed_wiz_list_act:duplicate:${name}`).setLabel('Duplicate').setStyle(ButtonStyle.Secondary),
@@ -1094,7 +1094,7 @@ export const embedCommand: Command = {
         if (interaction.customId.startsWith('embed_edit_modal:')) {
             const session = editors.get(key);
             if (!session) {
-                await interaction.reply({ content: '❌ Session expired.' });
+                await interaction.reply({ content: '<:Cross:1524363088621469737> Session expired.' });
                 return;
             }
 
@@ -1182,7 +1182,7 @@ export const embedCommand: Command = {
 
         if (interaction.customId.startsWith('embed_wiz_modal:')) {
             if (!session) {
-                await interaction.reply({ content: '❌ Session expired.' });
+                await interaction.reply({ content: '<:Cross:1524363088621469737> Session expired.' });
                 return;
             }
 
@@ -1288,13 +1288,13 @@ export const embedListActionButtons: Command = {
         if (action === 'publish') {
             // Select channel to publish to
             const listContainer = ComponentsV2.baseContainer(ComponentsV2.Accents.primary)
-                .addTextDisplayComponents(ComponentsV2.text(`# 🌐 Select Target Channel\nChoose a text channel to send custom embed **\`${name}\`**.`));
+                .addTextDisplayComponents(ComponentsV2.text(`# <:Globe:1524363001023434822> Select Target Channel\nChoose a text channel to send custom embed **\`${name}\`**.`));
 
             // Generate channels menu
             const channelsList = interaction.guild?.channels.cache.filter(c => c.type === ChannelType.GuildText);
             const channels = channelsList ? Array.from(channelsList.values()).slice(0, 25) : [];
             if (channels.length === 0) {
-                await interaction.reply({ content: '❌ No text channels found.' });
+                await interaction.reply({ content: '<:Cross:1524363088621469737> No text channels found.' });
                 return;
             }
 
@@ -1349,13 +1349,13 @@ export const embedListActionButtons: Command = {
         const embed = await supabase.getCustomEmbed(interaction.guildId!, name);
 
         if (!embed) {
-            await interaction.reply({ content: '❌ Embed template not found.' });
+            await interaction.reply({ content: '<:Cross:1524363088621469737> Embed template not found.' });
             return;
         }
 
         const channel = interaction.guild?.channels.cache.get(channelId);
         if (!channel || channel.type !== ChannelType.GuildText) {
-            await interaction.reply({ content: '❌ Target is not a text channel.' });
+            await interaction.reply({ content: '<:Cross:1524363088621469737> Target is not a text channel.' });
             return;
         }
 
@@ -1420,7 +1420,7 @@ export const embedLinksRouter: Command = {
         if (!embed) {
             if (actionType === 'embed_link') {
                 await interaction.deferUpdate().catch(() => {});
-                await interaction.followUp({ content: `❌ Linked child embed template **\`${targetName}\`** not found in the database.` }).catch(() => {});
+                await interaction.followUp({ content: `<:Cross:1524363088621469737> Linked child embed template **\`${targetName}\`** not found in the database.` }).catch(() => {});
             }
             return;
         }
@@ -1464,7 +1464,7 @@ export const embedLinksRouter: Command = {
         if (!embed) {
             if (val.startsWith('embed_link:')) {
                 await interaction.deferUpdate().catch(() => {});
-                await interaction.followUp({ content: `❌ Linked child embed template **\`${targetName}\`** not found in the database.` }).catch(() => {});
+                await interaction.followUp({ content: `<:Cross:1524363088621469737> Linked child embed template **\`${targetName}\`** not found in the database.` }).catch(() => {});
             }
             return;
         }

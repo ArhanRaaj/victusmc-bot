@@ -18,9 +18,9 @@ const V2 = ComponentsV2.IS_COMPONENTS_V2;
 function renderWarnDashboard(config: WarnConfig): any {
     const c = ComponentsV2.baseContainer(config.enabled ? ComponentsV2.Accents.success : ComponentsV2.Accents.warning);
     
-    const text = `# ⚠️ Warning System Setup\n` +
+    const text = `# <:Exclamation:1524363098809569350> Warning System Setup\n` +
         `Configure moderator staff warnings and logging settings.\n\n` +
-        `› **Status:** ${config.enabled ? '🟢 **Enabled**' : '🔴 **Disabled**'}\n` +
+        `› **Status:** ${config.enabled ? '<:Tick:1524363090626482326> **Enabled**' : '<:Cross:1524363088621469737> **Disabled**'}\n` +
         `› **Warn Logs Channel:** ${config.warnChannelId ? `<#${config.warnChannelId}>` : '*Not configured (Required)*'}\n\n` +
         `*Note: The configured warn channel is protected from deletion and will automatically recreate itself if deleted.*`;
         
@@ -39,7 +39,7 @@ function renderWarnDashboard(config: WarnConfig): any {
     const btnRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
         new ButtonBuilder()
             .setCustomId('warn_wiz:toggle_status')
-            .setLabel(config.enabled ? 'Disable Warnings 🔴' : 'Enable Warnings 🟢')
+            .setLabel(config.enabled ? 'Disable Warnings <:Cross:1524363088621469737>' : 'Enable Warnings <:Tick:1524363090626482326>')
             .setStyle(config.enabled ? ButtonStyle.Danger : ButtonStyle.Success)
     );
     
@@ -96,24 +96,24 @@ export const warnCommand: Command = {
         }
 
         if (!config.enabled) {
-            await interaction.reply({ content: '❌ The warning system is currently disabled on this server.' });
+            await interaction.reply({ content: '<:Cross:1524363088621469737> The warning system is currently disabled on this server.' });
             return;
         }
 
         const targetUser = interaction.options.getUser('user', true);
         if (targetUser.id === interaction.user.id) {
-            await interaction.reply({ content: '❌ You cannot warn yourself.' });
+            await interaction.reply({ content: '<:Cross:1524363088621469737> You cannot warn yourself.' });
             return;
         }
         
         const isWhitelisted = await whitelistSettings.isImmune(interaction.guildId!, targetUser.id, 'warn');
         if (isWhitelisted) {
-            await interaction.reply({ content: '❌ This user is whitelisted and immune to warnings.' });
+            await interaction.reply({ content: '<:Cross:1524363088621469737> This user is whitelisted and immune to warnings.' });
             return;
         }
 
         if (targetUser.bot) {
-            await interaction.reply({ content: '❌ You cannot warn a bot user.' });
+            await interaction.reply({ content: '<:Cross:1524363088621469737> You cannot warn a bot user.' });
             return;
         }
 
@@ -143,7 +143,7 @@ export const warnCommand: Command = {
                 if (warnChannel?.isTextBased()) {
                     const logCard = ComponentsV2.baseContainer(ComponentsV2.Accents.warning);
                     logCard.addTextDisplayComponents(ComponentsV2.text(
-                        `# ⚠️ Member Warned\n` +
+                        `# <:Exclamation:1524363098809569350> Member Warned\n` +
                         `› **User:** <@${targetUser.id}> (${targetUser.username})\n` +
                         `› **Moderator:** <@${interaction.user.id}>\n` +
                         `› **Warning ID:** \`${warningId}\`\n` +
@@ -157,7 +157,7 @@ export const warnCommand: Command = {
             // 2. DM the warned user (DMs must use EmbedBuilder to prevent component errors)
             const dmEmbed = new EmbedBuilder()
                 .setColor(0x2b2d31)
-                .setTitle('⚠️ Warning Notice')
+                .setTitle('<:Exclamation:1524363098809569350> Warning Notice')
                 .setDescription(
                     `You have been issued a warning in **${interaction.guild?.name}**.\n\n` +
                     `**Reason:** ${reason}\n` +
@@ -172,7 +172,7 @@ export const warnCommand: Command = {
             if (isPrefix) {
                 const successEmbed = new EmbedBuilder()
                     .setColor(0x2b2d31)
-                    .setTitle('✅ Warning Issued')
+                    .setTitle('<:Tick:1524363090626482326> Warning Issued')
                     .setDescription(`Successfully warned <@${targetUser.id}>.\n\n**Warning ID:** \`${warningId}\` | **Total Warns:** \`${warnCount}\``);
                 await interaction.reply({ embeds: [successEmbed] });
             } else {
@@ -189,7 +189,7 @@ export const warnCommand: Command = {
                 if (warnings.length === 0) {
                     const noWarnEmbed = new EmbedBuilder()
                         .setColor(0x2b2d31)
-                        .setTitle('ℹ️ No Warnings')
+                        .setTitle('<:Info:1524363004823470120> No Warnings')
                         .setDescription(`<@${targetUser.id}> currently has no warnings.`);
                     await interaction.reply({ embeds: [noWarnEmbed] });
                     return;
@@ -197,7 +197,7 @@ export const warnCommand: Command = {
 
                 const listEmbed = new EmbedBuilder()
                     .setColor(0x2b2d31)
-                    .setTitle(`⚠️ Warnings for ${targetUser.username}`)
+                    .setTitle(`<:Exclamation:1524363098809569350> Warnings for ${targetUser.username}`)
                     .setDescription(`**Total Active Warnings:** \`${warnings.length}\`\n\n────────────────────────`);
                 warnings.forEach((w) => {
                     listEmbed.addFields({
@@ -216,7 +216,7 @@ export const warnCommand: Command = {
                 }
 
                 const c = ComponentsV2.baseContainer(ComponentsV2.Accents.info);
-                let text = `# ⚠️ Warnings for ${targetUser.username}\n` +
+                let text = `# <:Exclamation:1524363098809569350> Warnings for ${targetUser.username}\n` +
                     `› **Total Warnings:** \`${warnings.length}\`\n\n`;
                 warnings.forEach((w) => {
                     text += `**ID:** \`${w.id}\` | **Moderator:** <@${w.moderatorId}>\n` +
@@ -232,14 +232,14 @@ export const warnCommand: Command = {
             const warnId = interaction.options.getString('id', true);
             const updated = await warnSettings.removeWarning(interaction.guildId!, targetUser.id, warnId);
             if (!updated) {
-                await interaction.reply({ content: `❌ Warning ID \`${warnId}\` not found for <@${targetUser.id}>.` });
+                await interaction.reply({ content: `<:Cross:1524363088621469737> Warning ID \`${warnId}\` not found for <@${targetUser.id}>.` });
                 return;
             }
 
             if (isPrefix) {
                 const successEmbed = new EmbedBuilder()
                     .setColor(0x2b2d31)
-                    .setTitle('✅ Warning Removed')
+                    .setTitle('<:Tick:1524363090626482326> Warning Removed')
                     .setDescription(`Removed warning ID \`${warnId}\` from <@${targetUser.id}>.\n\n**Total warnings remaining:** \`${updated.length}\``);
                 await interaction.reply({ embeds: [successEmbed] });
             } else {
@@ -254,7 +254,7 @@ export const warnCommand: Command = {
             if (isPrefix) {
                 const successEmbed = new EmbedBuilder()
                     .setColor(0x2b2d31)
-                    .setTitle('✅ Warnings Cleared')
+                    .setTitle('<:Tick:1524363090626482326> Warnings Cleared')
                     .setDescription(`Successfully cleared all warnings for <@${targetUser.id}>.`);
                 await interaction.reply({ embeds: [successEmbed] });
             } else {

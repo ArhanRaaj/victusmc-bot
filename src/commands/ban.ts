@@ -43,7 +43,7 @@ export const banCommand: Command = {
         const isPrefix = interaction.constructor.name === 'PrefixInteraction';
 
         if (user.id === interaction.user.id) {
-            const err = '❌ You cannot ban yourself.';
+            const err = '<:Cross:1524363088621469737> You cannot ban yourself.';
             if (isPrefix) {
                 await interaction.reply({ content: err });
             } else {
@@ -57,7 +57,7 @@ export const banCommand: Command = {
 
         const isWhitelisted = await whitelistSettings.isImmune(guild.id, user.id, 'ban');
         if (isWhitelisted) {
-            const err = '❌ This user is whitelisted and immune to bans.';
+            const err = '<:Cross:1524363088621469737> This user is whitelisted and immune to bans.';
             if (isPrefix) {
                 await interaction.reply({ content: err });
             } else {
@@ -75,7 +75,7 @@ export const banCommand: Command = {
             // Hierarchy check
             const selfMember = guild.members.me;
             if (selfMember && targetMember.roles.highest.position >= selfMember.roles.highest.position) {
-                const err = '❌ I cannot ban this user because their highest role is equal to or higher than mine.';
+                const err = '<:Cross:1524363088621469737> I cannot ban this user because their highest role is equal to or higher than mine.';
                 if (isPrefix) {
                     await interaction.reply({ content: err });
                 } else {
@@ -88,7 +88,7 @@ export const banCommand: Command = {
             }
 
             if (targetMember.id === guild.ownerId) {
-                const err = '❌ You cannot ban the server owner.';
+                const err = '<:Cross:1524363088621469737> You cannot ban the server owner.';
                 if (isPrefix) {
                     await interaction.reply({ content: err });
                 } else {
@@ -103,7 +103,7 @@ export const banCommand: Command = {
 
         // Try to DM the user
         const dmContainer = ComponentsV2.errorContainer(
-            `🔨 Banned from ${guild.name}`,
+            `<:Ban:1524363011291222086> Banned from ${guild.name}`,
             `You have been permanently banned from **${guild.name}**.\n\n**Reason:** ${reason}`
         );
 
@@ -136,7 +136,7 @@ export const banCommand: Command = {
             }
         } catch (err: any) {
             logger.error('Failed to ban member:', err);
-            const errMsg = '❌ Failed to ban user. Make sure I have appropriate administrative/ban permissions.';
+            const errMsg = '<:Cross:1524363088621469737> Failed to ban user. Make sure I have appropriate administrative/ban permissions.';
             if (isPrefix) {
                 await interaction.reply({ content: errMsg });
             } else {

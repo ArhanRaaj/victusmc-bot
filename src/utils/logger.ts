@@ -10,7 +10,7 @@ const logFormat = winston.format.combine(
             warn: '⚠️',
             info: '📘',
             debug: '🔍',
-        }[level] || '📋';
+        }[level] || '📦';
 
         return `${timestamp} ${emoji} [${level.toUpperCase()}]: ${stack || message}`;
     })

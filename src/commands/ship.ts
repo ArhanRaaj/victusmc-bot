@@ -23,8 +23,8 @@ export const shipCommand: Command = {
         const p1 = name1.slice(0, Math.ceil(name1.length / 2));
         const p2 = name2.slice(Math.floor(name2.length / 2));
         const shipName = p1 + p2;
-        const heart = compatibility >= 70 ? '💖' : compatibility >= 40 ? '💛' : '💔';
-        const bar = '🟥'.repeat(Math.floor(compatibility / 10)) + '⬜'.repeat(10 - Math.floor(compatibility / 10));
+        const heart = compatibility >= 70 ? '<:Heart:1524363051716051106>' : compatibility >= 40 ? '<:Heart:1524363051716051106>' : '<:Heart:1524363051716051106>';
+        const bar = '<:Cross:1524363088621469737>'.repeat(Math.floor(compatibility / 10)) + '<:Cross:1524363088621469737>'.repeat(10 - Math.floor(compatibility / 10));
         const c = ComponentsV2.infoContainer('💕 Ship Generator',
             `**${name1}** × **${name2}**\n\n` +
             `Ship name: **${shipName}**\n${bar}\n**${compatibility}%** ${heart}`);

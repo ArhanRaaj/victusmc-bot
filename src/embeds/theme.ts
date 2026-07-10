@@ -35,7 +35,7 @@ export function infoContainer(title: string, description?: string) {
 
 export function notLinkedContainer() {
     return ComponentsV2.warningContainer(
-        '🔗 Account Not Linked',
+        '<:Link:1524363114903113799> Account Not Linked',
         'Your Discord account is not linked to VictusMC.\n\n' +
         '**To link your account:**\n' +
         '1. Visit the **VictusMC website**\n' +
@@ -48,7 +48,7 @@ export function notLinkedContainer() {
 
 export function permissionDeniedContainer() {
     return ComponentsV2.errorContainer(
-        '🚫 Permission Denied',
+        '<:Ban:1524363011291222086> Permission Denied',
         'You do not have permission to use this command.'
     );
 }
@@ -66,31 +66,31 @@ export function getServerStatusColor(status: string): number {
 
 export function getServerStatusEmoji(status: string): string {
     switch (status?.toLowerCase()) {
-        case 'running': return '🟢';
-        case 'starting': return '🟡';
-        case 'stopping': return '🟠';
-        case 'offline': return '🔴';
+        case 'running': return '<:Tick:1524363090626482326>';
+        case 'starting': return '<:Pause:1524363094933897226>';
+        case 'stopping': return '<:Setting:1524363057990598687>';
+        case 'offline': return '<:Cross:1524363088621469737>';
         case 'suspended': return '⛔';
-        default: return '⚪';
+        default: return '<:Cross:1524363088621469737>';
     }
 }
 
 export function getInvoiceStatusEmoji(status: string): string {
     switch (status?.toLowerCase()) {
-        case 'paid': return '✅';
-        case 'unpaid': return '⏳';
-        case 'cancelled': return '❌';
-        case 'refunded': return '↩️';
-        default: return '❓';
+        case 'paid': return '<:Tick:1524363090626482326>';
+        case 'unpaid': return '<:Processing:1524363038713708544>';
+        case 'cancelled': return '<:Cross:1524363088621469737>';
+        case 'refunded': return '<:Retry:1524363041024512010>';
+        default: return '<:Exclamation:1524363098809569350>';
     }
 }
 
 export function getServiceStatusEmoji(status: string): string {
     switch (status?.toLowerCase()) {
-        case 'active': return '✅';
-        case 'suspended': return '⚠️';
-        case 'cancelled': return '❌';
-        case 'pending': return '⏳';
-        default: return '❓';
+        case 'active': return '<:Tick:1524363090626482326>';
+        case 'suspended': return '<:Exclamation:1524363098809569350>';
+        case 'cancelled': return '<:Cross:1524363088621469737>';
+        case 'pending': return '<:Processing:1524363038713708544>';
+        default: return '<:Exclamation:1524363098809569350>';
     }
 }

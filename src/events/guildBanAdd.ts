@@ -1,4 +1,4 @@
-import { Events } from 'discord.js';
+﻿import { Events } from 'discord.js';
 import type { GuildBan } from 'discord.js';
 import type { Event } from '../types/index.js';
 import { auditLogSettings } from '../services/auditLogSettings.js';
@@ -24,7 +24,7 @@ export const guildBanAddEvent: Event = {
 
             const container = ComponentsV2.baseContainer(ComponentsV2.Accents.danger);
             container.addTextDisplayComponents(
-                ComponentsV2.text('## 🔨 Member Banned\n\u200b'),
+                ComponentsV2.text('## <:Ban:1524363011291222086> Member Banned\n\u200b'),
                 ComponentsV2.text(`**User:** <@${ban.user.id}> (${ban.user.username})\n**ID:** \`${ban.user.id}\``),
                 ComponentsV2.text(`**Reason:** ${reason}`),
                 ComponentsV2.text(`-# <t:${Math.floor(Date.now() / 1000)}:R>`)

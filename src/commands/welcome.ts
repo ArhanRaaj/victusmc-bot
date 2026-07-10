@@ -1,4 +1,4 @@
-import { 
+﻿import { 
     ActionRowBuilder, 
     ButtonBuilder, 
     ButtonStyle, 
@@ -23,9 +23,9 @@ const V2 = ComponentsV2.IS_COMPONENTS_V2;
 function renderWelcomeDashboard(config: WelcomeConfig): any {
     const c = ComponentsV2.baseContainer(config.enabled ? ComponentsV2.Accents.success : ComponentsV2.Accents.warning);
     
-    let text = `# 💠 Welcome System Configuration\n` +
+    let text = `# <:Gem:1524362979926081546> Welcome System Configuration\n` +
         `Configure how the bot welcomes new server members.\n\n` +
-        `› **Status:** ${config.enabled ? '🟢 **Enabled**' : '🔴 **Disabled**'}\n` +
+        `› **Status:** ${config.enabled ? '<:Tick:1524363090626482326> **Enabled**' : '<:Cross:1524363088621469737> **Disabled**'}\n` +
         `› **Welcome Channel:** ${config.channelId ? `<#${config.channelId}>` : '*Not configured (Required)*'}\n` +
         `› **Welcome Format:** **\`${config.welcomeType.toUpperCase()}\`**\n` +
         `› **Auto-Assign Roles:** ${config.autoRoleIds && config.autoRoleIds.length > 0 ? config.autoRoleIds.map(id => `<@&${id}>`).join(', ') : '*None configured*'}\n`;
@@ -38,7 +38,7 @@ function renderWelcomeDashboard(config: WelcomeConfig): any {
     }
         
     if (config.welcomeType === 'embed') {
-        text += `### 🎨 Default Embed Settings\n` +
+        text += `### <:Pallete:1524362993666756628> Default Embed Settings\n` +
             `› **Embed Title:** \`${config.embedTitle}\`\n` +
             `› **Color HEX:** \`${config.embedColor}\`\n` +
             `› **Banner Image:** ${config.embedImage ? `[Link](${config.embedImage})` : '*None*'}\n`;
@@ -80,7 +80,7 @@ function renderWelcomeDashboard(config: WelcomeConfig): any {
     const toggleRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
         new ButtonBuilder()
             .setCustomId('welcome_wiz:toggle_status')
-            .setLabel(config.enabled ? 'Disable System 🔴' : 'Enable System 🟢')
+            .setLabel(config.enabled ? 'Disable System <:Cross:1524363088621469737>' : 'Enable System <:Tick:1524363090626482326>')
             .setStyle(config.enabled ? ButtonStyle.Danger : ButtonStyle.Success),
         new ButtonBuilder()
             .setCustomId('welcome_wiz:modal:custom_embed')
@@ -103,7 +103,7 @@ function renderWelcomeDashboard(config: WelcomeConfig): any {
             .setDisabled(config.welcomeType !== 'embed'),
         new ButtonBuilder()
             .setCustomId('welcome_wiz:test')
-            .setLabel('Send Test Welcome 🧪')
+            .setLabel('Send Test Welcome <:Tool:1524363009202323466>')
             .setStyle(ButtonStyle.Primary)
             .setDisabled(!config.channelId)
     );
@@ -149,7 +149,7 @@ export async function buildWelcomePayload(config: WelcomeConfig, member: any): P
             const payload = buildFinalEmbedPayload(cloned);
             return { components: [payload], flags: V2 };
         } else {
-            return { content: `⚠️ Welcome custom embed template **\`${config.customEmbedName}\`** not found in database.` };
+            return { content: `<:Exclamation:1524363098809569350> Welcome custom embed template **\`${config.customEmbedName}\`** not found in database.` };
         }
     }
 
@@ -277,7 +277,7 @@ export const welcomeCommand: Command = {
                         new TextInputBuilder()
                             .setCustomId('title')
                             .setLabel('Embed Title text')
-                            .setPlaceholder('Welcome to the Server! 🎉')
+                            .setPlaceholder('Welcome to the Server! <:Stars:1524363036389937212>')
                             .setValue(config.embedTitle)
                             .setStyle(TextInputStyle.Short)
                             .setRequired(true)

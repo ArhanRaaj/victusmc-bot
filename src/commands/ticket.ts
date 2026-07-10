@@ -133,7 +133,7 @@ export const ticketCommand: Command = {
     cooldown: 5,
 
     async execute(interaction) {
-        logger.info(`⚡ [Execute] /ticket command started by ${interaction.user.tag}`);
+        logger.info(`<:Thunder:1524362985647247420> [Execute] /ticket command started by ${interaction.user.tag}`);
 
         try {
             const subcommand = interaction.options.getSubcommand();
@@ -147,7 +147,7 @@ export const ticketCommand: Command = {
 
             const isAdmin = await requireAdmin(interaction);
             if (!isAdmin) {
-                logger.warn(`🚫 [Execute] Access denied for ${interaction.user.tag}`);
+                logger.warn(`<:Ban:1524363011291222086> [Execute] Access denied for ${interaction.user.tag}`);
                 return;
             }
 
@@ -159,11 +159,11 @@ export const ticketCommand: Command = {
             if (subcommand === 'panel') {
                 await handlePanelSpawn(interaction);
             } else {
-                await interaction.editReply({ content: '❌ Unknown subcommand' });
+                await interaction.editReply({ content: '<:Cross:1524363088621469737> Unknown subcommand' });
             }
-            logger.info(`✅ [Execute] Command completed successfully`);
+            logger.info(`<:Tick:1524363090626482326> [Execute] Command completed successfully`);
         } catch (error: any) {
-            logger.error(`❌ [Execute] Critical crash:`, error);
+            logger.error(`<:Cross:1524363088621469737> [Execute] Critical crash:`, error);
 
             const errorContainer = ComponentsV2.errorContainer(
                 'Command Error',
@@ -292,7 +292,7 @@ export const ticketCommand: Command = {
 
         try {
             if (customId === CUSTOM_IDS.CATEGORY_SELECT) {
-                logger.info(`🎯 [SelectMenu] Category selection detected`);
+                logger.info(`<:Target:1524363004823470120> [SelectMenu] Category selection detected`);
                 await handleCategorySelect(interaction);
                 return;
             }
@@ -419,7 +419,7 @@ function createTicketPanel(categories: TicketCategory[]): ContainerBuilder {
                 `**V** Please select the category that best fits your needs from the options below. Our team will assist you as soon as possible.\n\n` +
                 `${sections}\n\n` +
                 `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
-                `### ⭐ Available Categories\n` +
+                `### <:Stars:1524363036389937212> Available Categories\n` +
                 `${list}\n\n` +
                 `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
                 `-# 🆔 You'll be asked internal questions when creating a ticket`
@@ -467,7 +467,7 @@ async function handleCategoriesList(interaction: any) {
 
     const categoryList = categories
         .map((c, i) =>
-            `**${i + 1}.** ${c.emoji} ${c.name} ${c.enabled ? '🟢' : '🔴'}\n` +
+            `**${i + 1}.** ${c.emoji} ${c.name} ${c.enabled ? '<:Tick:1524363090626482326>' : '<:Cross:1524363088621469737>'}\n` +
             `-# ${c.description || 'No description'} | Priority: ${c.priority_default}`
         )
         .join('\n\n');
@@ -476,7 +476,7 @@ async function handleCategoriesList(interaction: any) {
         .setAccentColor(ComponentsV2.Accents.info)
         .addTextDisplayComponents(
             ComponentsV2.text(
-                `# 📋 Ticket Categories\n\n` +
+                `# <:Message:1524363100734623836> Ticket Categories\n\n` +
                 `━━━━━━━━━━━━━━━━━━\n` +
                 `${categoryList}\n` +
                 `━━━━━━━━━━━━━━━━━━\n\n` +
@@ -506,10 +506,10 @@ async function handleCreateTicketButton(interaction: any) {
             .setAccentColor(ComponentsV2.Accents.warning)
             .addTextDisplayComponents(
                 ComponentsV2.text(
-                    `# 🔗 Account Not Linked\n\n` +
+                    `# <:Link:1524363114903113799> Account Not Linked\n\n` +
                     `You need to link your Discord account to VictusMC before creating a ticket.\n\n` +
                     `━━━━━━━━━━━━━━━━━━\n` +
-                    `### 📝 How to Link\n` +
+                    `### <:Edit:1524363079675154433> How to Link\n` +
                     `1. Visit **VictusMC website**\n` +
                     `2. Sign in to your VictusMC account\n` +
                     `3. Link your Discord in account settings\n` +
@@ -523,12 +523,12 @@ async function handleCreateTicketButton(interaction: any) {
                 .setCustomId(CUSTOM_IDS.LINK_ACCOUNT)
                 .setLabel('Link Account')
                 .setStyle(ButtonStyle.Primary)
-                .setEmoji('🔗'),
+                .setEmoji('<:Link:1524363114903113799>'),
             new ButtonBuilder()
                 .setCustomId(CUSTOM_IDS.CANCEL)
                 .setLabel('Cancel')
                 .setStyle(ButtonStyle.Secondary)
-                .setEmoji('❌')
+                .setEmoji('<:Cross:1524363088621469737>')
         );
 
         container.addActionRowComponents(buttons);
@@ -559,7 +559,7 @@ async function handleCreateTicketButton(interaction: any) {
         .setAccentColor(ComponentsV2.Accents.info)
         .addTextDisplayComponents(
             ComponentsV2.text(
-                `# 🎫 Create Support Ticket\n\n` +
+                `# <:Ticket:1524363100734623836> Create Support Ticket\n\n` +
                 `Select the category that best describes your issue.\n\n` +
                 `━━━━━━━━━━━━━━━━━━`
             )
@@ -585,7 +585,7 @@ async function handleCreateTicketButton(interaction: any) {
             .setCustomId(CUSTOM_IDS.CANCEL)
             .setLabel('Cancel')
             .setStyle(ButtonStyle.Secondary)
-            .setEmoji('❌')
+            .setEmoji('<:Cross:1524363088621469737>')
     );
 
     container.addActionRowComponents(selectMenu);
@@ -599,7 +599,7 @@ async function handleCreateTicketButton(interaction: any) {
 
 async function handleCategorySelect(interaction: any) {
     const categoryId = interaction.values[0];
-    logger.info(`🔍 [CategorySelect] ID: ${categoryId} by ${interaction.user.tag}`);
+    logger.info(`<:Search:1524363077393317968> [CategorySelect] ID: ${categoryId} by ${interaction.user.tag}`);
     const category = await supabase.getTicketCategory(categoryId);
 
     if (!category) {
@@ -630,7 +630,7 @@ async function handleCategorySelect(interaction: any) {
     const email = '';
 
     // Open the ticket form modal
-    logger.info(`✨ [CategorySelect] Opening modal for ${category.name}`);
+    logger.info(`<:Stars:1524363036389937212> [CategorySelect] Opening modal for ${category.name}`);
     const modal = new ModalBuilder()
         .setCustomId(`${CUSTOM_IDS.TICKET_FORM}_${categoryId}`)
         .setTitle(`New Ticket: ${category.name}`);
@@ -687,9 +687,9 @@ async function handleCategorySelect(interaction: any) {
 
     try {
         await interaction.showModal(modal);
-        logger.info(`✅ [CategorySelect] Modal shown successfully`);
+        logger.info(`<:Tick:1524363090626482326> [CategorySelect] Modal shown successfully`);
     } catch (err: any) {
-        logger.error(`❌ [CategorySelect] Failed to show modal: ${err.message}`);
+        logger.error(`<:Cross:1524363088621469737> [CategorySelect] Failed to show modal: ${err.message}`);
     }
 }
 
@@ -765,7 +765,7 @@ function createConfirmationContainer(data: any): ContainerBuilder {
         .setAccentColor(ComponentsV2.Accents.info)
         .addTextDisplayComponents(
             ComponentsV2.text(
-                `# 📋 Confirm Ticket\n\n` +
+                `# <:Message:1524363100734623836> Confirm Ticket\n\n` +
                 `Please review your ticket before submitting.\n\n` +
                 `━━━━━━━━━━━━━━━━━━\n` +
                 `### 📌 Ticket Details\n` +
@@ -773,7 +773,7 @@ function createConfirmationContainer(data: any): ContainerBuilder {
                 `» **Email:** ${data.email}\n` +
                 `» **Subject:** ${data.subject}\n` +
                 `${customFields}\n` +
-                `\n### 📝 Description\n` +
+                `\n### <:Edit:1524363079675154433> Description\n` +
                 `${data.description.substring(0, 200)}${data.description.length > 200 ? '...' : ''}\n` +
                 `━━━━━━━━━━━━━━━━━━`
             )
@@ -784,12 +784,12 @@ function createConfirmationContainer(data: any): ContainerBuilder {
             .setCustomId(CUSTOM_IDS.CONFIRM)
             .setLabel('Submit Ticket')
             .setStyle(ButtonStyle.Success)
-            .setEmoji('✅'),
+            .setEmoji('<:Tick:1524363090626482326>'),
         new ButtonBuilder()
             .setCustomId(CUSTOM_IDS.CANCEL)
             .setLabel('Cancel')
             .setStyle(ButtonStyle.Danger)
-            .setEmoji('❌')
+            .setEmoji('<:Cross:1524363088621469737>')
     );
 
     container.addActionRowComponents(buttons);
@@ -988,13 +988,13 @@ async function handleAddMemberModal(interaction: any) {
     const raw = String(interaction.fields.getTextInputValue('user') || '').trim();
     const userId = (raw.match(/\d{15,20}/) || [])[0];
     if (!userId) {
-        await interaction.editReply({ content: '❌ Could not read a user ID. Paste their Discord user ID or mention.' });
+        await interaction.editReply({ content: '<:Cross:1524363088621469737> Could not read a user ID. Paste their Discord user ID or mention.' });
         return;
     }
     const channel = interaction.channel;
     const member = await interaction.guild?.members.fetch(userId).catch(() => null);
     if (!member) {
-        await interaction.editReply({ content: '❌ That user is not in this server.' });
+        await interaction.editReply({ content: '<:Cross:1524363088621469737> That user is not in this server.' });
         return;
     }
     try {
@@ -1004,13 +1004,13 @@ async function handleAddMemberModal(interaction: any) {
             ReadMessageHistory: true,
             AttachFiles: true,
         });
-        await interaction.editReply({ content: `✅ Added <@${userId}> to this ticket.` });
+        await interaction.editReply({ content: `<:Tick:1524363090626482326> Added <@${userId}> to this ticket.` });
         await channel.send({
-            content: `➕ <@${userId}> was added to the ticket by <@${interaction.user.id}>.`,
+            content: `<:Add:1524363108766974247> <@${userId}> was added to the ticket by <@${interaction.user.id}>.`,
             allowedMentions: { users: [userId] },
         }).catch(() => undefined);
     } catch {
-        await interaction.editReply({ content: '❌ Failed to add the member (do I have Manage Channels here?).' });
+        await interaction.editReply({ content: '<:Cross:1524363088621469737> Failed to add the member (do I have Manage Channels here?).' });
     }
 }
 
@@ -1022,13 +1022,13 @@ export function createTicketControlPanel(ticket: Ticket, user: any, linked?: any
     // Robust against website-originated tickets which may not carry every field.
     const status: string = String((ticket as any).status || 'open');
     const priority: string = String((ticket as any).priority || 'medium');
-    const statusEmoji = status === 'open' ? '🟢' : status === 'claimed' ? '🟡' : '🔴';
+    const statusEmoji = status === 'open' ? '<:Tick:1524363090626482326>' : status === 'claimed' ? '<:Pause:1524363094933897226>' : '<:Cross:1524363088621469737>';
     const priorityEmoji = ({
-        low: '🟢',
-        medium: '🟡',
-        high: '🟠',
-        urgent: '🔴',
-    } as Record<string, string>)[priority] || '⚪';
+        low: '<:Tick:1524363090626482326>',
+        medium: '<:Pause:1524363094933897226>',
+        high: '<:Setting:1524363057990598687>',
+        urgent: '<:Cross:1524363088621469737>',
+    } as Record<string, string>)[priority] || '<:Cross:1524363088621469737>';
 
     const categoryEmoji = ticket.category?.emoji || '🗂️';
     const categoryName = ticket.category?.name || 'General';
@@ -1051,7 +1051,7 @@ export function createTicketControlPanel(ticket: Ticket, user: any, linked?: any
         .setAccentColor(ComponentsV2.Accents.purple)
         .addTextDisplayComponents(
             ComponentsV2.text(
-                `# 🎟️ Support Ticket\n\n` +
+                `# <:Ticket:1524363100734623836> Support Ticket\n\n` +
                 `Ticket #${ticket.ticket_number} • ${categoryEmoji} ${categoryName}\n\n` +
                 `Please wait for a staff member to assist you. Use the buttons below to manage your ticket.\n\n` +
                 `━━━━━━━━━━━━━━━━━━\n` +
@@ -1063,11 +1063,11 @@ export function createTicketControlPanel(ticket: Ticket, user: any, linked?: any
                 `» **Created:** ${createdAgo}\n` +
                 (ticket.claimed_by ? `» **Assigned:** <@${ticket.claimed_by}>\n` : '') +
                 `━━━━━━━━━━━━━━━━━━\n` +
-                `### 📝 Issue Details\n` +
+                `### <:Edit:1524363079675154433> Issue Details\n` +
                 `» **Subject:** ${(ticket as any).subject || '—'}\n` +
                 `» **Details:**\n${String((ticket as any).description || '—').slice(0, 1400)}\n` +
                 (customAnswers ? customAnswers + '\n' : '') +
-                (linked ? '' : `\n⚠️ **Not linked yet?** Visit VictusMC website to connect your account.\n`) +
+                (linked ? '' : `\n<:Exclamation:1524363098809569350> **Not linked yet?** Visit VictusMC website to connect your account.\n`) +
                 `━━━━━━━━━━━━━━━━━━`
             )
         );
@@ -1083,24 +1083,24 @@ export function createTicketControlPanel(ticket: Ticket, user: any, linked?: any
             .setCustomId(`ticket_close_${ticket.id}`)
             .setLabel('Close')
             .setStyle(ButtonStyle.Danger)
-            .setEmoji('❌'),
+            .setEmoji('<:Cross:1524363088621469737>'),
         new ButtonBuilder()
             .setCustomId(`ticket_lock_${ticket.id}`)
             .setLabel('Lock')
             .setStyle(ButtonStyle.Secondary)
-            .setEmoji('🔒')
+            .setEmoji('<:Lock:1524363064001040385>')
             .setDisabled(isLocked),
         new ButtonBuilder()
             .setCustomId(`ticket_unlock_${ticket.id}`)
             .setLabel('Unlock')
             .setStyle(ButtonStyle.Secondary)
-            .setEmoji('🔓')
+            .setEmoji('<:UnLock:1524363066404503614>')
             .setDisabled(!isLocked),
         new ButtonBuilder()
             .setCustomId(`ticket_claim_${ticket.id}`)
             .setLabel(isClaimed ? 'Claimed' : 'Claim')
             .setStyle(isClaimed ? ButtonStyle.Success : ButtonStyle.Primary)
-            .setEmoji('👤')
+            .setEmoji('<:User:1524363104903893052>')
             .setDisabled(isClaimed)
     );
 
@@ -1110,17 +1110,17 @@ export function createTicketControlPanel(ticket: Ticket, user: any, linked?: any
             .setCustomId(`ticket_ai_${ticket.id}`)
             .setLabel('Ask AI')
             .setStyle(ButtonStyle.Secondary)
-            .setEmoji('✨'),
+            .setEmoji('<:Stars:1524363036389937212>'),
         new ButtonBuilder()
             .setCustomId(`ticket_addmember_${ticket.id}`)
             .setLabel('Add Member')
             .setStyle(ButtonStyle.Secondary)
-            .setEmoji('➕'),
+            .setEmoji('<:Add:1524363108766974247>'),
         new ButtonBuilder()
             .setLabel('VictusMC')
             .setStyle(ButtonStyle.Link)
             .setURL(config.branding.website)
-            .setEmoji('🖥️')
+            .setEmoji('<:Home:1524363002927911122>')
     );
 
     container.addActionRowComponents(buttons);
@@ -1193,11 +1193,11 @@ async function sendTicketArchiveSummary(interaction: any, ticket: Ticket, settin
     await transcriptChannel.send({
         content:
             `## 🧾 Ticket Transcript — #${ticket.ticket_number}\n` +
-            `🎟️ **Category:** ${ticket.category?.emoji || '🗂️'} ${ticket.category?.name || 'General'}\n` +
-            `📝 **Subject:** ${ticket.subject || '—'}\n` +
-            `👤 **Owner:** ${ticket.discord_id ? `<@${ticket.discord_id}>` : ownerLine}\n` +
-            `🛡️ **Closed by:** <@${interaction.user.id}>  •  🕒 <t:${unix}:F>\n` +
-            `💬 **Messages:** ${lines.length}`,
+            `<:Ticket:1524363100734623836> **Category:** ${ticket.category?.emoji || '🗂️'} ${ticket.category?.name || 'General'}\n` +
+            `<:Edit:1524363079675154433> **Subject:** ${ticket.subject || '—'}\n` +
+            `<:User:1524363104903893052> **Owner:** ${ticket.discord_id ? `<@${ticket.discord_id}>` : ownerLine}\n` +
+            `<:Shield:1524362964772196422> **Closed by:** <@${interaction.user.id}>  •  <:Time:1524363075271000146> <t:${unix}:F>\n` +
+            `<:Message:1524363100734623836> **Messages:** ${lines.length}`,
         files: [file],
         allowedMentions: { parse: [] },
     }).catch(() => undefined);
@@ -1208,7 +1208,7 @@ async function handleCloseTicket(interaction: any) {
     const ticket = await supabase.getTicket(ticketId);
 
     if (!ticket) {
-    await interaction.reply({ content: '❌ Ticket not found.' });
+    await interaction.reply({ content: '<:Cross:1524363088621469737> Ticket not found.' });
         return;
     }
 
@@ -1254,7 +1254,7 @@ async function handleLockTicket(interaction: any) {
     const ticket = await supabase.getTicket(ticketId);
 
     if (!ticket) {
-        await interaction.reply({ content: '❌ Ticket not found.' });
+        await interaction.reply({ content: '<:Cross:1524363088621469737> Ticket not found.' });
         return;
     }
 
@@ -1287,7 +1287,7 @@ async function handleUnlockTicket(interaction: any) {
     const ticket = await supabase.getTicket(ticketId);
 
     if (!ticket) {
-        await interaction.reply({ content: '❌ Ticket not found.' });
+        await interaction.reply({ content: '<:Cross:1524363088621469737> Ticket not found.' });
         return;
     }
 
@@ -1320,7 +1320,7 @@ async function handleClaimTicket(interaction: any) {
     const ticket = await supabase.getTicket(ticketId);
 
     if (!ticket) {
-        await interaction.reply({ content: '❌ Ticket not found.' });
+        await interaction.reply({ content: '<:Cross:1524363088621469737> Ticket not found.' });
         return;
     }
 
@@ -1346,7 +1346,7 @@ async function handleClaimTicket(interaction: any) {
 
     // Notify in channel
     await interaction.channel.send({
-        content: `👤 **${interaction.user.tag}** has claimed this ticket.`,
+        content: `<:User:1524363104903893052> **${interaction.user.tag}** has claimed this ticket.`,
     });
 
     logger.info(`Ticket #${ticket.ticket_number} claimed by ${interaction.user.tag}`);
@@ -1359,7 +1359,7 @@ async function handleAIHelp(interaction: any) {
     const ticket = await supabase.getTicket(ticketId);
 
     if (!ticket) {
-        await interaction.editReply({ content: '❌ Ticket not found.' });
+        await interaction.editReply({ content: '<:Cross:1524363088621469737> Ticket not found.' });
         return;
     }
 
@@ -1395,7 +1395,7 @@ async function handleAIHelp(interaction: any) {
 
     // Generate AI suggestion (simplified - would use OpenAI in production)
     const container = ComponentsV2.infoContainer(
-        '🤖 AI Suggestion',
+        '<:Bot:1524362962905862164> AI Suggestion',
         `Based on your ticket in the **${ticket.category?.name}** category:\n\n` +
         `**Issue:** ${ticket.subject}\n\n` +
         `**Suggestion:** A staff member will review your ticket shortly. ` +
@@ -1437,7 +1437,7 @@ function renderTicketSetupDashboard(config: any, panel: any): any {
     const c = ComponentsV2.baseContainer(ComponentsV2.Accents.primary);
     const catKeys = Object.keys(config || {});
 
-    let text = `# 🎫 Ticket Panel Setup\n` +
+    let text = `# <:Ticket:1524363100734623836> Ticket Panel Setup\n` +
         `Configure your ticket categories and customize the support panel.\n\n`;
 
     if (catKeys.length === 0) {
@@ -1446,7 +1446,7 @@ function renderTicketSetupDashboard(config: any, panel: any): any {
         text += `### Configured Categories:\n`;
         catKeys.forEach((key: string) => {
             const cat = config[key];
-            text += `• ${cat.emoji || '🎫'} **${cat.name}** (\`${key}\`) — ${cat.description || 'No description'}\n`;
+            text += `• ${cat.emoji || '<:Ticket:1524363100734623836>'} **${cat.name}** (\`${key}\`) — ${cat.description || 'No description'}\n`;
         });
     }
 
@@ -1463,7 +1463,7 @@ function renderTicketSetupDashboard(config: any, panel: any): any {
                     return {
                         label: cat.name,
                         value: key,
-                        emoji: cat.emoji || '🎫',
+                        emoji: cat.emoji || '<:Ticket:1524363100734623836>',
                     };
                 }))
         );
@@ -1473,18 +1473,18 @@ function renderTicketSetupDashboard(config: any, panel: any): any {
     const topRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
         new ButtonBuilder()
             .setCustomId('ticket_setup:create_cat')
-            .setLabel('Create Category ➕')
+            .setLabel('Create Category <:Add:1524363108766974247>')
             .setStyle(ButtonStyle.Success)
     );
 
     const editPanelRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
         new ButtonBuilder()
             .setCustomId('ticket_setup:edit_panel')
-            .setLabel('Edit Panel ✏️')
+            .setLabel('Edit Panel <:Edit:1524363079675154433>')
             .setStyle(ButtonStyle.Secondary),
         new ButtonBuilder()
             .setCustomId('ticket_setup:publish')
-            .setLabel('Publish Panel 📣')
+            .setLabel('Publish Panel <:Annc:1524363017813360710>')
             .setStyle(ButtonStyle.Primary)
             .setDisabled(catKeys.length === 0)
     );
@@ -1501,13 +1501,13 @@ function renderTicketCategorySubDashboard(cat: any): any {
         ? cat.custom_questions.map((q: any, i: number) => `\`${i + 1}.\` ${q.label} (${q.type})`).join('\n')
         : 'None configured';
 
-    const text = `# ⚙️ Managing: ${cat.emoji || '🎫'} ${cat.name}\n` +
+    const text = `# <:Setting:1524363057990598687> Managing: ${cat.emoji || '<:Ticket:1524363100734623836>'} ${cat.name}\n` +
         `› **ID:** \`${cat.id}\`\n` +
         `› **Description:** *${cat.description || 'None'}*\n` +
         `› **Priority:** \`${cat.priority_default || 'low'}\`\n` +
         `› **Staff Roles:** ${cat.staff_roles?.length ? cat.staff_roles.map((r: string) => `<@&${r}>`).join(' ') : 'None'}\n` +
         `› **Discord Category:** ${cat.discord_category_id ? `<#${cat.discord_category_id}>` : 'Not set'}\n` +
-        `› **Enabled:** ${cat.enabled ? '✅' : '❌'}\n\n` +
+        `› **Enabled:** ${cat.enabled ? '<:Tick:1524363090626482326>' : '<:Cross:1524363088621469737>'}\n\n` +
         `### Custom Questions (${cat.custom_questions?.length || 0})\n${questionsList}`;
 
     c.addTextDisplayComponents(ComponentsV2.text(text))
@@ -1520,15 +1520,15 @@ function renderTicketCategorySubDashboard(cat: any): any {
             .setStyle(ButtonStyle.Secondary),
         new ButtonBuilder()
             .setCustomId(`ticket_setup:edit_details:${cat.id}`)
-            .setLabel('Edit Details 📝')
+            .setLabel('Edit Details <:Edit:1524363079675154433>')
             .setStyle(ButtonStyle.Primary),
         new ButtonBuilder()
             .setCustomId(`ticket_setup:questions:${cat.id}`)
-            .setLabel('Questions ❓')
+            .setLabel('Questions <:Exclamation:1524363098809569350>')
             .setStyle(ButtonStyle.Secondary),
         new ButtonBuilder()
             .setCustomId(`ticket_setup:toggle:${cat.id}`)
-            .setLabel(cat.enabled ? 'Disable 🛑' : 'Enable ✅')
+            .setLabel(cat.enabled ? 'Disable <:Cross:1524363088621469737>' : 'Enable <:Tick:1524363090626482326>')
             .setStyle(ButtonStyle.Secondary)
     );
 
@@ -1543,7 +1543,7 @@ function renderTicketCategorySubDashboard(cat: any): any {
             .setStyle(ButtonStyle.Secondary),
         new ButtonBuilder()
             .setCustomId(`ticket_setup:delete:${cat.id}`)
-            .setLabel('Delete 🗑️')
+            .setLabel('Delete <:Delete:1524363081642147931>')
             .setStyle(ButtonStyle.Danger)
     );
 
@@ -1783,7 +1783,7 @@ async function handleTicketSetupButton(interaction: any) {
             new ActionRowBuilder<TextInputBuilder>().addComponents(
                 new TextInputBuilder()
                     .setCustomId('emoji')
-                    .setLabel('Emoji (e.g. 🎫)')
+                    .setLabel('Emoji (e.g. <:Ticket:1524363100734623836>)')
                     .setStyle(TextInputStyle.Short)
                     .setRequired(false)
                     .setMaxLength(10)
@@ -1805,7 +1805,7 @@ async function handleTicketSetupButton(interaction: any) {
             ? cat.custom_questions.map((q: any, i: number) => `\`${i + 1}.\` **${q.label}** (${q.type})`).join('\n')
             : 'None yet.';
 
-        const text = `# ❓ Questions for: ${cat.name}\n\n${questionsList}\n\nUse the buttons below to manage questions.`;
+        const text = `# <:Exclamation:1524363098809569350> Questions for: ${cat.name}\n\n${questionsList}\n\nUse the buttons below to manage questions.`;
         c.addTextDisplayComponents(ComponentsV2.text(text))
          .addSeparatorComponents(ComponentsV2.separator());
 
@@ -1816,7 +1816,7 @@ async function handleTicketSetupButton(interaction: any) {
                 .setStyle(ButtonStyle.Secondary),
             new ButtonBuilder()
                 .setCustomId(`ticket_setup:add_question:${catId}`)
-                .setLabel('➕ Add Question')
+                .setLabel('<:Add:1524363108766974247> Add Question')
                 .setStyle(ButtonStyle.Success)
         );
 
@@ -1904,7 +1904,7 @@ async function handleTicketSetupButton(interaction: any) {
         const questionsList = updatedCat.custom_questions?.length
             ? updatedCat.custom_questions.map((q: any, i: number) => `\`${i + 1}.\` **${q.label}** (${q.type})`).join('\n')
             : 'None yet.';
-        const text = `# ❓ Questions for: ${updatedCat.name}\n\n${questionsList}\n\nUse the buttons below to manage questions.`;
+        const text = `# <:Exclamation:1524363098809569350> Questions for: ${updatedCat.name}\n\n${questionsList}\n\nUse the buttons below to manage questions.`;
         c.addTextDisplayComponents(ComponentsV2.text(text))
          .addSeparatorComponents(ComponentsV2.separator());
         const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
@@ -1914,7 +1914,7 @@ async function handleTicketSetupButton(interaction: any) {
                 .setStyle(ButtonStyle.Secondary),
             new ButtonBuilder()
                 .setCustomId(`ticket_setup:add_question:${catId}`)
-                .setLabel('➕ Add Question')
+                .setLabel('<:Add:1524363108766974247> Add Question')
                 .setStyle(ButtonStyle.Success)
         );
         if (updatedCat.custom_questions?.length) {
@@ -2069,7 +2069,7 @@ async function handleTicketSetupModal(interaction: any) {
         const questionsList = updatedCat.custom_questions?.length
             ? updatedCat.custom_questions.map((q: any, i: number) => `\`${i + 1}.\` **${q.label}** (${q.type})`).join('\n')
             : 'None yet.';
-        const text = `# ❓ Questions for: ${updatedCat.name}\n\n${questionsList}\n\nUse the buttons below to manage questions.`;
+        const text = `# <:Exclamation:1524363098809569350> Questions for: ${updatedCat.name}\n\n${questionsList}\n\nUse the buttons below to manage questions.`;
         c.addTextDisplayComponents(ComponentsV2.text(text))
          .addSeparatorComponents(ComponentsV2.separator());
         const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
@@ -2079,7 +2079,7 @@ async function handleTicketSetupModal(interaction: any) {
                 .setStyle(ButtonStyle.Secondary),
             new ButtonBuilder()
                 .setCustomId(`ticket_setup:add_question:${catId}`)
-                .setLabel('➕ Add Question')
+                .setLabel('<:Add:1524363108766974247> Add Question')
                 .setStyle(ButtonStyle.Success)
         );
         if (updatedCat.custom_questions?.length) {

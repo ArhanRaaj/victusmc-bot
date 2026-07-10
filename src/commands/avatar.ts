@@ -21,7 +21,7 @@ export const avatarCommand: Command = {
         const c = ComponentsV2.baseContainer(ComponentsV2.Accents.info);
         c.addMediaGalleryComponents(ComponentsV2.mediaGallery(avatarUrl));
         c.addTextDisplayComponents(ComponentsV2.text(
-            `# 🖼️ ${user.username}'s Avatar\n\n[Open Avatar](${avatarUrl})`
+            `# <:Image:1524363100734623836> ${user.username}'s Avatar\n\n[Open Avatar](${avatarUrl})`
         ));
         await interaction.reply({ components: [c], flags: V2 });
     },

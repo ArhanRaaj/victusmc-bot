@@ -30,7 +30,7 @@ export const victusAiActions = {
         if (/\b(rules|rule|guidelines|tos|terms)\b/i.test(cleanedPrompt)) {
             return {
                 handled: true,
-                content: `📜 **VictusMC Server Rules:**\n\n` +
+                content: `📦 **VictusMC Server Rules:**\n\n` +
                     `1. **Be Respectful:** Treat all community members and staff with respect.\n` +
                     `2. **No Cheating/Hacking:** Hacked clients, x-ray, and unfair advantages are strictly prohibited.\n` +
                     `3. **No Griefing:** Do not destroy or steal others' creations or property.\n` +

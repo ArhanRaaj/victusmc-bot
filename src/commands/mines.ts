@@ -46,7 +46,7 @@ export const minesCommand: Command = {
 
         const key = gameKey(userId, guildId);
         if (activeGames.has(key)) {
-            const c = ComponentsV2.warningContainer('⚠️ Game In Progress',
+            const c = ComponentsV2.warningContainer('<:Exclamation:1524363098809569350> Game In Progress',
                 'You already have an active Mines game. Finish it first!');
             await interaction.reply({ components: [c], flags: V2 });
             return;
@@ -54,7 +54,7 @@ export const minesCommand: Command = {
 
         const balance = await economy.getBalance(guildId, userId);
         if (balance < bet) {
-            const c = ComponentsV2.errorContainer('❌ Insufficient Cash',
+            const c = ComponentsV2.errorContainer('<:Cross:1524363088621469737> Insufficient Cash',
                 `You need **$${bet.toLocaleString()}** but only have **$${balance.toLocaleString()}**.\n\nUse \`/daily\` to earn more cash!`);
             await interaction.reply({ components: [c], flags: V2 });
             return;
@@ -62,7 +62,7 @@ export const minesCommand: Command = {
 
         const result = await economy.removeCash(guildId, userId, bet);
         if (!result.success) {
-            const c = ComponentsV2.errorContainer('❌ Bet Failed', 'Could not place your bet.');
+            const c = ComponentsV2.errorContainer('<:Cross:1524363088621469737> Bet Failed', 'Could not place your bet.');
             await interaction.reply({ components: [c], flags: V2 });
             return;
         }
@@ -112,7 +112,7 @@ export const minesCommand: Command = {
             const finalBalance = await economy.addCash(guildId, userId, game.reward);
             activeGames.delete(key);
 
-            const c = ComponentsV2.successContainer('💰 Cashed Out!',
+            const c = ComponentsV2.successContainer('<:Diamond:1524363027711918110> Cashed Out!',
                 `You cashed out **$${game.reward.toLocaleString()}**!\n\n**Final Balance:** $${finalBalance.toLocaleString()}\n\n**Safe tiles revealed:** ${game.revealed.size}/${TOTAL_CELLS - MINE_COUNT}`);
             await interaction.update({ components: [c] });
             return;
@@ -137,7 +137,7 @@ export const minesCommand: Command = {
                 game.won = false;
                 activeGames.delete(key);
 
-                const c = ComponentsV2.errorContainer('💥 You Hit a Mine!',
+                const c = ComponentsV2.errorContainer('<:Thunder:1524362985647247420> You Hit a Mine!',
                     `**Bet lost:** $${game.bet.toLocaleString()}\n\nYou hit a mine on tile **${cellIdx + 1}**. Better luck next time!`);
                 await interaction.update({ components: [c] });
                 return;
@@ -152,7 +152,7 @@ export const minesCommand: Command = {
                 const finalBalance = await economy.addCash(guildId, userId, game.reward);
                 activeGames.delete(key);
 
-                const c = ComponentsV2.successContainer('🎉 You Won Mines!',
+                const c = ComponentsV2.successContainer('<:Stars:1524363036389937212> You Won Mines!',
                     `You revealed all safe tiles!\n\n**Won:** $${game.reward.toLocaleString()}\n**Final Balance:** $${finalBalance.toLocaleString()}`);
                 await interaction.update({ components: [c] });
                 return;
@@ -175,16 +175,16 @@ function buildMinesContainer(game: MinesGame): ContainerBuilder {
 
             if (game.gameOver) {
                 if (game.mines.has(idx)) {
-                    btn.setLabel('💣').setStyle(ButtonStyle.Danger);
+                    btn.setLabel('<:Ban:1524363011291222086>').setStyle(ButtonStyle.Danger);
                 } else if (game.revealed.has(idx)) {
-                    btn.setLabel('💎').setStyle(ButtonStyle.Success);
+                    btn.setLabel('<:Diamond:1524363027711918110>').setStyle(ButtonStyle.Success);
                 } else {
-                    btn.setLabel('⬛').setStyle(ButtonStyle.Secondary).setDisabled(true);
+                    btn.setLabel('<:Cross:1524363088621469737>').setStyle(ButtonStyle.Secondary).setDisabled(true);
                 }
             } else if (game.revealed.has(idx)) {
-                btn.setLabel('💎').setStyle(ButtonStyle.Success).setDisabled(true);
+                btn.setLabel('<:Diamond:1524363027711918110>').setStyle(ButtonStyle.Success).setDisabled(true);
             } else {
-                btn.setLabel('⬜').setStyle(ButtonStyle.Secondary);
+                btn.setLabel('<:Cross:1524363088621469737>').setStyle(ButtonStyle.Secondary);
             }
 
             row.addComponents(btn);
@@ -193,11 +193,11 @@ function buildMinesContainer(game: MinesGame): ContainerBuilder {
     }
 
     const infoText =
-        `# 💣 Mines\n\n` +
+        `# <:Ban:1524363011291222086> Mines\n\n` +
         `**Bet:** $${game.bet.toLocaleString()} | **Mines:** ${MINE_COUNT} | **Grid:** ${GRID_SIZE}×${GRID_SIZE}\n\n` +
         `**Revealed:** ${game.revealed.size}/${TOTAL_CELLS - MINE_COUNT} safe tiles\n` +
         `**Cashout Value:** $${game.reward.toLocaleString()}\n\n` +
-        `Click tiles to reveal. Avoid the 💣 mines!`;
+        `Click tiles to reveal. Avoid the <:Ban:1524363011291222086> mines!`;
 
     if (!game.gameOver) {
         const cashoutRow = new ActionRowBuilder<ButtonBuilder>().addComponents(

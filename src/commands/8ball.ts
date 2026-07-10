@@ -49,14 +49,14 @@ export const eightballCommand: Command = {
             const userId = interaction.user.id;
             const balance = await economy.getBalance(guildId, userId);
             if (balance < bet) {
-                const c = ComponentsV2.errorContainer('❌ Insufficient Cash',
+                const c = ComponentsV2.errorContainer('<:Cross:1524363088621469737> Insufficient Cash',
                     `You need **$${bet.toLocaleString()}** but only have **$${balance.toLocaleString()}**.`);
                 await interaction.reply({ components: [c], flags: V2 });
                 return;
             }
             const result = await economy.removeCash(guildId, userId, bet);
             if (!result.success) {
-                const c = ComponentsV2.errorContainer('❌ Bet Failed', 'Could not place your bet.');
+                const c = ComponentsV2.errorContainer('<:Cross:1524363088621469737> Bet Failed', 'Could not place your bet.');
                 await interaction.reply({ components: [c], flags: V2 });
                 return;
             }
@@ -66,12 +66,12 @@ export const eightballCommand: Command = {
             if (picked.type === 'positive') {
                 const winnings = Math.floor(bet * 2);
                 const newBalance = await economy.addCash(guildId, userId, winnings);
-                outcomeText = `**You won!** 🎉\n**Payout:** $${winnings.toLocaleString()}\n**New Balance:** $${newBalance.toLocaleString()}`;
+                outcomeText = `**You won!** <:Stars:1524363036389937212>\n**Payout:** $${winnings.toLocaleString()}\n**New Balance:** $${newBalance.toLocaleString()}`;
             } else if (picked.type === 'negative') {
                 outcomeText = `**You lost!** 💸\n**Lost:** $${bet.toLocaleString()}\n**Balance:** $${result.balance.toLocaleString()}`;
             } else {
                 const newBalance = await economy.addCash(guildId, userId, bet);
-                outcomeText = `**Push (refund)** ↩️\n**Balance:** $${newBalance.toLocaleString()}`;
+                outcomeText = `**Push (refund)** <:Retry:1524363041024512010>\n**Balance:** $${newBalance.toLocaleString()}`;
             }
             const c = ComponentsV2.infoContainer('🎱 Magic 8-Ball (Bet)',
                 `**Question:** ${question}\n\n**Answer:** *${picked.text}*\n\n${outcomeText}`);

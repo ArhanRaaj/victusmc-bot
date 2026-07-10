@@ -17,7 +17,7 @@ function renderPlayerCard(player: any): any {
     const avatarUrl = `https://crafatar.com/avatars/${player.uuid}?overlay`;
 
     const c = ComponentsV2.baseContainer(ComponentsV2.Accents.info);
-    let text = `# ⛏️ Minecraft Player\n\n` +
+    let text = `# <:Tool:1524363009202323466> Minecraft Player\n\n` +
         `### ${player.username}\n` +
         `› **UUID:** \`${player.uuid}\`\n` +
         `› **Skin:** [View Skin](https://crafatar.com/skins/${player.uuid})\n\n`;
@@ -78,7 +78,7 @@ export const minecraftCommand: Command = {
                 const c = ComponentsV2.baseContainer(data.online ? ComponentsV2.Accents.success : ComponentsV2.Accents.danger);
                 c.addMediaGalleryComponents(ComponentsV2.mediaGallery(`${config.branding.website}/favicon.png`));
                 c.addTextDisplayComponents(ComponentsV2.text(
-                    `# ⛏️ VictusMC Server Status\n\n` +
+                    `# <:Tool:1524363009202323466> VictusMC Server Status\n\n` +
                     `› **Status:** ${data.online ? 'Online' : 'Offline'}\n` +
                     (data.online ? (
                         `› **IP:** \`${data.ip || 'victusmc.net'}\`\n` +
@@ -130,7 +130,7 @@ export const minecraftCommand: Command = {
             const skinUrl = `https://crafatar.com/renders/body/${data.uuid}?overlay`;
             const c = ComponentsV2.baseContainer(ComponentsV2.Accents.info);
             c.addMediaGalleryComponents(ComponentsV2.mediaGallery(skinUrl));
-            c.addTextDisplayComponents(ComponentsV2.text(`# 🎨 ${username}'s Skin\n\n[Download Skin](https://crafatar.com/skins/${data.uuid})`));
+            c.addTextDisplayComponents(ComponentsV2.text(`# <:Pallete:1524362993666756628> ${username}'s Skin\n\n[Download Skin](https://crafatar.com/skins/${data.uuid})`));
             await interaction.editReply({ components: [c], flags: V2 });
             return;
         }
@@ -142,7 +142,7 @@ export const minecraftCommand: Command = {
                 await interaction.editReply({ components: [ComponentsV2.errorContainer('Player Not Found', `No player found with username **${username}**.`)], flags: V2 });
                 return;
             }
-            let text = `# 📜 Name History — ${username}\n\n`;
+            let text = `# <:Message:1524363100734623836> Name History — ${username}\n\n`;
             if (data.name_history?.length) {
                 data.name_history.forEach((h: any) => {
                     text += `› **${h.name}**${h.changedToAt ? ` — Changed <t:${Math.floor(new Date(h.changedToAt).getTime() / 1000)}:R>` : ' — Original name'}\n`;

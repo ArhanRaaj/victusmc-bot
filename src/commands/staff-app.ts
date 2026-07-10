@@ -61,11 +61,11 @@ function renderCategoriesDashboard(config: StaffAppConfig): any {
     const editPanelRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
         new ButtonBuilder()
             .setCustomId('staff_app_wiz:edit_panel')
-            .setLabel('Edit Panel ✏️')
+            .setLabel('Edit Panel <:Edit:1524363079675154433>')
             .setStyle(ButtonStyle.Secondary),
         new ButtonBuilder()
             .setCustomId('staff_app_wiz:publish_unified')
-            .setLabel('Publish Unified Panel 📣')
+            .setLabel('Publish Unified Panel <:Annc:1524363017813360710>')
             .setStyle(ButtonStyle.Primary)
             .setDisabled(catKeys.length === 0)
     );
@@ -76,7 +76,7 @@ function renderCategoriesDashboard(config: StaffAppConfig): any {
     const btnRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
         new ButtonBuilder()
             .setCustomId('staff_app_wiz:modal:create')
-            .setLabel('Create Category ➕')
+            .setLabel('Create Category <:Add:1524363108766974247>')
             .setStyle(ButtonStyle.Success)
     );
     
@@ -87,12 +87,12 @@ function renderCategoriesDashboard(config: StaffAppConfig): any {
 function renderCategorySubDashboard(cat: StaffAppCategory): any {
     const c = ComponentsV2.baseContainer(ComponentsV2.Accents.info);
     
-    const text = `# ⚙️ Managing Position: ${cat.displayName}\n` +
+    const text = `# <:Setting:1524363057990598687> Managing Position: ${cat.displayName}\n` +
         `› **Identifier Key:** \`${cat.id}\`\n` +
         `› **Description:** *${cat.description}*\n` +
         `› **Staff Role to Award:** ${cat.staffRoleId ? `<@&${cat.staffRoleId}>` : '*Not configured (Required)*'}\n` +
         `› **Reviewer Channel:** ${cat.reviewerChannelId ? `<#${cat.reviewerChannelId}>` : '*Not configured (Required)*'}\n\n` +
-        `### ❓ Form Questions (Max 5)\n` +
+        `### <:Exclamation:1524363098809569350> Form Questions (Max 5)\n` +
         cat.questions.map((q, i) => `\`${i + 1}.\` ${q}`).join('\n');
         
     c.addTextDisplayComponents(ComponentsV2.text(text))
@@ -130,12 +130,12 @@ function renderCategorySubDashboard(cat: StaffAppCategory): any {
             .setStyle(ButtonStyle.Secondary),
         new ButtonBuilder()
             .setCustomId(`staff_app_wiz:publish_specific:${cat.id}`)
-            .setLabel('Publish Apply Panel 📣')
+            .setLabel('Publish Apply Panel <:Annc:1524363017813360710>')
             .setStyle(ButtonStyle.Success)
             .setDisabled(!cat.staffRoleId || !cat.reviewerChannelId),
         new ButtonBuilder()
             .setCustomId(`staff_app_wiz:delete:${cat.id}`)
-            .setLabel('Delete Category 🗑️')
+            .setLabel('Delete Category <:Delete:1524363081642147931>')
             .setStyle(ButtonStyle.Danger)
     );
     
@@ -229,11 +229,11 @@ function buildReviewCard(submission: StaffSubmission, cat: StaffAppCategory): an
     const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
         new ButtonBuilder()
             .setCustomId(`staff_app_action:approve:${submission.id}`)
-            .setLabel('Approve ✅')
+            .setLabel('Approve <:Tick:1524363090626482326>')
             .setStyle(ButtonStyle.Success),
         new ButtonBuilder()
             .setCustomId(`staff_app_action:deny:${submission.id}`)
-            .setLabel('Deny ❌')
+            .setLabel('Deny <:Cross:1524363088621469737>')
             .setStyle(ButtonStyle.Danger)
     );
     
@@ -249,7 +249,7 @@ function buildReviewDecidedCard(submission: StaffSubmission, cat: StaffAppCatego
         `› **Applicant:** <@${submission.userId}> (${submission.userName})\n` +
         `› **Position:** **${cat.displayName}**\n` +
         `› **Submission ID:** \`${submission.id}\`\n` +
-        `› **Status:** ${isApproved ? '🟢 **Approved**' : '🔴 **Denied**'}\n` +
+        `› **Status:** ${isApproved ? '<:Tick:1524363090626482326> **Approved**' : '<:Cross:1524363088621469737> **Denied**'}\n` +
         `› **Reviewed By:** <@${submission.reviewerId}>\n` +
         `› **Reviewed On:** <t:${Math.floor(new Date(submission.reviewedAt!).getTime() / 1000)}:D>\n\n` +
         `---`;
@@ -503,7 +503,7 @@ export const staffAppCommand: Command = {
             const catId = interaction.customId.split(':')[2];
             const cat = config.categories[catId];
             if (!cat || !cat.reviewerChannelId) {
-                await interaction.reply({ content: '❌ This position is currently not open or misconfigured.' });
+                await interaction.reply({ content: '<:Cross:1524363088621469737> This position is currently not open or misconfigured.' });
                 return;
             }
 
@@ -515,20 +515,20 @@ export const staffAppCommand: Command = {
             const [, action, submissionId] = interaction.customId.split(':');
             const isManager = (interaction.member?.permissions as any)?.has(PermissionFlagsBits.ManageGuild);
             if (!isManager) {
-                await interaction.reply({ content: '❌ You must have `Manage Server` permissions to review staff applications.' });
+                await interaction.reply({ content: '<:Cross:1524363088621469737> You must have `Manage Server` permissions to review staff applications.' });
                 return;
             }
 
             await interaction.deferUpdate().catch(() => {});
             const submission = await staffAppSettings.getSubmission(submissionId);
             if (!submission || submission.status !== 'pending') {
-                await interaction.followUp({ content: '❌ This application has already been decided or does not exist.' });
+                await interaction.followUp({ content: '<:Cross:1524363088621469737> This application has already been decided or does not exist.' });
                 return;
             }
 
             const cat = config.categories[submission.categoryId];
             if (!cat) {
-                await interaction.followUp({ content: '❌ The recruitment track for this application no longer exists.' });
+                await interaction.followUp({ content: '<:Cross:1524363088621469737> The recruitment track for this application no longer exists.' });
                 return;
             }
 
@@ -596,7 +596,7 @@ export const staffAppCommand: Command = {
             const catId = interaction.values[0];
             const cat = config.categories[catId];
             if (!cat || !cat.reviewerChannelId) {
-                await interaction.reply({ content: '❌ This position is currently not open or misconfigured.' });
+                await interaction.reply({ content: '<:Cross:1524363088621469737> This position is currently not open or misconfigured.' });
                 return;
             }
 
@@ -613,7 +613,7 @@ export const staffAppCommand: Command = {
             const description = interaction.fields.getTextInputValue('description').trim();
 
             if (config.categories[catId]) {
-                await interaction.reply({ content: '❌ A category with that ID already exists.' });
+                await interaction.reply({ content: '<:Cross:1524363088621469737> A category with that ID already exists.' });
                 return;
             }
 

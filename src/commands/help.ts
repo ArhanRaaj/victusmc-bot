@@ -49,12 +49,10 @@ function getButtons() {
             .setURL(INVITE_URL),
         new ButtonBuilder()
             .setLabel('Website')
-            .setEmoji({ id: '1524335091302535249', name: 'store' })
             .setStyle(ButtonStyle.Link)
             .setURL('https://mc.victuscloud.com'),
         new ButtonBuilder()
             .setLabel('Support Discord')
-            .setEmoji({ id: '1524335906750857298', name: 'story' })
             .setStyle(ButtonStyle.Link)
             .setURL(config.branding.website + '/discord')
     );
@@ -81,10 +79,10 @@ export const helpCommand: Command = {
         const container = ComponentsV2.baseContainer(config.branding.color);
         container.addMediaGalleryComponents(ComponentsV2.mediaGallery(CATEGORY_ARTWORK.main));
 
-        const body = `-# 💫 VICTUSMC OPERATIONS • COMMAND LAYER\n` +
+        const body = `-# <:Stars:1524363036389937212> VICTUSMC OPERATIONS • COMMAND LAYER\n` +
             `# VictusMc Support Hub\n\n` +
             `Welcome, **${interaction.user.username}**. This panel grants access to all operational commands for the VictusMc Minecraft community bot.\n\n` +
-            `### ⚙️ Quick Connection Details\n` +
+            `### <:Setting:1524363057990598687> Quick Connection Details\n` +
             `› **Server Prefix:** \`${prefix}\`\n` +
             `› **Bot Prefix:** \`!\` / Mention prefix (e.g. <@${interaction.client.user?.id}>)\n` +
             `› **Website:** [victusmc.net](${config.branding.website})\n\n` +
@@ -121,7 +119,7 @@ export const helpCommand: Command = {
             case 'main':
                 title = 'VictusMc Support Hub';
                 desc = `Welcome, **${interaction.user.username}**. This panel grants access to all operational commands for the VictusMc Minecraft community bot.\n\n` +
-                    `### ⚙️ Quick Connection Details\n` +
+                    `### <:Setting:1524363057990598687> Quick Connection Details\n` +
                     `› **Server Prefix:** \`${prefix}\`\n` +
                     `› **Bot Prefix:** \`!\` / Mention prefix\n` +
                     `› **Website:** [victusmc.net](${config.branding.website})\n\n` +
@@ -223,7 +221,7 @@ export const helpCommand: Command = {
                 break;
         }
 
-        const body = `-# 💠 VICTUSMC OPERATIONS • ${category.toUpperCase()}\n` +
+        const body = `-# <:Gem:1524362979926081546> VICTUSMC OPERATIONS • ${category.toUpperCase()}\n` +
             `# ${title}\n\n` +
             `${desc}`;
 

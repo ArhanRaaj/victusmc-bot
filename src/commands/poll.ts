@@ -38,7 +38,7 @@ function renderPollContainer(poll: Poll, ended = false): any {
     const accent = ended ? ComponentsV2.Accents.warning : ComponentsV2.Accents.primary;
     const container = ComponentsV2.baseContainer(accent);
 
-    let title = ended ? `📊 Poll Ended: ${poll.question}` : `📊 Poll: ${poll.question}`;
+    let title = ended ? `<:Vote:1524363112709488641> Poll Ended: ${poll.question}` : `<:Vote:1524363112709488641> Poll: ${poll.question}`;
     let desc = '';
 
     if (ended) {
@@ -91,7 +91,7 @@ function renderPollContainer(poll: Poll, ended = false): any {
         const endRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
             new ButtonBuilder()
                 .setCustomId(`poll:end:${poll.id}`)
-                .setLabel('End Poll 🛑')
+                .setLabel('End Poll <:Cross:1524363088621469737>')
                 .setStyle(ButtonStyle.Danger)
         );
         container.addActionRowComponents(endRow);
@@ -115,7 +115,7 @@ export const pollCommand: Command = {
         if (sub === 'create') {
             const isPrefix = interaction.constructor.name === 'PrefixInteraction';
             if (isPrefix) {
-                await interaction.reply({ content: '❌ Poll creation is only supported via slash commands due to modal requirements.' });
+                await interaction.reply({ content: '<:Cross:1524363088621469737> Poll creation is only supported via slash commands due to modal requirements.' });
                 return;
             }
 
@@ -167,7 +167,7 @@ export const pollCommand: Command = {
             .filter(opt => opt.length > 0);
 
         if (options.length < 2 || options.length > 10) {
-            await interaction.reply({ content: '❌ You must provide between 2 and 10 options.' });
+            await interaction.reply({ content: '<:Cross:1524363088621469737> You must provide between 2 and 10 options.' });
             return;
         }
 
@@ -231,7 +231,7 @@ export const pollCommand: Command = {
         const poll = activePolls.get(pollId);
 
         if (!poll) {
-            await interaction.reply({ content: '❌ Poll not found or has already ended.' });
+            await interaction.reply({ content: '<:Cross:1524363088621469737> Poll not found or has already ended.' });
             return;
         }
 
@@ -252,7 +252,7 @@ export const pollCommand: Command = {
         const poll = activePolls.get(pollId);
 
         if (!poll) {
-            await interaction.reply({ content: '❌ Poll not found or has already ended.' });
+            await interaction.reply({ content: '<:Cross:1524363088621469737> Poll not found or has already ended.' });
             return;
         }
 
@@ -261,7 +261,7 @@ export const pollCommand: Command = {
         const hasManageServer = interaction.memberPermissions?.has(PermissionFlagsBits.ManageGuild);
 
         if (!isCreator && !hasManageServer) {
-            await interaction.reply({ content: '❌ Only the poll creator or server administrators can end this poll.' });
+            await interaction.reply({ content: '<:Cross:1524363088621469737> Only the poll creator or server administrators can end this poll.' });
             return;
         }
 

@@ -11,11 +11,11 @@ export interface Tier {
 
 export const TIERS: Tier[] = [
     { name: 'Initiate', emoji: '🌱', minLevel: 1, color: 0xa1a1aa },
-    { name: 'Vanguard', emoji: '🛡️', minLevel: 6, color: 0x34d399 },
-    { name: 'Stormborn', emoji: '⚡', minLevel: 11, color: 0x60a5fa },
+    { name: 'Vanguard', emoji: '<:Shield:1524362964772196422>', minLevel: 6, color: 0x34d399 },
+    { name: 'Stormborn', emoji: '<:Thunder:1524362985647247420>', minLevel: 11, color: 0x60a5fa },
     { name: 'Celestial', emoji: '🌌', minLevel: 21, color: 0xa78bfa },
-    { name: 'Titan', emoji: '🔥', minLevel: 36, color: 0xfbbf24 },
-    { name: 'Aethel', emoji: '👑', minLevel: 51, color: 0xfb7185 },
+    { name: 'Titan', emoji: '<:Thunder:1524362985647247420>', minLevel: 36, color: 0xfbbf24 },
+    { name: 'Aethel', emoji: '<:Crown:1524363055960428554>', minLevel: 51, color: 0xfb7185 },
 ];
 
 // CP required to reach a given level: 100 × level^1.2

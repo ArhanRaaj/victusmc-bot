@@ -58,7 +58,7 @@ export const timeoutCommand: Command = {
         const isPrefix = interaction.constructor.name === 'PrefixInteraction';
 
         if (user.id === interaction.user.id) {
-            const err = '❌ You cannot timeout yourself.';
+            const err = '<:Cross:1524363088621469737> You cannot timeout yourself.';
             if (isPrefix) {
                 await interaction.reply({ content: err });
             } else {
@@ -72,7 +72,7 @@ export const timeoutCommand: Command = {
 
         const isWhitelisted = await whitelistSettings.isImmune(guild.id, user.id, 'timeout');
         if (isWhitelisted) {
-            const err = '❌ This user is whitelisted and immune to timeouts.';
+            const err = '<:Cross:1524363088621469737> This user is whitelisted and immune to timeouts.';
             if (isPrefix) {
                 await interaction.reply({ content: err });
             } else {
@@ -87,7 +87,7 @@ export const timeoutCommand: Command = {
         const targetMember = await guild.members.fetch(user.id).catch(() => null);
 
         if (!targetMember) {
-            const err = '❌ User is not a member of this server.';
+            const err = '<:Cross:1524363088621469737> User is not a member of this server.';
             if (isPrefix) {
                 await interaction.reply({ content: err });
             } else {
@@ -101,7 +101,7 @@ export const timeoutCommand: Command = {
 
         const durationMs = parseDuration(durationStr);
         if (!durationMs || durationMs <= 0) {
-            const err = '❌ Invalid duration format. Use formats like `10m` (minutes), `2h` (hours), `1d` (days), or `30s` (seconds).';
+            const err = '<:Cross:1524363088621469737> Invalid duration format. Use formats like `10m` (minutes), `2h` (hours), `1d` (days), or `30s` (seconds).';
             if (isPrefix) {
                 await interaction.reply({ content: err });
             } else {
@@ -116,7 +116,7 @@ export const timeoutCommand: Command = {
         // Discord limit is 28 days
         const maxDuration = 28 * 24 * 60 * 60 * 1000;
         if (durationMs > maxDuration) {
-            const err = '❌ Max timeout duration is 28 days.';
+            const err = '<:Cross:1524363088621469737> Max timeout duration is 28 days.';
             if (isPrefix) {
                 await interaction.reply({ content: err });
             } else {
@@ -131,7 +131,7 @@ export const timeoutCommand: Command = {
         // Hierarchy check
         const selfMember = guild.members.me;
         if (selfMember && targetMember.roles.highest.position >= selfMember.roles.highest.position) {
-            const err = '❌ I cannot timeout this user because their highest role is equal to or higher than mine.';
+            const err = '<:Cross:1524363088621469737> I cannot timeout this user because their highest role is equal to or higher than mine.';
             if (isPrefix) {
                 await interaction.reply({ content: err });
             } else {
@@ -144,7 +144,7 @@ export const timeoutCommand: Command = {
         }
 
         if (targetMember.id === guild.ownerId) {
-            const err = '❌ You cannot timeout the server owner.';
+            const err = '<:Cross:1524363088621469737> You cannot timeout the server owner.';
             if (isPrefix) {
                 await interaction.reply({ content: err });
             } else {
@@ -159,7 +159,7 @@ export const timeoutCommand: Command = {
         // Try to DM the user
         const dmEmbed = new EmbedBuilder()
             .setColor(0xf59e0b)
-            .setTitle(`🔇 Timed out in ${guild.name}`)
+            .setTitle(`<:Dissable:1524363096855023626> Timed out in ${guild.name}`)
             .setDescription(`You have been placed in timeout in **${guild.name}** for **${durationStr}**.\n\n**Reason:** ${reason}`)
             .setTimestamp();
 
@@ -175,7 +175,7 @@ export const timeoutCommand: Command = {
             if (isPrefix) {
                 const embed = new EmbedBuilder()
                     .setColor(0x2b2d31)
-                    .setTitle('✅ User Timed Out')
+                    .setTitle('<:Tick:1524363090626482326> User Timed Out')
                     .setDescription(successMsg);
                 await interaction.reply({ embeds: [embed] });
             } else {
@@ -186,7 +186,7 @@ export const timeoutCommand: Command = {
             }
         } catch (err: any) {
             logger.error('Failed to timeout member:', err);
-            const errMsg = '❌ Failed to timeout user. Make sure I have appropriate administrative/timeout permissions.';
+            const errMsg = '<:Cross:1524363088621469737> Failed to timeout user. Make sure I have appropriate administrative/timeout permissions.';
             if (isPrefix) {
                 await interaction.reply({ content: errMsg });
             } else {

@@ -1,4 +1,4 @@
-import {
+﻿import {
     ActionRowBuilder,
     ButtonBuilder,
     ButtonStyle,
@@ -50,12 +50,12 @@ export async function createPagination<T>(
         return new ActionRowBuilder<ButtonBuilder>().addComponents(
             new ButtonBuilder()
                 .setCustomId('pagination_first')
-                .setEmoji('⏮️')
+                .setEmoji('<:Right_arrow2:1524362968916164678>')
                 .setStyle(ButtonStyle.Secondary)
                 .setDisabled(page === 0),
             new ButtonBuilder()
                 .setCustomId('pagination_prev')
-                .setEmoji('◀️')
+                .setEmoji('<:Play:1524363092706721892>')
                 .setStyle(ButtonStyle.Secondary)
                 .setDisabled(page === 0),
             new ButtonBuilder()
@@ -65,12 +65,12 @@ export async function createPagination<T>(
                 .setDisabled(true),
             new ButtonBuilder()
                 .setCustomId('pagination_next')
-                .setEmoji('▶️')
+                .setEmoji('<:Play:1524363092706721892>')
                 .setStyle(ButtonStyle.Secondary)
                 .setDisabled(page >= totalPages - 1),
             new ButtonBuilder()
                 .setCustomId('pagination_last')
-                .setEmoji('⏭️')
+                .setEmoji('<:Right_arrow2:1524362968916164678>')
                 .setStyle(ButtonStyle.Secondary)
                 .setDisabled(page >= totalPages - 1)
         );
@@ -93,7 +93,7 @@ export async function createPagination<T>(
         // Only allow original user to interact
         if (buttonInteraction.user.id !== interaction.user.id) {
             await buttonInteraction.reply({
-                content: '❌ Only the command author can use these buttons.',
+                content: '<:Cross:1524363088621469737> Only the command author can use these buttons.',
                 flags: MessageFlags.Ephemeral,
             });
             return;

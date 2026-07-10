@@ -20,9 +20,9 @@ const V2 = ComponentsV2.IS_COMPONENTS_V2;
 function renderJ2CDashboard(config: J2CConfig): any {
     const c = ComponentsV2.baseContainer(config.enabled ? ComponentsV2.Accents.success : ComponentsV2.Accents.warning);
     
-    const text = `# 🔊 Join to Create VC Setup\n` +
+    const text = `# <:VolumeUp:1524363013233053707> Join to Create VC Setup\n` +
         `Configure the dynamic voice channel manager.\n\n` +
-        `› **Status:** ${config.enabled ? '🟢 **Enabled**' : '🔴 **Disabled**'}\n` +
+        `› **Status:** ${config.enabled ? '<:Tick:1524363090626482326> **Enabled**' : '<:Cross:1524363088621469737> **Disabled**'}\n` +
         `› **Hub Voice Channel:** ${config.channelId ? `<#${config.channelId}>` : '*Not configured (Required)*'}\n` +
         `› **Parent Category:** ${config.categoryId ? `<#${config.categoryId}>` : '*Hub category (Default)*'}\n` +
         `› **Channel Name Format:** \`${config.nameFormat}\`\n\n` +
@@ -51,7 +51,7 @@ function renderJ2CDashboard(config: J2CConfig): any {
     const btnRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
         new ButtonBuilder()
             .setCustomId('j2c_wiz:toggle_status')
-            .setLabel(config.enabled ? 'Disable J2C 🔴' : 'Enable J2C 🟢')
+            .setLabel(config.enabled ? 'Disable J2C <:Cross:1524363088621469737>' : 'Enable J2C <:Tick:1524363090626482326>')
             .setStyle(config.enabled ? ButtonStyle.Danger : ButtonStyle.Success),
         new ButtonBuilder()
             .setCustomId('j2c_wiz:modal:name')
@@ -82,25 +82,25 @@ export function buildVoiceControlPanel(ownerId: string): any {
      .addSeparatorComponents(ComponentsV2.separator());
      
     const options = [
-        { label: '🔒 Lock Channel', value: 'lock', description: 'Prevent anyone else from joining' },
-        { label: '🔓 Unlock Channel', value: 'unlock', description: 'Allow anyone to join' },
-        { label: '👁️ Hide Channel', value: 'hide', description: 'Hide the channel from the channel list' },
+        { label: '<:Lock:1524363064001040385> Lock Channel', value: 'lock', description: 'Prevent anyone else from joining' },
+        { label: '<:UnLock:1524363066404503614> Unlock Channel', value: 'unlock', description: 'Allow anyone to join' },
+        { label: '<:User:1524363104903893052> Hide Channel', value: 'hide', description: 'Hide the channel from the channel list' },
         { label: '🔎 Reveal Channel', value: 'reveal', description: 'Make the channel visible to everyone' },
-        { label: '✏️ Rename Channel', value: 'modal_rename', description: 'Change the voice channel name' },
+        { label: '<:Edit:1524363079675154433> Rename Channel', value: 'modal_rename', description: 'Change the voice channel name' },
         { label: '🔢 Change Capacity Limit', value: 'modal_limit', description: 'Set user limit (0-99)' },
         { label: '🚷 Kick User', value: 'modal_kick', description: 'Disconnect a user from the channel' },
-        { label: '🚫 Ban User', value: 'modal_ban', description: 'Ban a user from connecting to the channel' },
-        { label: '✅ Unban User', value: 'modal_unban', description: 'Remove a ban override' },
-        { label: '🔇 Mute User', value: 'modal_mute', description: 'Server-mute a user in your VC' },
-        { label: '🔊 Unmute User', value: 'modal_unmute', description: 'Server-unmute a user in your VC' },
-        { label: '🔇 Deafen User', value: 'modal_deafen', description: 'Server-deafen a user in your VC' },
-        { label: '🔊 Undeafen User', value: 'modal_undeafen', description: 'Server-undeafen a user in your VC' },
-        { label: '🟢 Trust/Permit User', value: 'modal_permit', description: 'Allow a user to join locked channel' },
-        { label: '🔴 Remove Trust Override', value: 'modal_unpermit', description: 'Remove trust permission override' },
-        { label: '🔄 Reset Permissions', value: 'reset', description: 'Reset all channel overrides' },
-        { label: '👑 Transfer Ownership', value: 'modal_transfer', description: 'Transfer owner role to another member' },
-        { label: '👑 Claim Ownership', value: 'claim', description: 'Claim ownership if owner is not in VC' },
-        { label: 'ℹ️ Channel Information', value: 'info', description: 'Show current channel statistics' }
+        { label: '<:Ban:1524363011291222086> Ban User', value: 'modal_ban', description: 'Ban a user from connecting to the channel' },
+        { label: '<:Tick:1524363090626482326> Unban User', value: 'modal_unban', description: 'Remove a ban override' },
+        { label: '<:Dissable:1524363096855023626> Mute User', value: 'modal_mute', description: 'Server-mute a user in your VC' },
+        { label: '<:VolumeUp:1524363013233053707> Unmute User', value: 'modal_unmute', description: 'Server-unmute a user in your VC' },
+        { label: '<:Dissable:1524363096855023626> Deafen User', value: 'modal_deafen', description: 'Server-deafen a user in your VC' },
+        { label: '<:VolumeUp:1524363013233053707> Undeafen User', value: 'modal_undeafen', description: 'Server-undeafen a user in your VC' },
+        { label: '<:Tick:1524363090626482326> Trust/Permit User', value: 'modal_permit', description: 'Allow a user to join locked channel' },
+        { label: '<:Cross:1524363088621469737> Remove Trust Override', value: 'modal_unpermit', description: 'Remove trust permission override' },
+        { label: '<:Retry:1524363041024512010> Reset Permissions', value: 'reset', description: 'Reset all channel overrides' },
+        { label: '<:Crown:1524363055960428554> Transfer Ownership', value: 'modal_transfer', description: 'Transfer owner role to another member' },
+        { label: '<:Crown:1524363055960428554> Claim Ownership', value: 'claim', description: 'Claim ownership if owner is not in VC' },
+        { label: '<:Info:1524363004823470120> Channel Information', value: 'info', description: 'Show current channel statistics' }
     ];
 
     const selectMenu = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
@@ -152,7 +152,7 @@ export const j2cCommand: Command = {
                         new TextInputBuilder()
                             .setCustomId('format')
                             .setLabel('Name Format (Supports {username})')
-                            .setPlaceholder('🔊 {username}\'s Lounge')
+                            .setPlaceholder('<:VolumeUp:1524363013233053707> {username}\'s Lounge')
                             .setValue(config.nameFormat)
                             .setStyle(TextInputStyle.Short)
                             .setRequired(true)
@@ -187,7 +187,7 @@ export const j2cCommand: Command = {
             const tempChannel = tempChannels.find(i => i.channelId === interaction.channelId);
             
             if (!tempChannel) {
-                await interaction.reply({ content: '❌ This channel is not a registered temporary voice channel.' });
+                await interaction.reply({ content: '<:Cross:1524363088621469737> This channel is not a registered temporary voice channel.' });
                 return;
             }
 
@@ -197,20 +197,20 @@ export const j2cCommand: Command = {
                 const ownerStillInVC = voiceChannel.members.has(tempChannel.ownerId);
                 
                 if (ownerStillInVC) {
-                    await interaction.reply({ content: `❌ You cannot claim this channel because the current owner (<@${tempChannel.ownerId}>) is still in the voice channel.` });
+                    await interaction.reply({ content: `<:Cross:1524363088621469737> You cannot claim this channel because the current owner (<@${tempChannel.ownerId}>) is still in the voice channel.` });
                     return;
                 }
                 
                 await j2cSettings.setTempChannelOwner(voiceChannel.id, interaction.user.id);
                 const updatedPanel = buildVoiceControlPanel(interaction.user.id);
                 await interaction.update({ components: [updatedPanel] });
-                await voiceChannel.send({ content: `👑 <@${interaction.user.id}> has claimed ownership of this voice channel!` }).catch(() => {});
+                await voiceChannel.send({ content: `<:Crown:1524363055960428554> <@${interaction.user.id}> has claimed ownership of this voice channel!` }).catch(() => {});
                 return;
             }
 
             // Other actions require ownership
             if (tempChannel.ownerId !== interaction.user.id) {
-                await interaction.reply({ content: `❌ Only the channel owner (<@${tempChannel.ownerId}>) can use this panel.` });
+                await interaction.reply({ content: `<:Cross:1524363088621469737> Only the channel owner (<@${tempChannel.ownerId}>) can use this panel.` });
                 return;
             }
 
@@ -218,15 +218,15 @@ export const j2cCommand: Command = {
 
             if (action === 'lock') {
                 await voiceChannel.permissionOverwrites.edit(interaction.guild!.roles.everyone, { Connect: false }).catch(() => {});
-                await interaction.reply({ content: '🔒 Your voice channel has been locked. Only allowed members can join now.' });
+                await interaction.reply({ content: '<:Lock:1524363064001040385> Your voice channel has been locked. Only allowed members can join now.' });
             }
             else if (action === 'unlock') {
                 await voiceChannel.permissionOverwrites.edit(interaction.guild!.roles.everyone, { Connect: null }).catch(() => {});
-                await interaction.reply({ content: '🔓 Your voice channel has been unlocked. Anyone can join now.' });
+                await interaction.reply({ content: '<:UnLock:1524363066404503614> Your voice channel has been unlocked. Anyone can join now.' });
             }
             else if (action === 'hide') {
                 await voiceChannel.permissionOverwrites.edit(interaction.guild!.roles.everyone, { ViewChannel: false }).catch(() => {});
-                await interaction.reply({ content: '👁️ Your voice channel has been hidden from the channel list.' });
+                await interaction.reply({ content: '<:User:1524363104903893052> Your voice channel has been hidden from the channel list.' });
             }
             else if (action === 'reveal') {
                 await voiceChannel.permissionOverwrites.edit(interaction.guild!.roles.everyone, { ViewChannel: null }).catch(() => {});
@@ -239,18 +239,18 @@ export const j2cCommand: Command = {
                         allow: ['ManageChannels', 'MoveMembers', 'MuteMembers', 'DeafenMembers']
                     }
                 ]).catch(() => {});
-                await interaction.reply({ content: '🔄 Reset all voice channel permission overrides.' });
+                await interaction.reply({ content: '<:Retry:1524363041024512010> Reset all voice channel permission overrides.' });
             }
             else if (action === 'info') {
                 const locked = voiceChannel.permissionOverwrites.cache.get(interaction.guild!.roles.everyone.id)?.deny.has('Connect');
                 const hidden = voiceChannel.permissionOverwrites.cache.get(interaction.guild!.roles.everyone.id)?.deny.has('ViewChannel');
                 
-                const stats = `# ℹ️ Voice Channel Information\n` +
+                const stats = `# <:Info:1524363004823470120> Voice Channel Information\n` +
                     `› **Owner:** <@${tempChannel.ownerId}>\n` +
                     `› **User Limit:** \`${voiceChannel.userLimit || 'Unlimited'}\`\n` +
                     `› **Connected Members:** \`${voiceChannel.members.size}\`\n` +
-                    `› **Locked Status:** \`${locked ? 'Locked 🔒' : 'Unlocked 🔓'}\`\n` +
-                    `› **Visibility:** \`${hidden ? 'Hidden 👁️' : 'Visible 🔎'}\``;
+                    `› **Locked Status:** \`${locked ? 'Locked <:Lock:1524363064001040385>' : 'Unlocked <:UnLock:1524363066404503614>'}\`\n` +
+                    `› **Visibility:** \`${hidden ? 'Hidden <:User:1524363104903893052>' : 'Visible 🔎'}\``;
                     
                 await interaction.reply({ content: stats });
             }
@@ -263,7 +263,7 @@ export const j2cCommand: Command = {
                             new TextInputBuilder()
                                 .setCustomId('name')
                                 .setLabel('New Channel Name')
-                                .setPlaceholder('🔊 Study Room')
+                                .setPlaceholder('<:VolumeUp:1524363013233053707> Study Room')
                                 .setStyle(TextInputStyle.Short)
                                 .setRequired(true)
                         )
@@ -435,7 +435,7 @@ export const j2cCommand: Command = {
             const tempChannel = tempChannels.find(i => i.channelId === interaction.channelId);
 
             if (!tempChannel || tempChannel.ownerId !== interaction.user.id) {
-                await interaction.reply({ content: '❌ You are not the owner of this channel.' });
+                await interaction.reply({ content: '<:Cross:1524363088621469737> You are not the owner of this channel.' });
                 return;
             }
 
@@ -444,13 +444,13 @@ export const j2cCommand: Command = {
             if (action === 'rename') {
                 const newName = interaction.fields.getTextInputValue('name').trim();
                 await voiceChannel.setName(newName).catch(() => {});
-                await interaction.reply({ content: `✏️ Voice channel renamed to **${newName}**.` });
+                await interaction.reply({ content: `<:Edit:1524363079675154433> Voice channel renamed to **${newName}**.` });
             }
             else if (action === 'limit') {
                 const limitStr = interaction.fields.getTextInputValue('limit').trim();
                 const limit = parseInt(limitStr, 10);
                 if (isNaN(limit) || limit < 0 || limit > 99) {
-                    await interaction.reply({ content: '❌ Please enter a number between 0 and 99.' });
+                    await interaction.reply({ content: '<:Cross:1524363088621469737> Please enter a number between 0 and 99.' });
                     return;
                 }
                 await voiceChannel.setUserLimit(limit).catch(() => {});
@@ -463,11 +463,11 @@ export const j2cCommand: Command = {
                 );
 
                 if (!targetMember) {
-                    await interaction.reply({ content: '❌ Could not find that member in this voice channel.' });
+                    await interaction.reply({ content: '<:Cross:1524363088621469737> Could not find that member in this voice channel.' });
                     return;
                 }
                 if (targetMember.id === interaction.user.id) {
-                    await interaction.reply({ content: '❌ You cannot kick yourself!' });
+                    await interaction.reply({ content: '<:Cross:1524363088621469737> You cannot kick yourself!' });
                     return;
                 }
                 await targetMember.voice.disconnect().catch(() => {});
@@ -480,23 +480,23 @@ export const j2cCommand: Command = {
                 );
 
                 if (!targetMember) {
-                    await interaction.reply({ content: '❌ Could not find that member in the server.' });
+                    await interaction.reply({ content: '<:Cross:1524363088621469737> Could not find that member in the server.' });
                     return;
                 }
                 if (targetMember.id === interaction.user.id) {
-                    await interaction.reply({ content: '❌ You cannot ban yourself!' });
+                    await interaction.reply({ content: '<:Cross:1524363088621469737> You cannot ban yourself!' });
                     return;
                 }
                 await voiceChannel.permissionOverwrites.edit(targetMember.id, { Connect: false }).catch(() => {});
                 if (voiceChannel.members.has(targetMember.id)) {
                     await targetMember.voice.disconnect().catch(() => {});
                 }
-                await interaction.reply({ content: `🚫 Banned <@${targetMember.id}> from connecting to this voice channel.` });
+                await interaction.reply({ content: `<:Ban:1524363011291222086> Banned <@${targetMember.id}> from connecting to this voice channel.` });
             }
             else if (action === 'unban') {
                 const userId = interaction.fields.getTextInputValue('userId').trim();
                 await voiceChannel.permissionOverwrites.delete(userId).catch(() => {});
-                await interaction.reply({ content: `✅ Unbanned user ID \`${userId}\` from this voice channel.` });
+                await interaction.reply({ content: `<:Tick:1524363090626482326> Unbanned user ID \`${userId}\` from this voice channel.` });
             }
             else if (action === 'mute') {
                 const input = interaction.fields.getTextInputValue('userId').trim().toLowerCase();
@@ -505,11 +505,11 @@ export const j2cCommand: Command = {
                 );
 
                 if (!targetMember) {
-                    await interaction.reply({ content: '❌ Could not find that member in this voice channel.' });
+                    await interaction.reply({ content: '<:Cross:1524363088621469737> Could not find that member in this voice channel.' });
                     return;
                 }
                 await targetMember.voice.setMute(true).catch(() => {});
-                await interaction.reply({ content: `🔇 Server-muted <@${targetMember.id}> in this VC.` });
+                await interaction.reply({ content: `<:Dissable:1524363096855023626> Server-muted <@${targetMember.id}> in this VC.` });
             }
             else if (action === 'unmute') {
                 const input = interaction.fields.getTextInputValue('userId').trim().toLowerCase();
@@ -518,11 +518,11 @@ export const j2cCommand: Command = {
                 );
 
                 if (!targetMember) {
-                    await interaction.reply({ content: '❌ Could not find that member in this voice channel.' });
+                    await interaction.reply({ content: '<:Cross:1524363088621469737> Could not find that member in this voice channel.' });
                     return;
                 }
                 await targetMember.voice.setMute(false).catch(() => {});
-                await interaction.reply({ content: `🔊 Server-unmuted <@${targetMember.id}> in this VC.` });
+                await interaction.reply({ content: `<:VolumeUp:1524363013233053707> Server-unmuted <@${targetMember.id}> in this VC.` });
             }
             else if (action === 'deafen') {
                 const input = interaction.fields.getTextInputValue('userId').trim().toLowerCase();
@@ -531,11 +531,11 @@ export const j2cCommand: Command = {
                 );
 
                 if (!targetMember) {
-                    await interaction.reply({ content: '❌ Could not find that member in this voice channel.' });
+                    await interaction.reply({ content: '<:Cross:1524363088621469737> Could not find that member in this voice channel.' });
                     return;
                 }
                 await targetMember.voice.setDeaf(true).catch(() => {});
-                await interaction.reply({ content: `🔇 Server-deafened <@${targetMember.id}> in this VC.` });
+                await interaction.reply({ content: `<:Dissable:1524363096855023626> Server-deafened <@${targetMember.id}> in this VC.` });
             }
             else if (action === 'undeafen') {
                 const input = interaction.fields.getTextInputValue('userId').trim().toLowerCase();
@@ -544,11 +544,11 @@ export const j2cCommand: Command = {
                 );
 
                 if (!targetMember) {
-                    await interaction.reply({ content: '❌ Could not find that member in this voice channel.' });
+                    await interaction.reply({ content: '<:Cross:1524363088621469737> Could not find that member in this voice channel.' });
                     return;
                 }
                 await targetMember.voice.setDeaf(false).catch(() => {});
-                await interaction.reply({ content: `🔊 Server-undeafened <@${targetMember.id}> in this VC.` });
+                await interaction.reply({ content: `<:VolumeUp:1524363013233053707> Server-undeafened <@${targetMember.id}> in this VC.` });
             }
             else if (action === 'permit') {
                 const input = interaction.fields.getTextInputValue('userId').trim().toLowerCase();
@@ -557,11 +557,11 @@ export const j2cCommand: Command = {
                 );
 
                 if (!targetMember) {
-                    await interaction.reply({ content: '❌ Could not find that member in the server.' });
+                    await interaction.reply({ content: '<:Cross:1524363088621469737> Could not find that member in the server.' });
                     return;
                 }
                 await voiceChannel.permissionOverwrites.edit(targetMember.id, { Connect: true }).catch(() => {});
-                await interaction.reply({ content: `🟢 Trusted/Permitted <@${targetMember.id}> to join this voice channel.` });
+                await interaction.reply({ content: `<:Tick:1524363090626482326> Trusted/Permitted <@${targetMember.id}> to join this voice channel.` });
             }
             else if (action === 'unpermit') {
                 const input = interaction.fields.getTextInputValue('userId').trim().toLowerCase();
@@ -570,11 +570,11 @@ export const j2cCommand: Command = {
                 );
 
                 if (!targetMember) {
-                    await interaction.reply({ content: '❌ Could not find that member in the server.' });
+                    await interaction.reply({ content: '<:Cross:1524363088621469737> Could not find that member in the server.' });
                     return;
                 }
                 await voiceChannel.permissionOverwrites.delete(targetMember.id).catch(() => {});
-                await interaction.reply({ content: `🔴 Removed trust permission override for <@${targetMember.id}>.` });
+                await interaction.reply({ content: `<:Cross:1524363088621469737> Removed trust permission override for <@${targetMember.id}>.` });
             }
             else if (action === 'transfer') {
                 const input = interaction.fields.getTextInputValue('userId').trim().toLowerCase();
@@ -583,15 +583,15 @@ export const j2cCommand: Command = {
                 );
 
                 if (!targetMember) {
-                    await interaction.reply({ content: '❌ The new owner must be currently connected to this voice channel.' });
+                    await interaction.reply({ content: '<:Cross:1524363088621469737> The new owner must be currently connected to this voice channel.' });
                     return;
                 }
 
                 await j2cSettings.setTempChannelOwner(voiceChannel.id, targetMember.id);
                 const updatedPanel = buildVoiceControlPanel(targetMember.id);
                 await (interaction.message as any).edit({ components: [updatedPanel] });
-                await voiceChannel.send({ content: `👑 Control Panel ownership has been transferred to <@${targetMember.id}>!` }).catch(() => {});
-                await interaction.reply({ content: `👑 Transferred ownership of this voice channel to <@${targetMember.id}>.` });
+                await voiceChannel.send({ content: `<:Crown:1524363055960428554> Control Panel ownership has been transferred to <@${targetMember.id}>!` }).catch(() => {});
+                await interaction.reply({ content: `<:Crown:1524363055960428554> Transferred ownership of this voice channel to <@${targetMember.id}>.` });
             }
         }
     }

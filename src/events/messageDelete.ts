@@ -1,4 +1,4 @@
-import { Events } from 'discord.js';
+﻿import { Events } from 'discord.js';
 import type { Message } from 'discord.js';
 import type { Event } from '../types/index.js';
 import { auditLogSettings } from '../services/auditLogSettings.js';
@@ -25,7 +25,7 @@ export const messageDeleteEvent: Event = {
 
             const container = ComponentsV2.baseContainer(ComponentsV2.Accents.danger);
             container.addTextDisplayComponents(
-                ComponentsV2.text('## 🗑️ Message Deleted\n\u200b'),
+                ComponentsV2.text('## <:Delete:1524363081642147931> Message Deleted\n\u200b'),
                 ComponentsV2.text(`**User:** <@${message.author?.id}> (${message.author?.tag || 'Unknown'})\n**Channel:** <#${message.channelId}>`),
                 ComponentsV2.text(`**Content:** ${content.slice(0, 1000)}`),
                 ComponentsV2.text(`-# <t:${Math.floor(Date.now() / 1000)}:R>`)

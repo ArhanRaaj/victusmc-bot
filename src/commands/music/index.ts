@@ -182,11 +182,11 @@ export const playCommand: Command = {
 
             // Fallback: if a Spotify URL failed (LavaSrc not configured), try spsearch:
             if (isSpotify && (!res || !res.tracks?.length || res.loadType === 'empty' || res.loadType === 'error')) {
-                logger.warn('🎵 Spotify direct URL load failed, trying spsearch fallback...');
+                logger.warn('<:Music:1524363029838561400> Spotify direct URL load failed, trying spsearch fallback...');
                 res = await player.search({ query, source: 'spsearch' as any }, interaction.user);
             }
         } catch (error) {
-            logger.error('🎵 Lavalink search failed:', error);
+            logger.error('<:Music:1524363029838561400> Lavalink search failed:', error);
             const container = ComponentsV2.errorContainer('Search failed', 'Could not reach the music server. Please try again in a moment.');
             await interaction.editReply({ components: [container], flags: V2 });
             return;
@@ -226,13 +226,13 @@ export const playCommand: Command = {
         
         const player = interaction.client.lavalink.getPlayer(interaction.guildId!);
         if (!player) {
-            await interaction.reply({ content: '❌ Nothing is playing right now.' });
+            await interaction.reply({ content: '<:Cross:1524363088621469737> Nothing is playing right now.' });
             return;
         }
 
         const member = interaction.member as GuildMember | null;
         if (member?.voice?.channelId !== player.voiceChannelId) {
-            await interaction.reply({ content: '❌ Join my voice channel to control playback.' });
+            await interaction.reply({ content: '<:Cross:1524363088621469737> Join my voice channel to control playback.' });
             return;
         }
 
@@ -265,10 +265,10 @@ export const playCommand: Command = {
                                 description: JSON.stringify(favorites)
                             });
                         }
-                        await interaction.reply({ content: `❤️ Added **${escapeMd(track.info.title)}** to your favorites!` });
+                        await interaction.reply({ content: `<:Heart:1524363051716051106> Added **${escapeMd(track.info.title)}** to your favorites!` });
                     } catch (error) {
                         logger.error('Failed to save music favorite:', error);
-                        await interaction.reply({ content: '❌ Failed to add to favorites.' });
+                        await interaction.reply({ content: '<:Cross:1524363088621469737> Failed to add to favorites.' });
                     }
                 }
                 return;
@@ -280,27 +280,27 @@ export const playCommand: Command = {
             }
             case 'skip': {
                 if (!player.queue.tracks.length) {
-                    await interaction.reply({ content: '⏭️ That was the last track — stopping playback.' });
+                    await interaction.reply({ content: '<:Right_arrow2:1524362968916164678> That was the last track — stopping playback.' });
                     await player.destroy().catch(() => undefined);
                     return;
                 }
                 await player.skip();
-                await interaction.reply({ content: '⏭️ Skipped to the next track.' });
+                await interaction.reply({ content: '<:Right_arrow2:1524362968916164678> Skipped to the next track.' });
                 return;
             }
             case 'previous': {
                 const prev = player.queue.previous?.[0];
                 if (!prev) {
-                    await interaction.reply({ content: '⏮️ There is no track to go back to.' });
+                    await interaction.reply({ content: '<:Right_arrow2:1524362968916164678> There is no track to go back to.' });
                     return;
                 }
                 await player.play({ clientTrack: prev });
-                await interaction.reply({ content: '⏮️ Playing the previous track.' });
+                await interaction.reply({ content: '<:Right_arrow2:1524362968916164678> Playing the previous track.' });
                 return;
             }
             case 'stop': {
                 await player.destroy();
-                await interaction.reply({ content: '⏹️ Playback stopped and connection closed.' });
+                await interaction.reply({ content: '<:Dissable:1524363096855023626> Playback stopped and connection closed.' });
                 return;
             }
             case 'loop': {
@@ -335,25 +335,25 @@ export const playCommand: Command = {
             case 'history': {
                 const prev = player.queue.previous;
                 if (!prev || prev.length === 0) {
-                    await interaction.reply({ content: '🕒 No history found.' });
+                    await interaction.reply({ content: '<:Time:1524363075271000146> No history found.' });
                     return;
                 }
                 const historyList = prev.slice(0, 10).map((t, idx) => `${idx + 1}. **${escapeMd(t.info.title)}**`).join('\n');
-                await interaction.reply({ content: `🕒 **Recent History:**\n${historyList}` });
+                await interaction.reply({ content: `<:Time:1524363075271000146> **Recent History:**\n${historyList}` });
                 return;
             }
             case 'library_playlists': {
                 const playlists = await playlistService.getAll(interaction.guildId!, interaction.user.id);
                 if (playlists.length === 0) {
-                    await interaction.reply({ content: '📁 You have no playlists. Use `/playlist create` to make one!' });
+                    await interaction.reply({ content: '<:Message:1524363100734623836> You have no playlists. Use `/playlist create` to make one!' });
                     return;
                 }
                 const list = playlists.map(p => `• **${escapeMd(p.name)}** (${p.tracks.length} tracks)`).join('\n');
-                await interaction.reply({ content: `📁 **Your Playlists:**\n${list}` });
+                await interaction.reply({ content: `<:Message:1524363100734623836> **Your Playlists:**\n${list}` });
                 return;
             }
             default: {
-                await interaction.reply({ content: '🔧 Feature coming soon!' });
+                await interaction.reply({ content: '<:Tool:1524363009202323466> Feature coming soon!' });
                 return;
             }
         }
@@ -409,7 +409,7 @@ export const playCommand: Command = {
                 const embed = new EmbedBuilder()
                     .setColor(0x2b2d31)
                     .setTitle('⏹ Stopped')
-                    .setDescription('Playback stopped and the queue was cleared. 👋');
+                    .setDescription('Playback stopped and the queue was cleared. <:Wave:1524363100734623836>');
                 await interaction.update({ embeds: [embed], components: [] });
                 return;
             }
@@ -497,20 +497,20 @@ export const playCommand: Command = {
 
         const player = interaction.client.lavalink.getPlayer(interaction.guildId!);
         if (!player) {
-            await interaction.reply({ content: '❌ Nothing is playing right now.' });
+            await interaction.reply({ content: '<:Cross:1524363088621469737> Nothing is playing right now.' });
             return;
         }
 
         const member = interaction.member as GuildMember | null;
         if (member?.voice?.channelId !== player.voiceChannelId) {
-            await interaction.reply({ content: '❌ Join my voice channel to control playback.' });
+            await interaction.reply({ content: '<:Cross:1524363088621469737> Join my voice channel to control playback.' });
             return;
         }
 
         const input = interaction.fields.getTextInputValue('volume_level').trim();
         const level = parseInt(input, 10);
         if (isNaN(level) || level < 0 || level > 150) {
-            await interaction.reply({ content: '❌ Invalid volume. Please enter a number between 0 and 150.' });
+            await interaction.reply({ content: '<:Cross:1524363088621469737> Invalid volume. Please enter a number between 0 and 150.' });
             return;
         }
 
@@ -521,7 +521,7 @@ export const playCommand: Command = {
             const controls = musicControlsContainer(player);
             await (interaction as any).update({ embeds: [], components: controls.components });
         } else {
-            await interaction.reply({ content: `🔊 Volume set to **${level}%**.` });
+            await interaction.reply({ content: `<:VolumeUp:1524363013233053707> Volume set to **${level}%**.` });
         }
     }
 };
@@ -554,7 +554,7 @@ export const stopCommand: Command = {
         const player = await requirePlayer(interaction);
         if (!player) return;
         await player.destroy();
-        await interaction.editReply(info('Stopped', 'Playback stopped, queue cleared, and I left the voice channel. 👋'));
+        await interaction.editReply(info('Stopped', 'Playback stopped, queue cleared, and I left the voice channel. <:Wave:1524363100734623836>'));
     },
 };
 
@@ -590,7 +590,7 @@ export const resumeCommand: Command = {
         }
         await player.resume();
         await refreshNowPlaying(player);
-        await interaction.editReply(ok('Resumed', 'Playback resumed. ▶️'));
+        await interaction.editReply(ok('Resumed', 'Playback resumed. <:Play:1524363092706721892>'));
     },
 };
 
@@ -636,7 +636,7 @@ export const queueCommand: Command = {
 
             const c = ComponentsV2.baseContainer(ComponentsV2.Accents.info);
             c.addTextDisplayComponents(ComponentsV2.text(
-                `# 📝 Edit Playlist Queue\n` +
+                `# <:Edit:1524363079675154433> Edit Playlist Queue\n` +
                 `Select a track from the dropdown select menu below to remove it from the queue.` +
                 (tracks.length > 25 ? `\n\n_-# Showing first 25 tracks of ${tracks.length}_` : '')
             )).addSeparatorComponents(ComponentsV2.separator());
@@ -672,13 +672,13 @@ export const queueCommand: Command = {
 
         const player = interaction.client.lavalink.getPlayer(interaction.guildId!);
         if (!player) {
-            await interaction.reply({ content: '❌ Music player is not active.' });
+            await interaction.reply({ content: '<:Cross:1524363088621469737> Music player is not active.' });
             return;
         }
 
         const index = parseInt(interaction.values[0], 10);
         if (isNaN(index) || index < 0 || index >= player.queue.tracks.length) {
-            await interaction.reply({ content: '❌ Invalid track selected.' });
+            await interaction.reply({ content: '<:Cross:1524363088621469737> Invalid track selected.' });
             return;
         }
 
@@ -732,7 +732,7 @@ export const volumeCommand: Command = {
         }
         await player.setVolume(level);
         await refreshNowPlaying(player);
-        await interaction.editReply(ok('Volume updated', `Volume set to **${level}%**. 🔊`));
+        await interaction.editReply(ok('Volume updated', `Volume set to **${level}%**. <:VolumeUp:1524363013233053707>`));
     },
 };
 
@@ -757,7 +757,7 @@ export const loopCommand: Command = {
         const mode = interaction.options.getString('mode', true) as 'off' | 'track' | 'queue';
         await player.setRepeatMode(mode);
         await refreshNowPlaying(player);
-        const label = mode === 'off' ? 'disabled' : mode === 'track' ? 'looping the current track 🔂' : 'looping the whole queue 🔁';
+        const label = mode === 'off' ? 'disabled' : mode === 'track' ? 'looping the current track <:Retry:1524363041024512010>' : 'looping the whole queue <:Retry:1524363041024512010>';
         await interaction.editReply(ok('Loop updated', `Loop is now ${label}.`));
     },
 };
@@ -775,7 +775,7 @@ export const shuffleCommand: Command = {
             return;
         }
         await player.queue.shuffle();
-        await interaction.editReply(ok('Shuffled', `Shuffled **${player.queue.tracks.length}** tracks in the queue. 🔀`));
+        await interaction.editReply(ok('Shuffled', `Shuffled **${player.queue.tracks.length}** tracks in the queue. <:Retry:1524363041024512010>`));
     },
 };
 
@@ -800,7 +800,7 @@ export const disconnectCommand: Command = {
             return;
         }
         await player.destroy();
-        await interaction.editReply(info('Disconnected', 'Left the voice channel and cleared the queue. 👋'));
+        await interaction.editReply(info('Disconnected', 'Left the voice channel and cleared the queue. <:Wave:1524363100734623836>'));
     },
 };
 
@@ -900,7 +900,7 @@ const playrandomSessions = new Map<string, { lang: 'english' | 'hindi' }>();
 function renderPlayrandomDashboard(userId: string, lang: 'english' | 'hindi'): ContainerBuilder {
     const container = new ContainerBuilder();
     
-    const body = `# 🎲 Random Music Generator\n` +
+    const body = `# <:Giveaway:1524363020250382437> Random Music Generator\n` +
         `Select your preferred language and music category from the dropdown select menus below.\n\n` +
         `› **Selected Language:** **${lang.toUpperCase()}**`;
 
@@ -920,11 +920,11 @@ function renderPlayrandomDashboard(userId: string, lang: 'english' | 'hindi'): C
         .setCustomId(`playrandom:cat_select:${userId}`)
         .setPlaceholder('Choose Category to Play...')
         .addOptions([
-            { label: '🎧 Phonk', value: 'phonk', description: 'Aggressive phonk beats' },
+            { label: '<:Music:1524363029838561400> Phonk', value: 'phonk', description: 'Aggressive phonk beats' },
             { label: '😢 Sad / Emotional', value: 'sad', description: 'Deep, emotional melodies' },
-            { label: '❤️ Love / Romantic', value: 'love', description: 'Sweet romantic tracks' },
-            { label: '💪 Gym / Workout', value: 'gym', description: 'High energy beats for training' },
-            { label: '🎉 Party / Dance', value: 'party', description: 'Upbeat tracks to dance to' },
+            { label: '<:Heart:1524363051716051106> Love / Romantic', value: 'love', description: 'Sweet romantic tracks' },
+            { label: '<:Muscle:1524362981750734908> Gym / Workout', value: 'gym', description: 'High energy beats for training' },
+            { label: '<:Stars:1524363036389937212> Party / Dance', value: 'party', description: 'Upbeat tracks to dance to' },
             { label: '☕ Lofi Chill', value: 'lofi', description: 'Relaxing ambient beats' }
         ]);
 
@@ -962,7 +962,7 @@ export const playrandomCommand: Command = {
         if (customId.startsWith('playrandom:lang_select:')) {
             const targetUser = customId.split(':')[2];
             if (interaction.user.id !== targetUser) {
-                await interaction.reply({ content: '❌ You cannot control this session.' });
+                await interaction.reply({ content: '<:Cross:1524363088621469737> You cannot control this session.' });
                 return;
             }
 
@@ -978,13 +978,13 @@ export const playrandomCommand: Command = {
         if (customId.startsWith('playrandom:cat_select:')) {
             const targetUser = customId.split(':')[2];
             if (interaction.user.id !== targetUser) {
-                await interaction.reply({ content: '❌ You cannot control this session.' });
+                await interaction.reply({ content: '<:Cross:1524363088621469737> You cannot control this session.' });
                 return;
             }
 
             const member = interaction.member as GuildMember | null;
             if (!member?.voice?.channelId) {
-                await interaction.reply({ content: '❌ You must be in a voice channel to play music.' });
+                await interaction.reply({ content: '<:Cross:1524363088621469737> You must be in a voice channel to play music.' });
                 return;
             }
 
@@ -994,7 +994,7 @@ export const playrandomCommand: Command = {
 
             const tracksList = PLAYRANDOM_TRACKS[session.lang]?.[category];
             if (!tracksList || tracksList.length === 0) {
-                await interaction.reply({ content: '❌ No tracks found for this selection.' });
+                await interaction.reply({ content: '<:Cross:1524363088621469737> No tracks found for this selection.' });
                 return;
             }
 
@@ -1042,7 +1042,7 @@ export const playrandomCommand: Command = {
                 `› **Category:** \`${category.toUpperCase()}\` • **Language:** \`${session.lang.toUpperCase()}\`\n` +
                 `› **Queue Position:** \`#${positionBefore + 1}\``;
 
-            const successContainer = ComponentsV2.successContainer('Random Song Queued 🎲', successMsg);
+            const successContainer = ComponentsV2.successContainer('Random Song Queued <:Giveaway:1524363020250382437>', successMsg);
 
             await interaction.editReply({
                 components: [successContainer],

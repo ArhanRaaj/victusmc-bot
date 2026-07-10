@@ -18,10 +18,10 @@ export const rateCommand: Command = {
     async execute(interaction) {
         const subject = interaction.options.getString('subject', true);
         const rating = randomInt(0, 10);
-        const emojis = ['💩', '😕', '🤷', '👍', '⭐', '🌟'];
+        const emojis = ['💩', '😕', '🤷', '<:Like:1524362991825453166>', '<:Stars:1524363036389937212>', '<:Stars:1524363036389937212>'];
         const emoji = rating <= 2 ? emojis[0] : rating <= 4 ? emojis[1] : rating <= 6 ? emojis[2] : emojis[3];
-        const bar = '🟩'.repeat(rating) + '⬜'.repeat(10 - rating);
-        const c = ComponentsV2.infoContainer('📊 Rate-o-Meter',
+        const bar = '<:Tick:1524363090626482326>'.repeat(rating) + '<:Cross:1524363088621469737>'.repeat(10 - rating);
+        const c = ComponentsV2.infoContainer('<:Vote:1524363112709488641> Rate-o-Meter',
             `**${subject}**\n\n${bar}\n**${rating}/10** ${emoji}`);
         await interaction.reply({ components: [c], flags: V2 });
     },

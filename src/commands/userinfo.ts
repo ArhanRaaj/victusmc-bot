@@ -24,10 +24,10 @@ export const userinfoCommand: Command = {
         const joined = member ? Math.floor((member.joinedTimestamp || 0) / 1000) : null;
 
         const statusEmojis: Record<string, string> = {
-            online: '🟢',
-            idle: '🟡',
-            dnd: '🔴',
-            offline: '⚫',
+            online: '<:Tick:1524363090626482326>',
+            idle: '<:Pause:1524363094933897226>',
+            dnd: '<:Cross:1524363088621469737>',
+            offline: '<:Cross:1524363088621469737>',
         };
         const status = member?.presence?.status || 'offline';
 

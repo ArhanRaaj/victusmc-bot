@@ -32,12 +32,12 @@ function renderDashboard(config: AuditLogConfig): any {
     const eventLines = EVENTS_OPTIONS.map(opt => {
         const enabled = config.events.includes(opt.value);
         const ch = config.channels?.[opt.value];
-        return `${enabled ? '🟢' : '🔴'} **${opt.label}** → ${ch ? `<#${ch}>` : '*Not set*'}`;
+        return `${enabled ? '<:Tick:1524363090626482326>' : '<:Cross:1524363088621469737>'} **${opt.label}** → ${ch ? `<#${ch}>` : '*Not set*'}`;
     }).join('\n');
 
-    const text = `# 📜 Server Audit Log System\n` +
+    const text = `# <:Message:1524363100734623836> Server Audit Log System\n` +
         `Configure individual channels for each log type.\n\n` +
-        `› **Status:** ${config.enabled ? '🟢 **Enabled**' : '🔴 **Disabled**'}\n\n` +
+        `› **Status:** ${config.enabled ? '<:Tick:1524363090626482326> **Enabled**' : '<:Cross:1524363088621469737> **Disabled**'}\n\n` +
         `### Event Channels\n${eventLines}`;
 
     c.addTextDisplayComponents(ComponentsV2.text(text))

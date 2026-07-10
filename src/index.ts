@@ -79,12 +79,12 @@ async function main() {
 
 // Handle graceful shutdown
 process.on('SIGINT', () => {
-    logger.info('🛑 Shutting down...');
+    logger.info('❌ Shutting down...');
     process.exit(0);
 });
 
 process.on('SIGTERM', () => {
-    logger.info('🛑 Shutting down...');
+    logger.info('❌ Shutting down...');
     process.exit(0);
 });
 

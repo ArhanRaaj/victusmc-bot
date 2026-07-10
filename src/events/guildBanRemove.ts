@@ -1,4 +1,4 @@
-import { Events } from 'discord.js';
+﻿import { Events } from 'discord.js';
 import type { GuildBan } from 'discord.js';
 import type { Event } from '../types/index.js';
 import { auditLogSettings } from '../services/auditLogSettings.js';
@@ -19,7 +19,7 @@ export const guildBanRemoveEvent: Event = {
 
             const container = ComponentsV2.baseContainer(ComponentsV2.Accents.success);
             container.addTextDisplayComponents(
-                ComponentsV2.text('## 🔓 Member Unbanned\n\u200b'),
+                ComponentsV2.text('## <:UnLock:1524363066404503614> Member Unbanned\n\u200b'),
                 ComponentsV2.text(`**User:** <@${ban.user.id}> (${ban.user.username})\n**ID:** \`${ban.user.id}\``),
                 ComponentsV2.text(`-# <t:${Math.floor(Date.now() / 1000)}:R>`)
             );

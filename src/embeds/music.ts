@@ -23,15 +23,15 @@ import { logger } from '../utils/logger.js';
 type AnyTrack = Track | UnresolvedTrack;
 
 const SOURCE_ICON: Record<string, string> = {
-    youtube: '▶️',
-    soundcloud: '🟠',
+    youtube: '<:Play:1524363092706721892>',
+    soundcloud: '⚙️',
     bandcamp: '🔵',
-    twitch: '🟣',
+    twitch: '🎵',
     vimeo: '🎬',
-    spotify: '🟢',
-    deezer: '🟣',
+    spotify: '<:Tick:1524363090626482326>',
+    deezer: '🎵',
     applemusic: '🍎',
-    http: '🔗',
+    http: '<:Link:1524363114903113799>',
 };
 
 export function sourceIcon(source?: string): string {
@@ -75,7 +75,7 @@ export function musicIdleContainer(): ContainerBuilder {
     return new ContainerBuilder()
         .addTextDisplayComponents(
             new TextDisplayBuilder().setContent(
-                `-# 🎵 MUSIC SYSTEM • SESSION STANDBY\n` +
+                `-# <:Music:1524363029838561400> MUSIC SYSTEM • SESSION STANDBY\n` +
                 `# Ready to Play\n\n` +
                 `There is no active music session playing in this server right now.\n\n` +
                 `› Use \`/play <song or link>\` to start playing.\n` +
@@ -91,7 +91,7 @@ export async function nowPlayingContainer(player: Player, guild?: any): Promise<
         const container = new ContainerBuilder()
             .addTextDisplayComponents(
                 new TextDisplayBuilder().setContent(
-                    `-# 🎵 NOW PLAYING • INACTIVE SESSION\n` +
+                    `-# <:Music:1524363029838561400> NOW PLAYING • INACTIVE SESSION\n` +
                     `# Nothing is playing right now.`
                 )
             );
@@ -146,8 +146,8 @@ export async function nowPlayingContainer(player: Player, guild?: any): Promise<
 
     const nextTrack = player.queue.tracks[0];
     const nextUpStr = nextTrack 
-        ? `⏭️ **Next up:** [${escapeMd(nextTrack.info?.title)}](${nextTrack.info?.uri})`
-        : `⏭️ **Next up:** _Queue end_`;
+        ? `<:Right_arrow2:1524362968916164678> **Next up:** [${escapeMd(nextTrack.info?.title)}](${nextTrack.info?.uri})`
+        : `<:Right_arrow2:1524362968916164678> **Next up:** _Queue end_`;
 
     if (cardBuffer.length > 0) {
         let finalBuffer = cardBuffer;
@@ -211,7 +211,7 @@ export async function nowPlayingContainer(player: Player, guild?: any): Promise<
         }
         container.addTextDisplayComponents(
             new TextDisplayBuilder().setContent(
-                `-# 🎵 MUSIC SYSTEM • NOW PLAYING\n` +
+                `-# <:Music:1524363029838561400> MUSIC SYSTEM • NOW PLAYING\n` +
                 `# [${escapeMd(info?.title)}](${info?.uri})\n\n` +
                 `› **Artist:** \`${escapeMd(info?.author || 'Unknown Artist')}\`\n` +
                 `› **Requester:** ${reqId ? `<@${reqId}>` : 'System'}\n` +
@@ -223,16 +223,16 @@ export async function nowPlayingContainer(player: Player, guild?: any): Promise<
         );
     }
 
-    const playPauseEmoji = player.paused ? '▶️' : '⏸️';
-    const loopEmoji = player.repeatMode === 'off' ? '🔁' : player.repeatMode === 'track' ? '🔂' : '🔁';
+    const playPauseEmoji = player.paused ? '<:Play:1524363092706721892>' : '<:Pause:1524363094933897226>';
+    const loopEmoji = player.repeatMode === 'off' ? '<:Retry:1524363041024512010>' : player.repeatMode === 'track' ? '<:Retry:1524363041024512010>' : '<:Retry:1524363041024512010>';
     const loopStyle = player.repeatMode === 'off' ? ButtonStyle.Secondary : ButtonStyle.Primary;
 
     const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
         new ButtonBuilder().setCustomId('music:pause').setEmoji(playPauseEmoji).setStyle(ButtonStyle.Secondary),
-        new ButtonBuilder().setCustomId('music:skip').setEmoji('⏭️').setStyle(ButtonStyle.Secondary),
+        new ButtonBuilder().setCustomId('music:skip').setEmoji('<:Right_arrow2:1524362968916164678>').setStyle(ButtonStyle.Secondary),
         new ButtonBuilder().setCustomId('music:loop').setEmoji(loopEmoji).setStyle(loopStyle),
-        new ButtonBuilder().setCustomId('music:open_controls').setEmoji('🎛️').setLabel('Controls').setStyle(ButtonStyle.Secondary),
-        new ButtonBuilder().setCustomId('music:stop').setEmoji('❌').setStyle(ButtonStyle.Danger),
+        new ButtonBuilder().setCustomId('music:open_controls').setEmoji('<:Setting:1524363057990598687>').setLabel('Controls').setStyle(ButtonStyle.Secondary),
+        new ButtonBuilder().setCustomId('music:stop').setEmoji('<:Cross:1524363088621469737>').setStyle(ButtonStyle.Danger),
     );
 
     container.addActionRowComponents(row);
@@ -251,7 +251,7 @@ export function musicControlsContainer(player: Player): { embeds: any[]; compone
             .setAccentColor(0x6366f1)
             .addTextDisplayComponents(
                 new TextDisplayBuilder().setContent(
-                    `-# 🎵 MUSIC SYSTEM • CONTROLS\n` +
+                    `-# <:Music:1524363029838561400> MUSIC SYSTEM • CONTROLS\n` +
                     `# Inactive Session\n\n` +
                     `There is no music playing right now.`
                 )
@@ -267,13 +267,13 @@ export function musicControlsContainer(player: Player): { embeds: any[]; compone
     const container = new ContainerBuilder()
         .addTextDisplayComponents(
             new TextDisplayBuilder().setContent(
-                `-# 🎛️ MUSIC SYSTEM • CONTROL PANEL\n` +
+                `-# <:Setting:1524363057990598687> MUSIC SYSTEM • CONTROL PANEL\n` +
                 `# Audio Dashboard\n\n` +
                 `### Active Track\n` +
                 `› **Title:** [${escapeMd(info.title)}](${info.uri})\n` +
                 `› **Artist:** \`${escapeMd(info.author || 'Unknown Artist')}\`\n\n` +
                 `### Audio Settings\n` +
-                `› **State:** ${isPaused ? '⏸️ Paused' : '▶️ Playing'}\n` +
+                `› **State:** ${isPaused ? '<:Pause:1524363094933897226> Paused' : '<:Play:1524363092706721892> Playing'}\n` +
                 `› **Volume:** \`${vol}%\` • **Loop:** \`${loopMode.toUpperCase()}\`\n` +
                 `› **Queue Length:** \`${player.queue.tracks.length} tracks\`\n\n` +
                 `### Interactive Transport Controls\n` +
@@ -282,30 +282,30 @@ export function musicControlsContainer(player: Player): { embeds: any[]; compone
         );
 
     const playbackRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
-        new ButtonBuilder().setCustomId('music:previous').setEmoji('⏮️').setStyle(ButtonStyle.Secondary),
-        new ButtonBuilder().setCustomId('music:pause').setEmoji(player.paused ? '▶️' : '⏸️').setStyle(ButtonStyle.Secondary),
-        new ButtonBuilder().setCustomId('music:skip').setEmoji('⏭️').setStyle(ButtonStyle.Secondary),
-        new ButtonBuilder().setCustomId('music:stop').setEmoji('❌').setStyle(ButtonStyle.Danger),
+        new ButtonBuilder().setCustomId('music:previous').setEmoji('<:Right_arrow2:1524362968916164678>').setStyle(ButtonStyle.Secondary),
+        new ButtonBuilder().setCustomId('music:pause').setEmoji(player.paused ? '<:Play:1524363092706721892>' : '<:Pause:1524363094933897226>').setStyle(ButtonStyle.Secondary),
+        new ButtonBuilder().setCustomId('music:skip').setEmoji('<:Right_arrow2:1524362968916164678>').setStyle(ButtonStyle.Secondary),
+        new ButtonBuilder().setCustomId('music:stop').setEmoji('<:Cross:1524363088621469737>').setStyle(ButtonStyle.Danger),
     );
 
     const musicRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
-        new ButtonBuilder().setCustomId('music:queue').setEmoji('📊').setStyle(ButtonStyle.Secondary),
-        new ButtonBuilder().setCustomId('music:filters').setEmoji('🎛️').setStyle(ButtonStyle.Secondary),
-        new ButtonBuilder().setCustomId('music:add').setEmoji('➕').setStyle(ButtonStyle.Secondary),
-        new ButtonBuilder().setCustomId('music:search').setEmoji('🔍').setStyle(ButtonStyle.Secondary),
-        new ButtonBuilder().setCustomId('music:lyrics').setEmoji('🎵').setStyle(ButtonStyle.Secondary),
+        new ButtonBuilder().setCustomId('music:queue').setEmoji('<:Vote:1524363112709488641>').setStyle(ButtonStyle.Secondary),
+        new ButtonBuilder().setCustomId('music:filters').setEmoji('<:Setting:1524363057990598687>').setStyle(ButtonStyle.Secondary),
+        new ButtonBuilder().setCustomId('music:add').setEmoji('<:Add:1524363108766974247>').setStyle(ButtonStyle.Secondary),
+        new ButtonBuilder().setCustomId('music:search').setEmoji('<:Search:1524363077393317968>').setStyle(ButtonStyle.Secondary),
+        new ButtonBuilder().setCustomId('music:lyrics').setEmoji('<:Music:1524363029838561400>').setStyle(ButtonStyle.Secondary),
     );
 
     const controlsRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
-        new ButtonBuilder().setCustomId('music:like').setEmoji('🤍').setStyle(ButtonStyle.Secondary),
-        new ButtonBuilder().setCustomId('music:volume').setEmoji('🔊').setStyle(ButtonStyle.Secondary),
-        new ButtonBuilder().setCustomId('music:eq').setEmoji('🎚️').setStyle(ButtonStyle.Secondary),
-        new ButtonBuilder().setCustomId('music:preset').setEmoji('🟣').setStyle(ButtonStyle.Secondary),
+        new ButtonBuilder().setCustomId('music:like').setEmoji('<:Heart:1524363051716051106>').setStyle(ButtonStyle.Secondary),
+        new ButtonBuilder().setCustomId('music:volume').setEmoji('<:VolumeUp:1524363013233053707>').setStyle(ButtonStyle.Secondary),
+        new ButtonBuilder().setCustomId('music:eq').setEmoji('<:VolumeDown:1524363032199692308>').setStyle(ButtonStyle.Secondary),
+        new ButtonBuilder().setCustomId('music:preset').setEmoji('<:Music:1524363029838561400>').setStyle(ButtonStyle.Secondary),
     );
 
     const libraryRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
-        new ButtonBuilder().setCustomId('music:library_playlists').setEmoji('📁').setStyle(ButtonStyle.Secondary),
-        new ButtonBuilder().setCustomId('music:history').setEmoji('🕒').setStyle(ButtonStyle.Secondary),
+        new ButtonBuilder().setCustomId('music:library_playlists').setEmoji('<:Message:1524363100734623836>').setStyle(ButtonStyle.Secondary),
+        new ButtonBuilder().setCustomId('music:history').setEmoji('<:Time:1524363075271000146>').setStyle(ButtonStyle.Secondary),
     );
 
     container.addActionRowComponents(playbackRow);
@@ -331,8 +331,8 @@ export function addedContainer(
         const totalMs = tracks.reduce((sum, t) => sum + (trackInfo(t)?.duration || 0), 0);
         container.addTextDisplayComponents(
             new TextDisplayBuilder().setContent(
-                `-# 🎵 MUSIC SYSTEM • QUEUE UPDATE\n` +
-                `# ✅ Playlist Added\n\n` +
+                `-# <:Music:1524363029838561400> MUSIC SYSTEM • QUEUE UPDATE\n` +
+                `# <:Tick:1524363090626482326> Playlist Added\n\n` +
                 `› **Playlist:** \`${escapeMd(playlistName)}\`\n` +
                 `› **Tracks:** \`${tracks.length}\`\n` +
                 `› **Total Duration:** \`${formatDuration(totalMs)}\`\n` +
@@ -348,8 +348,8 @@ export function addedContainer(
     
     container.addTextDisplayComponents(
         new TextDisplayBuilder().setContent(
-            `-# 🎵 MUSIC SYSTEM • QUEUE UPDATE\n` +
-            `# ✅ Track Added\n\n` +
+            `-# <:Music:1524363029838561400> MUSIC SYSTEM • QUEUE UPDATE\n` +
+            `# <:Tick:1524363090626482326> Track Added\n\n` +
             `**[${escapeMd(info?.title)}](${info?.uri})**\n` +
             `› **Artist:** \`${escapeMd(info?.author || 'Unknown Artist')}\`\n` +
             `› **Duration:** \`${formatDuration(info?.duration)}\`\n` +
@@ -376,12 +376,12 @@ export function queueContainer(player: Player, page = 0): ContainerBuilder {
 
     const container = new ContainerBuilder();
 
-    let description = `-# 🎵 MUSIC SYSTEM • TRACK QUEUE\n# Live Playlist Queue\n\n`;
+    let description = `-# <:Music:1524363029838561400> MUSIC SYSTEM • TRACK QUEUE\n# Live Playlist Queue\n\n`;
     
     if (current) {
         const info = trackInfo(current);
         const reqId = requesterId(current);
-        description += `### 🔊 Now Playing\n` +
+        description += `### <:VolumeUp:1524363013233053707> Now Playing\n` +
             `**[${escapeMd(info?.title)}](${info?.uri})**\n` +
             `› Artist: \`${escapeMd(info?.author || 'Unknown')}\` • Request: ${reqId ? `<@${reqId}>` : 'System'}\n\n`;
     }
@@ -391,7 +391,7 @@ export function queueContainer(player: Player, page = 0): ContainerBuilder {
     let totalMs = 0;
 
     if (!upcoming.length) {
-        description += `### ⏭️ Upcoming Playlist\n_No upcoming tracks in queue. Add tracks using \`/play\`._`;
+        description += `### <:Right_arrow2:1524362968916164678> Upcoming Playlist\n_No upcoming tracks in queue. Add tracks using \`/play\`._`;
     } else {
         pages = Math.max(1, Math.ceil(upcoming.length / QUEUE_PAGE_SIZE));
         safePage = Math.max(0, Math.min(page, pages - 1));
@@ -399,7 +399,7 @@ export function queueContainer(player: Player, page = 0): ContainerBuilder {
         const slice = upcoming.slice(start, start + QUEUE_PAGE_SIZE);
         totalMs = upcoming.reduce((sum, t) => sum + (trackInfo(t)?.duration || 0), 0);
 
-        description += `### ⏭️ Upcoming Playlist (${upcoming.length} tracks)\n`;
+        description += `### <:Right_arrow2:1524362968916164678> Upcoming Playlist (${upcoming.length} tracks)\n`;
         slice.forEach((t, i) => {
             const info = trackInfo(t);
             const reqId = requesterId(t);

@@ -36,7 +36,7 @@ export const untimeoutCommand: Command = {
         const targetMember = await guild.members.fetch(user.id).catch(() => null);
 
         if (!targetMember) {
-            const err = '❌ User is not a member of this server.';
+            const err = '<:Cross:1524363088621469737> User is not a member of this server.';
             if (isPrefix) {
                 await interaction.reply({ content: err });
             } else {
@@ -49,7 +49,7 @@ export const untimeoutCommand: Command = {
         }
 
         if (!targetMember.communicationDisabledUntilTimestamp) {
-            const err = '❌ This user is not currently in a timeout.';
+            const err = '<:Cross:1524363088621469737> This user is not currently in a timeout.';
             if (isPrefix) {
                 await interaction.reply({ content: err });
             } else {
@@ -64,7 +64,7 @@ export const untimeoutCommand: Command = {
         // Hierarchy check
         const selfMember = guild.members.me;
         if (selfMember && targetMember.roles.highest.position >= selfMember.roles.highest.position) {
-            const err = '❌ I cannot remove the timeout for this user because their highest role is equal to or higher than mine.';
+            const err = '<:Cross:1524363088621469737> I cannot remove the timeout for this user because their highest role is equal to or higher than mine.';
             if (isPrefix) {
                 await interaction.reply({ content: err });
             } else {
@@ -79,7 +79,7 @@ export const untimeoutCommand: Command = {
         // Try to DM the user
         const dmEmbed = new EmbedBuilder()
             .setColor(0x10b981)
-            .setTitle(`🔊 Timeout Removed in ${guild.name}`)
+            .setTitle(`<:VolumeUp:1524363013233053707> Timeout Removed in ${guild.name}`)
             .setDescription(`Your timeout has been removed in **${guild.name}**.\n\n**Reason:** ${reason}`)
             .setTimestamp();
 
@@ -95,7 +95,7 @@ export const untimeoutCommand: Command = {
             if (isPrefix) {
                 const embed = new EmbedBuilder()
                     .setColor(0x2b2d31)
-                    .setTitle('✅ Timeout Removed')
+                    .setTitle('<:Tick:1524363090626482326> Timeout Removed')
                     .setDescription(successMsg);
                 await interaction.reply({ embeds: [embed] });
             } else {
@@ -106,7 +106,7 @@ export const untimeoutCommand: Command = {
             }
         } catch (err: any) {
             logger.error('Failed to remove timeout:', err);
-            const errMsg = '❌ Failed to remove timeout. Make sure I have appropriate administrative/timeout permissions.';
+            const errMsg = '<:Cross:1524363088621469737> Failed to remove timeout. Make sure I have appropriate administrative/timeout permissions.';
             if (isPrefix) {
                 await interaction.reply({ content: errMsg });
             } else {

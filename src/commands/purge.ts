@@ -33,7 +33,7 @@ export const purgeCommand: Command = {
         const channel = interaction.channel;
 
         if (!channel || !channel.isTextBased()) {
-            const err = '❌ This command can only be used in text channels.';
+            const err = '<:Cross:1524363088621469737> This command can only be used in text channels.';
             if (interaction.constructor.name === 'PrefixInteraction') {
                 await interaction.reply({ content: err });
             } else {
@@ -71,7 +71,7 @@ export const purgeCommand: Command = {
             if (isPrefix) {
                 const embed = new EmbedBuilder()
                     .setColor(0x2b2d31)
-                    .setTitle('✅ Messages Purged')
+                    .setTitle('<:Tick:1524363090626482326> Messages Purged')
                     .setDescription(successMsg);
                 await interaction.reply({ embeds: [embed] });
             } else {
@@ -82,7 +82,7 @@ export const purgeCommand: Command = {
             }
         } catch (err: any) {
             logger.error('Failed to purge messages:', err);
-            const errMsg = '❌ Failed to purge messages. Note: Discord does not allow bulk deletion of messages older than 14 days.';
+            const errMsg = '<:Cross:1524363088621469737> Failed to purge messages. Note: Discord does not allow bulk deletion of messages older than 14 days.';
             if (isPrefix) {
                 await interaction.reply({ content: errMsg });
             } else {

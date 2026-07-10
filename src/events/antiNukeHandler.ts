@@ -1,4 +1,4 @@
-import { Client, Guild, GuildAuditLogsEntry, GuildBan, GuildChannel, Role, Webhook, User, TextChannel, PermissionFlagsBits } from 'discord.js';
+﻿import { Client, Guild, GuildAuditLogsEntry, GuildBan, GuildChannel, Role, Webhook, User, TextChannel, PermissionFlagsBits } from 'discord.js';
 import { antiNukeSettings } from '../services/antiNukeSettings.js';
 import * as antiNukeTracker from '../services/antiNukeTracker.js';
 import { logger } from '../utils/logger.js';
@@ -10,7 +10,7 @@ async function sendAlert(guild: Guild, title: string, description: string, color
     const channel = guild.channels.cache.get(config.logChannelId) as TextChannel | undefined;
     if (!channel) return;
     const container = ComponentsV2.baseContainer(color);
-    container.addTextDisplayComponents(ComponentsV2.text(`# 🛡️ Anti-Nuke Alert\n\n**${title}**\n\n${description}`));
+    container.addTextDisplayComponents(ComponentsV2.text(`# <:Shield:1524362964772196422> Anti-Nuke Alert\n\n**${title}**\n\n${description}`));
     channel.send({ components: [container], flags: ComponentsV2.IS_COMPONENTS_V2 }).catch(() => {});
 }
 
